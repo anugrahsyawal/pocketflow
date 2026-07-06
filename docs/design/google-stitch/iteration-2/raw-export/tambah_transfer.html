@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tambah Transfer - PocketFlow</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&amp;family=Nunito+Sans:wght@400;700;800;900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#005320",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#ffdbca",
+                        "waspada-warning": "#F59E0B",
+                        "tertiary-fixed-dim": "#62df7d",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#002109",
+                        "inverse-surface": "#33302c",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#434655",
+                        "outline-variant": "#c3c6d7",
+                        "surface-container-low": "#f9f2ec",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#004ac6",
+                        "surface-tint": "#0053db",
+                        "surface-dim": "#dfd9d2",
+                        "tertiary": "#006329",
+                        "on-primary-container": "#eeefff",
+                        "primary-soft": "#DBEAFE",
+                        "primary-fixed": "#dbe1ff",
+                        "inverse-primary": "#b4c5ff",
+                        "primary-container": "#2563eb",
+                        "on-secondary-fixed": "#341100",
+                        "text-primary": "#1F2937",
+                        "text-secondary": "#6B7280",
+                        "outline": "#737686",
+                        "background": "#fff8f2",
+                        "secondary": "#9d4300",
+                        "surface-container-highest": "#e8e1db",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#e8e1db",
+                        "on-secondary-fixed-variant": "#783200",
+                        "success-soft": "#DCFCE7",
+                        "surface-container-high": "#eee7e0",
+                        "error": "#ba1a1a",
+                        "danger-soft": "#FEE2E2",
+                        "aman-success": "#16A34A",
+                        "on-secondary-container": "#5c2400",
+                        "surface-container": "#f4ede6",
+                        "surface": "#FFFFFF",
+                        "tertiary-fixed": "#7ffc97",
+                        "warning-soft": "#FEF3C7",
+                        "surface-bright": "#fff8f2",
+                        "info-blue": "#0EA5E9",
+                        "on-surface": "#1e1b17",
+                        "tertiary-container": "#007f36",
+                        "on-primary-fixed": "#00174b",
+                        "secondary-container": "#fd761a",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "bahaya-danger": "#DC2626",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#f6f0e9",
+                        "on-tertiary-container": "#c7ffca",
+                        "secondary-fixed-dim": "#ffb690",
+                        "on-background": "#1e1b17"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "gutter": "12px",
+                        "3xl": "40px",
+                        "safe-margin": "16px",
+                        "2xl": "32px",
+                        "lg": "16px",
+                        "xl": "24px",
+                        "md": "12px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Nunito Sans"],
+                        "headline-lg": ["Nunito Sans"],
+                        "amount-lg": ["Nunito Sans"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Nunito Sans"],
+                        "amount-md": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-sm": ["Nunito Sans"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "headline-lg": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+                        "amount-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.04em", "fontWeight": "900" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "34px", "fontWeight": "800" }],
+                        "amount-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Hide scrollbar for clean UI */
+        ::-webkit-scrollbar { display: none; }
+        body { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Subtle pulse for the arrow indicator */
+        @keyframes subtlePulse {
+            0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(0, 74, 198, 0.2); }
+            50% { transform: translate(-50%, -50%) scale(1.05); box-shadow: 0 0 0 8px rgba(0, 74, 198, 0); }
+            100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(0, 74, 198, 0); }
+        }
+        .animate-indicator {
+            animation: subtlePulse 2s infinite;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface antialiased">
+<!-- Main Container: Mobile Optimized -->
+<main class="max-w-[480px] mx-auto min-h-screen relative flex flex-col pb-[100px] shadow-[0_0_40px_rgba(0,0,0,0.05)] bg-background">
+<!-- Task Header (Transactional - Suppresses standard Nav) -->
+<header class="flex items-center justify-between px-lg py-md sticky top-0 bg-background/80 backdrop-blur-md z-20 border-b border-surface-variant/50">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface hover:bg-surface-container-low transition-colors shadow-sm text-text-primary">
+<span class="material-symbols-outlined">close</span>
+</button>
+<h1 class="font-headline-sm text-headline-sm text-text-primary">Tambah Transfer</h1>
+<div class="w-10"></div> <!-- Spacer -->
+</header>
+<!-- Large Amount Input -->
+<section class="px-xl py-2xl flex flex-col items-center justify-center">
+<p class="font-label-caps text-label-caps text-text-secondary mb-sm uppercase tracking-wider">Nominal Transfer</p>
+<div class="flex items-center justify-center text-primary border-b-2 border-primary-soft pb-xs w-full max-w-[240px] transition-colors focus-within:border-primary">
+<span class="font-amount-md text-amount-md mr-xs text-primary-fixed-dim">Rp</span>
+<input class="font-amount-lg text-amount-lg bg-transparent border-none text-center w-full focus:outline-none focus:ring-0 p-0 text-primary" inputmode="numeric" placeholder="0" type="text" value="0"/>
+</div>
+<!-- Quick Add Chips -->
+<div class="flex gap-sm mt-md">
+<button class="px-3 py-1 rounded-full bg-primary-soft text-primary font-label-caps text-label-caps hover:bg-primary hover:text-on-primary transition-colors">+50rb</button>
+<button class="px-3 py-1 rounded-full bg-primary-soft text-primary font-label-caps text-label-caps hover:bg-primary hover:text-on-primary transition-colors">+100rb</button>
+<button class="px-3 py-1 rounded-full bg-primary-soft text-primary font-label-caps text-label-caps hover:bg-primary hover:text-on-primary transition-colors">+500rb</button>
+</div>
+</section>
+<!-- Directional UI: Dari -> Ke -->
+<section class="px-lg mb-xl">
+<div class="bg-surface rounded-[24px] p-lg shadow-[0_4px_20px_rgba(0,74,198,0.05)] border border-surface-variant relative flex items-center justify-between">
+<!-- Dari Pocket -->
+<div class="flex-1 text-center pr-md">
+<p class="font-label-caps text-label-caps text-text-secondary mb-xs">Dari Pocket</p>
+<button class="w-full flex flex-col items-center justify-center gap-1 p-sm rounded-xl bg-surface-container-low hover:bg-surface-dim transition-colors border border-transparent hover:border-surface-variant">
+<span class="text-2xl mb-1">💰</span>
+<div class="flex items-center justify-center gap-1 w-full">
+<span class="font-body-sm text-body-sm text-text-primary font-medium truncate">Utama</span>
+<span class="material-symbols-outlined text-[16px] text-text-secondary">expand_more</span>
+</div>
+</button>
+</div>
+<!-- Direction Arrow -->
+<div class="absolute left-1/2 top-1/2 w-12 h-12 flex items-center justify-center bg-primary rounded-full text-on-primary z-10 border-[6px] border-surface animate-indicator shadow-md">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'wght' 600;">arrow_forward</span>
+</div>
+<!-- Ke Pocket -->
+<div class="flex-1 text-center pl-md">
+<p class="font-label-caps text-label-caps text-text-secondary mb-xs">Ke Pocket</p>
+<button class="w-full flex flex-col items-center justify-center gap-1 p-sm rounded-xl bg-surface-container-lowest hover:bg-surface-container-low transition-colors border border-dashed border-outline-variant hover:border-primary-soft">
+<div class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-text-secondary text-[18px]">add</span>
+</div>
+<div class="flex items-center justify-center gap-1 w-full">
+<span class="font-body-sm text-body-sm text-text-secondary font-medium truncate">Pilih Tujuan</span>
+</div>
+</button>
+</div>
+</div>
+<!-- Validation Hint (Neutral/Warning Style) -->
+<div class="flex items-start gap-2 mt-md p-md rounded-xl bg-surface-container-low border border-surface-variant">
+<span class="material-symbols-outlined text-[18px] text-text-secondary mt-0.5">info</span>
+<p class="font-body-sm text-body-sm text-text-secondary leading-snug">Pocket asal &amp; tujuan tidak boleh sama. Pastikan memilih pocket yang berbeda.</p>
+</div>
+</section>
+<!-- Transfer Details Form -->
+<section class="px-lg flex flex-col gap-xl">
+<!-- Tipe Transfer -->
+<div>
+<p class="font-label-caps text-label-caps text-text-secondary mb-md">Tipe Transfer</p>
+<div class="flex flex-wrap gap-sm">
+<button class="px-xl py-md rounded-full bg-primary text-on-primary font-body-sm text-body-sm font-medium shadow-[0_4px_12px_rgba(0,74,198,0.2)] flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">sync_alt</span>
+                        Normal
+                    </button>
+<button class="px-xl py-md rounded-full bg-surface text-text-primary border border-surface-variant font-body-sm text-body-sm hover:bg-surface-container-low transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">payments</span>
+                        Tarik Tunai
+                    </button>
+<button class="px-xl py-md rounded-full bg-surface text-text-primary border border-surface-variant font-body-sm text-body-sm hover:bg-surface-container-low transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">contactless</span>
+                        Top up NFC
+                    </button>
+</div>
+</div>
+<!-- Tanggal & Waktu -->
+<div class="flex gap-md">
+<div class="flex-1 relative group">
+<p class="font-label-caps text-label-caps text-text-secondary mb-xs">Tanggal</p>
+<div class="flex items-center justify-between p-md rounded-xl bg-surface border border-surface-variant group-hover:border-primary-soft transition-colors cursor-pointer">
+<span class="font-body-sm text-body-sm text-text-primary">Hari ini</span>
+<span class="material-symbols-outlined text-text-secondary text-[20px]">calendar_today</span>
+</div>
+</div>
+<div class="flex-1 relative group">
+<p class="font-label-caps text-label-caps text-text-secondary mb-xs">Waktu</p>
+<div class="flex items-center justify-between p-md rounded-xl bg-surface border border-surface-variant group-hover:border-primary-soft transition-colors cursor-pointer">
+<span class="font-body-sm text-body-sm text-text-primary">Sekarang</span>
+<span class="material-symbols-outlined text-text-secondary text-[20px]">schedule</span>
+</div>
+</div>
+</div>
+<!-- Catatan -->
+<div>
+<p class="font-label-caps text-label-caps text-text-secondary mb-xs flex justify-between">
+<span>Catatan</span>
+<span class="text-outline font-normal">Opsional</span>
+</p>
+<div class="relative">
+<textarea class="w-full p-md rounded-xl bg-surface border border-surface-variant focus:border-primary focus:ring-2 focus:ring-primary-soft outline-none font-body-sm text-body-sm text-text-primary resize-none h-28 placeholder:text-outline transition-all" placeholder="Tulis tujuan transfer atau pengingat..."></textarea>
+<span class="material-symbols-outlined absolute bottom-md right-md text-outline text-[20px] pointer-events-none">edit_note</span>
+</div>
+</div>
+</section>
+<!-- Sticky Bottom Action -->
+<div class="fixed bottom-0 left-0 right-0 w-full max-w-[480px] mx-auto p-lg bg-gradient-to-t from-background via-background to-transparent z-50 pt-xl">
+<button class="w-full py-xl rounded-full bg-primary text-on-primary font-headline-sm text-headline-sm font-bold shadow-[0_8px_24px_rgba(0,74,198,0.3)] hover:shadow-[0_12px_28px_rgba(0,74,198,0.4)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2">
+<span>Simpan Transfer</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'wght' 600;">check_circle</span>
+</button>
+</div>
+</main>
+<script>
+        // Simple interaction script to enhance the tactile feel
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', function() {
+                this.style.transform = 'scale(0.97)';
+            });
+            btn.addEventListener('mouseup', function() {
+                this.style.transform = '';
+            });
+            btn.addEventListener('mouseleave', function() {
+                this.style.transform = '';
+            });
+        });
+
+        // Amount input formatter (basic)
+        const amountInput = document.querySelector('input[type="text"]');
+        amountInput.addEventListener('input', function(e) {
+            let val = this.value.replace(/\D/g, '');
+            if(val !== '') {
+                this.value = new Intl.NumberFormat('id-ID').format(val);
+            }
+        });
+    </script>
+</body></html>

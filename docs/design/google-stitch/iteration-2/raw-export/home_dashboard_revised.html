@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PocketFlow - Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&amp;family=Nunito+Sans:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#fff8f2",
+                        "warning-soft": "#FEF3C7",
+                        "error": "#ba1a1a",
+                        "inverse-on-surface": "#f6f0e9",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "surface-dim": "#dfd9d2",
+                        "surface-container-low": "#f9f2ec",
+                        "danger-soft": "#FEE2E2",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#7ffc97",
+                        "inverse-surface": "#33302c",
+                        "surface": "#FFFFFF",
+                        "secondary-fixed-dim": "#ffb690",
+                        "secondary-container": "#fd761a",
+                        "primary": "#004ac6",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#eee7e0",
+                        "secondary": "#9d4300",
+                        "info-blue": "#0EA5E9",
+                        "on-tertiary-fixed": "#002109",
+                        "on-background": "#1e1b17",
+                        "primary-container": "#2563eb",
+                        "primary-soft": "#DBEAFE",
+                        "waspada-warning": "#F59E0B",
+                        "primary-fixed": "#dbe1ff",
+                        "surface-container": "#f4ede6",
+                        "on-tertiary-fixed-variant": "#005320",
+                        "outline": "#737686",
+                        "text-primary": "#1F2937",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e8e1db",
+                        "on-primary-container": "#eeefff",
+                        "tertiary": "#006329",
+                        "on-secondary-fixed-variant": "#783200",
+                        "bahaya-danger": "#DC2626",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1e1b17",
+                        "background": "#fff8f2",
+                        "aman-success": "#16A34A",
+                        "secondary-fixed": "#ffdbca",
+                        "outline-variant": "#c3c6d7",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-tint": "#0053db",
+                        "text-secondary": "#6B7280",
+                        "on-secondary-fixed": "#341100",
+                        "on-primary-fixed": "#00174b",
+                        "tertiary-container": "#007f36",
+                        "on-surface-variant": "#434655",
+                        "on-secondary-container": "#5c2400",
+                        "tertiary-fixed-dim": "#62df7d",
+                        "on-secondary": "#ffffff",
+                        "success-soft": "#DCFCE7",
+                        "on-tertiary-container": "#c7ffca",
+                        "surface-variant": "#e8e1db"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "sm": "8px",
+                        "xl": "24px",
+                        "gutter": "12px",
+                        "2xl": "32px",
+                        "safe-margin": "16px",
+                        "lg": "16px",
+                        "3xl": "40px",
+                        "md": "12px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Nunito Sans"],
+                        "headline-lg-mobile": ["Nunito Sans"],
+                        "headline-md": ["Nunito Sans"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "amount-lg": ["Nunito Sans"],
+                        "amount-md": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "headline-lg": ["Nunito Sans"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "34px", "fontWeight": "800" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "amount-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.04em", "fontWeight": "900" }],
+                        "amount-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.03em", "fontWeight": "800" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface-bright text-on-surface font-body-sm min-h-screen flex flex-col items-center">
+<!-- TopAppBar -->
+<header class="docked full-width top-0 bg-background flex justify-between items-center w-full px-lg py-md max-w-[480px] mx-auto z-40 relative">
+<div class="leading-element shrink-0">
+<a aria-label="Settings" href="#">
+<img class="w-10 h-10 rounded-full object-cover shadow-sm border-2 border-white cursor-pointer" data-alt="A stylized, modern 3D avatar of a young user with a cheerful expression, set against a warm cream background. The aesthetic is playful, minimal, and premium, matching a friendly personal finance app designed in light mode. Soft lighting and smooth textures emphasize a welcoming tone." src="https://lh3.googleusercontent.com/aida-public/AB6AXuARoS1yM2OBhi08ODsehBChPEUeDpt2Xh-te3z6SpBPPR3KUsB5z3kFl-6Q3mu-ioF8E-xGWzdy9y_OHnphwsBGyGyMkzE9_EF0PY344KRLgy2U0HODNOYS89-ZtMpfHDZL6-UCHj_-OjdZ06UlH8R2pv_O_ZjTfTMpSknmWaWjHWiGEmepToR1nvUSZgIraGpfgsuAo1kgm4_J7vBKod2HcTLBtUxl8OVEVkSmL9PJrSId5fl_xJLTcTvJaVbcjcaYswWsffB6XFg"/>
+</a>
+</div>
+<div class="headline-container flex-1 text-center">
+<h1 class="font-headline-md text-headline-md font-extrabold text-primary">PocketFlow</h1>
+</div>
+<div class="trailing-element shrink-0">
+<button aria-label="Toggle Privacy" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">visibility</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="w-full max-w-[480px] px-safe-margin pt-sm pb-32 flex flex-col gap-xl overflow-x-hidden">
+<!-- Greeting Section -->
+<section class="flex flex-col gap-xs mt-sm">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-background">Hai Kyune 👋</h2>
+<p class="font-body-sm text-body-sm text-text-secondary bg-surface-container-low inline-flex items-center gap-1.5 px-3 py-1 rounded-full w-fit">
+<span class="material-symbols-outlined text-[16px]">calendar_month</span>
+                Periode: 26 Jul – 25 Agu
+            </p>
+</section>
+<!-- Summary Bento Grid -->
+<section class="flex flex-col gap-md">
+<!-- Main Balance Card -->
+<div class="glass-card rounded-[32px] p-xl shadow-[0_12px_30px_rgb(0,74,198,0.06)] relative overflow-hidden flex flex-col gap-md">
+<!-- Decorative blurred blob -->
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-primary-soft rounded-full mix-blend-multiply filter blur-2xl opacity-70"></div>
+<div class="flex justify-between items-start relative z-10">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-text-secondary mb-1 uppercase tracking-wider">Total Semua Pocket</span>
+<h3 class="font-amount-lg text-amount-lg text-on-background">Rp 12.500.000</h3>
+</div>
+<div class="bg-success-soft px-3 py-1.5 rounded-full flex items-center gap-1 border border-success-soft/50 shadow-sm">
+<span class="font-label-caps text-label-caps text-aman-success whitespace-nowrap">Kondisi Aman ✅</span>
+</div>
+</div>
+<!-- Sub-stats Grid -->
+<div class="grid grid-cols-2 gap-md mt-sm relative z-10 border-t border-surface-container-highest/50 pt-md">
+<div class="flex flex-col gap-xs">
+<div class="flex items-center gap-1.5 text-text-secondary">
+<span class="material-symbols-outlined text-[16px]">account_balance_wallet</span>
+<span class="font-label-caps text-label-caps">Sisa Spendable</span>
+</div>
+<span class="font-amount-md text-amount-md text-on-background">Rp 4.200.000</span>
+</div>
+<div class="flex flex-col gap-xs">
+<div class="flex items-center gap-1.5 text-text-secondary">
+<span class="material-symbols-outlined text-[16px]">today</span>
+<span class="font-label-caps text-label-caps">Aman per hari</span>
+</div>
+<span class="font-amount-md text-amount-md text-on-background">Rp 150.000</span>
+</div>
+</div>
+<!-- Progress Bar -->
+<div class="w-full bg-surface-container-high h-2 rounded-full mt-2 overflow-hidden">
+<div class="bg-primary h-full rounded-full w-[66%]"></div>
+</div>
+</div>
+<!-- Transportation + NFC Summary -->
+<div class="bg-surface rounded-[24px] p-lg flex justify-between items-center shadow-sm border border-surface-variant">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-primary-soft flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">directions_car</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-background text-[16px]">Transportation + NFC</span>
+<span class="font-body-sm text-body-sm text-text-secondary text-[13px]">Saldo e-Toll &amp; Parkir</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-amount-md text-amount-md text-on-background block">Rp 350.000</span>
+<span class="font-label-caps text-label-caps text-aman-success">Aman</span>
+</div>
+</div>
+<!-- Pantauan Pocket Section -->
+<div class="flex flex-col gap-sm">
+<h3 class="font-headline-sm text-headline-sm text-on-background mt-2">Pantauan Pocket</h3>
+<!-- Pocket Alert 1 -->
+<div class="bg-warning-soft rounded-2xl p-lg flex items-start gap-md border border-waspada-warning/20 shadow-sm relative overflow-hidden">
+<div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shrink-0 shadow-sm text-xl z-10">
+                    🍜
+                </div>
+<div class="flex flex-col z-10">
+<span class="font-headline-sm text-headline-sm text-on-secondary-container mb-1">Food &amp; Groceries: Waspada</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant leading-snug">Pengeluaran mulai ngebut. Rem sedikit yuk.</span>
+</div>
+</div>
+<!-- Pocket Alert 2 -->
+<div class="bg-danger-soft rounded-2xl p-lg flex items-start gap-md border border-bahaya-danger/20 shadow-sm relative overflow-hidden">
+<div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shrink-0 shadow-sm text-xl z-10">
+                    🛍️
+                </div>
+<div class="flex flex-col z-10">
+<span class="font-headline-sm text-headline-sm text-on-error-container mb-1">Shopping: Bahaya</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant leading-snug">Budget sudah over Rp 150k. Hati-hati.</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Recent Transactions Preview -->
+<section class="flex flex-col gap-md">
+<div class="flex justify-between items-end">
+<h3 class="font-headline-sm text-headline-sm text-on-background">Transaksi Terakhir</h3>
+<button class="font-label-caps text-label-caps text-primary hover:text-primary-container transition-colors">Lihat Semua</button>
+</div>
+<div class="flex flex-col gap-sm">
+<!-- Transaction Item 1 -->
+<div class="bg-surface rounded-xl p-md flex items-center justify-between shadow-[0_4px_12px_rgb(0,0,0,0.02)] hover:shadow-md transition-shadow">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-text-secondary">
+<span class="material-symbols-outlined">local_cafe</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-background text-[16px]">Kopi Senja</span>
+<span class="font-body-sm text-body-sm text-text-secondary text-[12px]">Food &amp; Groceries • Hari ini</span>
+</div>
+</div>
+<span class="font-amount-md text-amount-md text-on-background text-[16px]">-Rp 45.000</span>
+</div>
+<!-- Transaction Item 2 -->
+<div class="bg-surface rounded-xl p-md flex items-center justify-between shadow-[0_4px_12px_rgb(0,0,0,0.02)] hover:shadow-md transition-shadow">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-text-secondary">
+<span class="material-symbols-outlined">sync_alt</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-background text-[16px]">Transfer ke Utama</span>
+<span class="font-body-sm text-body-sm text-text-secondary text-[12px]">Pockets -&gt; Utama • Kemarin</span>
+</div>
+</div>
+<span class="font-amount-md text-amount-md text-text-secondary text-[16px]">Rp 500.000</span>
+</div>
+<!-- Empty State hinting at more -->
+<div class="bg-transparent border border-dashed border-outline-variant rounded-xl p-md flex items-center justify-center mt-xs">
+<span class="font-body-sm text-body-sm text-text-secondary">🌱 Hemat terus hari ini!</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 right-0 w-full max-w-[480px] mx-auto flex justify-around items-end px-gutter pb-safe h-20 bg-surface shadow-[0_-4px_20px_0_rgba(0,74,198,0.1)] rounded-t-3xl z-50">
+<!-- Item 1: Home (Active) -->
+<button aria-label="Home" class="flex flex-col items-center justify-center text-primary p-2 w-16 group">
+<span class="material-symbols-outlined transition-transform duration-150 group-hover:scale-95 group-active:scale-90" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-caps text-label-caps mt-1">Home</span>
+</button>
+<!-- Item 2: Pockets (Inactive) -->
+<button aria-label="Pockets" class="flex flex-col items-center justify-center text-text-secondary hover:bg-surface-container-low transition-colors p-2 w-16 rounded-xl group">
+<span class="material-symbols-outlined transition-transform duration-150 group-active:scale-90" style="font-variation-settings: 'FILL' 0;">account_balance_wallet</span>
+<span class="font-label-caps text-label-caps mt-1">Pockets</span>
+</button>
+<!-- Item 3: Add (Special center button) -->
+<button aria-label="Add" class="flex flex-col items-center justify-center bg-primary text-on-primary rounded-full -translate-y-4 w-14 h-14 shadow-lg hover:opacity-80 transition-opacity group">
+<span class="material-symbols-outlined text-[28px] transition-transform duration-150 group-active:scale-90" style="font-variation-settings: 'FILL' 0;">add</span>
+</button>
+<!-- Item 4: History (Inactive) -->
+<button aria-label="History" class="flex flex-col items-center justify-center text-text-secondary hover:bg-surface-container-low transition-colors p-2 w-16 rounded-xl group">
+<span class="material-symbols-outlined transition-transform duration-150 group-active:scale-90" style="font-variation-settings: 'FILL' 0;">receipt_long</span>
+<span class="font-label-caps text-label-caps mt-1">History</span>
+</button>
+<!-- Item 5: Reports (Inactive) -->
+<button aria-label="Reports" class="flex flex-col items-center justify-center text-text-secondary hover:bg-surface-container-low transition-colors p-2 w-16 rounded-xl group">
+<span class="material-symbols-outlined transition-transform duration-150 group-active:scale-90" style="font-variation-settings: 'FILL' 0;">bar_chart</span>
+<span class="font-label-caps text-label-caps mt-1">Reports</span>
+</button>
+</nav>
+</body></html>

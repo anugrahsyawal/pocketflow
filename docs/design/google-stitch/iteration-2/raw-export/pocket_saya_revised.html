@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PocketFlow - Pocket Saya</title>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=Nunito+Sans:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#fff8f2",
+                        "warning-soft": "#FEF3C7",
+                        "error": "#ba1a1a",
+                        "inverse-on-surface": "#f6f0e9",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "surface-dim": "#dfd9d2",
+                        "surface-container-low": "#f9f2ec",
+                        "danger-soft": "#FEE2E2",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#7ffc97",
+                        "inverse-surface": "#33302c",
+                        "surface": "#FFFFFF",
+                        "secondary-fixed-dim": "#ffb690",
+                        "secondary-container": "#fd761a",
+                        "primary": "#004ac6",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#eee7e0",
+                        "secondary": "#9d4300",
+                        "info-blue": "#0EA5E9",
+                        "on-tertiary-fixed": "#002109",
+                        "on-background": "#1e1b17",
+                        "primary-container": "#2563eb",
+                        "primary-soft": "#DBEAFE",
+                        "waspada-warning": "#F59E0B",
+                        "primary-fixed": "#dbe1ff",
+                        "surface-container": "#f4ede6",
+                        "on-tertiary-fixed-variant": "#005320",
+                        "outline": "#737686",
+                        "text-primary": "#1F2937",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e8e1db",
+                        "on-primary-container": "#eeefff",
+                        "tertiary": "#006329",
+                        "on-secondary-fixed-variant": "#783200",
+                        "bahaya-danger": "#DC2626",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1e1b17",
+                        "background": "#fff8f2",
+                        "aman-success": "#16A34A",
+                        "secondary-fixed": "#ffdbca",
+                        "outline-variant": "#c3c6d7",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-tint": "#0053db",
+                        "text-secondary": "#6B7280",
+                        "on-secondary-fixed": "#341100",
+                        "on-primary-fixed": "#00174b",
+                        "tertiary-container": "#007f36",
+                        "on-surface-variant": "#434655",
+                        "on-secondary-container": "#5c2400",
+                        "tertiary-fixed-dim": "#62df7d",
+                        "on-secondary": "#ffffff",
+                        "success-soft": "#DCFCE7",
+                        "on-tertiary-container": "#c7ffca",
+                        "surface-variant": "#e8e1db"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "sm": "8px",
+                        "xl": "24px",
+                        "gutter": "12px",
+                        "2xl": "32px",
+                        "safe-margin": "16px",
+                        "lg": "16px",
+                        "3xl": "40px",
+                        "md": "12px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Nunito Sans"],
+                        "headline-lg-mobile": ["Nunito Sans"],
+                        "headline-md": ["Nunito Sans"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "amount-lg": ["Nunito Sans"],
+                        "amount-md": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "headline-lg": ["Nunito Sans"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "34px", "fontWeight": "800" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "amount-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.04em", "fontWeight": "900" }],
+                        "amount-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.03em", "fontWeight": "800" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Hide scrollbar for clean mobile feel */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-inverse-surface flex justify-center min-h-screen">
+<!-- Mobile Device Container (Max 480px) -->
+<div class="w-full max-w-[480px] bg-background relative min-h-screen flex flex-col shadow-2xl overflow-hidden">
+<!-- Shared Component: TopAppBar -->
+<header class="bg-background dark:bg-on-background docked full-width top-0 flex justify-between items-center w-full px-lg py-md max-w-[480px] mx-auto z-40 fixed">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity">
+<!-- Fallback avatar icon -->
+<span class="material-symbols-outlined text-on-surface-variant" style="font-variation-settings: 'FILL' 1;">person</span>
+</div>
+<h1 class="font-headline-md text-headline-md font-extrabold text-primary dark:text-primary-fixed">PocketFlow</h1>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</header>
+<!-- Main Canvas Content -->
+<main class="flex-1 px-safe-margin pt-[88px] pb-[120px] overflow-y-auto">
+<div class="mb-xl">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Pocket Saya</h2>
+<p class="font-body-sm text-body-sm text-text-secondary mt-1">Kelola semua kantong uangmu di sini.</p>
+</div>
+<!-- Group: Harian (Daily Spending) -->
+<section class="mb-2xl">
+<h3 class="font-headline-sm text-headline-sm text-on-surface-variant mb-md flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary-fixed-dim"></span> Harian
+                </h3>
+<div class="grid grid-cols-1 gap-md">
+<!-- Pocket Card: Food -->
+<div class="bg-surface rounded-[24px] p-lg shadow-[0_4px_20px_0_rgba(0,74,198,0.04)] border border-surface-variant/30 hover:-translate-y-1 transition-transform duration-200 cursor-pointer">
+<div class="flex justify-between items-start mb-md">
+<h4 class="font-body-lg text-body-lg font-bold text-on-surface">Food &amp; Groceries</h4>
+<span class="text-[28px] leading-none bg-surface-bright p-2 rounded-2xl">🛒</span>
+</div>
+<div class="mb-md">
+<p class="font-amount-md text-amount-md text-on-surface">Rp1.300.000</p>
+</div>
+<div class="flex items-center gap-sm mb-sm">
+<span class="bg-success-soft text-aman-success font-label-caps text-label-caps px-3 py-1 rounded-full uppercase tracking-wider">Aman</span>
+<span class="font-body-sm text-body-sm text-text-secondary ml-auto text-[13px]">45% Digunakan</span>
+</div>
+<div class="h-2 bg-surface-container-low rounded-full overflow-hidden w-full">
+<div class="h-full bg-aman-success w-[45%] rounded-full shadow-sm"></div>
+</div>
+</div>
+<!-- Pocket Card: Cash -->
+<div class="bg-surface rounded-[24px] p-lg shadow-[0_4px_20px_0_rgba(0,74,198,0.04)] border border-surface-variant/30 hover:-translate-y-1 transition-transform duration-200 cursor-pointer">
+<div class="flex justify-between items-start mb-md">
+<h4 class="font-body-lg text-body-lg font-bold text-on-surface">Cash (Dompet)</h4>
+<span class="text-[28px] leading-none bg-surface-bright p-2 rounded-2xl">💵</span>
+</div>
+<div class="mb-md">
+<p class="font-amount-md text-amount-md text-on-surface">Rp500.000</p>
+</div>
+<div class="flex items-center gap-sm mb-sm">
+<span class="bg-success-soft text-aman-success font-label-caps text-label-caps px-3 py-1 rounded-full uppercase tracking-wider">Aman</span>
+<span class="font-body-sm text-body-sm text-text-secondary ml-auto text-[13px]">20% Digunakan</span>
+</div>
+<div class="h-2 bg-surface-container-low rounded-full overflow-hidden w-full">
+<div class="h-full bg-aman-success w-[20%] rounded-full shadow-sm"></div>
+</div>
+</div>
+<!-- Pocket Card: Transportation -->
+<div class="bg-surface rounded-[24px] p-lg shadow-[0_4px_20px_0_rgba(0,74,198,0.04)] border border-surface-variant/30 hover:-translate-y-1 transition-transform duration-200 cursor-pointer">
+<div class="flex justify-between items-start mb-md">
+<h4 class="font-body-lg text-body-lg font-bold text-on-surface">Transportation</h4>
+<span class="text-[28px] leading-none bg-surface-bright p-2 rounded-2xl">🚌</span>
+</div>
+<div class="mb-md">
+<p class="font-amount-md text-amount-md text-on-surface">Rp200.000</p>
+</div>
+<div class="flex items-center gap-sm mb-sm">
+<span class="bg-warning-soft text-waspada-warning font-label-caps text-label-caps px-3 py-1 rounded-full uppercase tracking-wider">Waspada</span>
+<span class="font-body-sm text-body-sm text-text-secondary ml-auto text-[13px]">80% Digunakan</span>
+</div>
+<div class="h-2 bg-surface-container-low rounded-full overflow-hidden w-full">
+<div class="h-full bg-waspada-warning w-[80%] rounded-full shadow-sm"></div>
+</div>
+</div>
+<!-- Pocket Card: NFC Card -->
+<div class="bg-surface rounded-[24px] p-lg shadow-[0_4px_20px_0_rgba(0,74,198,0.04)] border border-surface-variant/30 hover:-translate-y-1 transition-transform duration-200 cursor-pointer">
+<div class="flex justify-between items-start mb-md">
+<h4 class="font-body-lg text-body-lg font-bold text-on-surface">NFC Card</h4>
+<span class="text-[28px] leading-none bg-surface-bright p-2 rounded-2xl">💳</span>
+</div>
+<div class="mb-md">
+<p class="font-amount-md text-amount-md text-on-surface">Rp50.000</p>
+</div>
+<div class="flex items-center gap-sm mb-sm">
+<span class="bg-danger-soft text-bahaya-danger font-label-caps text-label-caps px-3 py-1 rounded-full uppercase tracking-wider">Bahaya</span>
+<span class="font-body-sm text-body-sm text-text-secondary ml-auto text-[13px]">95% Digunakan</span>
+</div>
+<div class="h-2 bg-surface-container-low rounded-full overflow-hidden w-full">
+<div class="h-full bg-bahaya-danger w-[95%] rounded-full shadow-sm"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Group: Tagihan (Bills) -->
+<section class="mb-2xl">
+<h3 class="font-headline-sm text-headline-sm text-on-surface-variant mb-md flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed-dim"></span> Tagihan
+                </h3>
+<div class="grid grid-cols-1 gap-md">
+<!-- Pocket Card: Housing & Utilities -->
+<div class="bg-surface rounded-[24px] p-lg shadow-[0_4px_20px_0_rgba(0,74,198,0.04)] border border-surface-variant/30 hover:-translate-y-1 transition-transform duration-200 cursor-pointer">
+<div class="flex justify-between items-start mb-md">
+<h4 class="font-body-lg text-body-lg font-bold text-on-surface">Housing &amp; Utilities</h4>
+<span class="text-[28px] leading-none bg-surface-bright p-2 rounded-2xl">🏠</span>
+</div>
+<div class="mb-md flex items-baseline gap-2">
+<p class="font-amount-md text-amount-md text-on-surface">Rp866.500</p>
+<span class="font-body-sm text-body-sm text-text-secondary">jatuh tempo dalam 4 hari</span>
+</div>
+<div class="flex items-center gap-sm mb-sm">
+<span class="bg-surface-container-low text-text-secondary font-label-caps text-label-caps px-3 py-1 rounded-full uppercase tracking-wider">Belum Lunas</span>
+</div>
+<div class="h-2 bg-surface-container-low rounded-full overflow-hidden w-full">
+<div class="h-full bg-primary-fixed-dim w-[0%] rounded-full shadow-sm"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Group: Tabungan & Masa Depan (Savings & Future) -->
+<section class="mb-xl">
+<h3 class="font-headline-sm text-headline-sm text-on-surface-variant mb-md flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span> Tabungan &amp; Masa Depan
+                </h3>
+<div class="grid grid-cols-1 gap-md">
+<!-- Pocket Card: Sinking Fund -->
+<div class="bg-surface rounded-[24px] p-lg shadow-[0_4px_20px_0_rgba(0,74,198,0.04)] border border-surface-variant/30 hover:-translate-y-1 transition-transform duration-200 cursor-pointer">
+<div class="flex justify-between items-start mb-md">
+<h4 class="font-body-lg text-body-lg font-bold text-on-surface">Sinking Fund</h4>
+<span class="text-[28px] leading-none bg-surface-bright p-2 rounded-2xl">🏖️</span>
+</div>
+<div class="mb-md">
+<p class="font-amount-md text-amount-md text-on-surface">Rp5.000.000</p>
+</div>
+<div class="flex items-center gap-sm mb-sm">
+<span class="bg-success-soft text-aman-success font-label-caps text-label-caps px-3 py-1 rounded-full uppercase tracking-wider">Aman</span>
+<span class="font-body-sm text-body-sm text-text-secondary ml-auto text-[13px]">Target: Rp10M</span>
+</div>
+<div class="h-2 bg-surface-container-low rounded-full overflow-hidden w-full">
+<div class="h-full bg-tertiary-container w-[50%] rounded-full shadow-sm"></div>
+</div>
+</div>
+<!-- Pocket Card: Emergency Buffer -->
+<div class="bg-surface rounded-[24px] p-lg shadow-[0_4px_20px_0_rgba(0,74,198,0.04)] border border-surface-variant/30 hover:-translate-y-1 transition-transform duration-200 cursor-pointer">
+<div class="flex justify-between items-start mb-md">
+<h4 class="font-body-lg text-body-lg font-bold text-on-surface">Emergency Buffer</h4>
+<span class="text-[28px] leading-none bg-surface-bright p-2 rounded-2xl">🏦</span>
+</div>
+<div class="mb-md">
+<p class="font-amount-md text-amount-md text-on-surface">Rp15.000.000</p>
+</div>
+<div class="flex items-center gap-sm mb-sm">
+<span class="bg-success-soft text-aman-success font-label-caps text-label-caps px-3 py-1 rounded-full uppercase tracking-wider">Aman</span>
+<span class="font-body-sm text-body-sm text-text-secondary ml-auto text-[13px]">Target: Rp20M</span>
+</div>
+<div class="h-2 bg-surface-container-low rounded-full overflow-hidden w-full">
+<div class="h-full bg-tertiary-container w-[75%] rounded-full shadow-sm"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Playful Empty State for encouraging saving -->
+<div class="flex flex-col items-center justify-center py-xl mt-lg text-center">
+<span class="text-[40px] mb-2">🌱</span>
+<p class="font-body-sm text-body-sm text-text-secondary px-lg">Terus kembangkan pocketmu. Setiap sedikit berharga untuk masa depanmu!</p>
+</div>
+</main>
+<!-- Shared Component: BottomNavBar -->
+<nav class="bg-surface dark:bg-surface-container-highest shadow-[0_-4px_20px_0_rgba(0,74,198,0.1)] shadow-lg fixed bottom-0 left-0 right-0 w-full max-w-[480px] mx-auto flex justify-around items-end px-gutter pb-safe h-20 rounded-t-3xl z-50">
+<!-- Nav Item 1: Home (Inactive) -->
+<a class="flex flex-col items-center justify-center text-text-secondary dark:text-outline-variant p-2 hover:bg-surface-container-low dark:hover:bg-surface-dim transition-colors rounded-xl w-[64px] h-full pb-4" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]">home</span>
+<span class="font-label-caps text-label-caps">Beranda</span>
+</a>
+<!-- Nav Item 2: Pockets (ACTIVE) -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim p-2 transition-all duration-200 scale-95 rounded-xl w-[64px] h-full pb-4" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+<span class="font-label-caps text-label-caps font-bold">Pocket</span>
+</a>
+<!-- Nav Item 3: Add (Center FAB style based on JSON rules) -->
+<a class="flex flex-col items-center justify-center bg-primary text-on-primary rounded-full -translate-y-4 w-14 h-14 shadow-lg hover:opacity-90 transition-transform" href="#">
+<span class="material-symbols-outlined text-[28px]">add</span>
+</a>
+<!-- Nav Item 4: History (Inactive) -->
+<a class="flex flex-col items-center justify-center text-text-secondary dark:text-outline-variant p-2 hover:bg-surface-container-low dark:hover:bg-surface-dim transition-colors rounded-xl w-[64px] h-full pb-4" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]">receipt_long</span>
+<span class="font-label-caps text-label-caps">Riwayat</span>
+</a>
+<!-- Nav Item 5: Reports (Inactive) -->
+<a class="flex flex-col items-center justify-center text-text-secondary dark:text-outline-variant p-2 hover:bg-surface-container-low dark:hover:bg-surface-dim transition-colors rounded-xl w-[64px] h-full pb-4" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]">bar_chart</span>
+<span class="font-label-caps text-label-caps">Laporan</span>
+</a>
+</nav>
+</div>
+</body></html>

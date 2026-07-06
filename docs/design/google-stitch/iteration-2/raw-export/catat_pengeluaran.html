@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PocketFlow - Add Expense</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&amp;family=Nunito+Sans:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-bright": "#fff8f2",
+                      "warning-soft": "#FEF3C7",
+                      "error": "#ba1a1a",
+                      "inverse-on-surface": "#f6f0e9",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "surface-dim": "#dfd9d2",
+                      "surface-container-low": "#f9f2ec",
+                      "danger-soft": "#FEE2E2",
+                      "error-container": "#ffdad6",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "on-error": "#ffffff",
+                      "tertiary-fixed": "#7ffc97",
+                      "inverse-surface": "#33302c",
+                      "surface": "#FFFFFF",
+                      "secondary-fixed-dim": "#ffb690",
+                      "secondary-container": "#fd761a",
+                      "primary": "#004ac6",
+                      "on-tertiary": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "surface-container-high": "#eee7e0",
+                      "secondary": "#9d4300",
+                      "info-blue": "#0EA5E9",
+                      "on-tertiary-fixed": "#002109",
+                      "on-background": "#1e1b17",
+                      "primary-container": "#2563eb",
+                      "primary-soft": "#DBEAFE",
+                      "waspada-warning": "#F59E0B",
+                      "primary-fixed": "#dbe1ff",
+                      "surface-container": "#f4ede6",
+                      "on-tertiary-fixed-variant": "#005320",
+                      "outline": "#737686",
+                      "text-primary": "#1F2937",
+                      "on-error-container": "#93000a",
+                      "surface-container-highest": "#e8e1db",
+                      "on-primary-container": "#eeefff",
+                      "tertiary": "#006329",
+                      "on-secondary-fixed-variant": "#783200",
+                      "bahaya-danger": "#DC2626",
+                      "surface-container-lowest": "#ffffff",
+                      "on-surface": "#1e1b17",
+                      "background": "#fff8f2",
+                      "aman-success": "#16A34A",
+                      "secondary-fixed": "#ffdbca",
+                      "outline-variant": "#c3c6d7",
+                      "inverse-primary": "#b4c5ff",
+                      "surface-tint": "#0053db",
+                      "text-secondary": "#6B7280",
+                      "on-secondary-fixed": "#341100",
+                      "on-primary-fixed": "#00174b",
+                      "tertiary-container": "#007f36",
+                      "on-surface-variant": "#434655",
+                      "on-secondary-container": "#5c2400",
+                      "tertiary-fixed-dim": "#62df7d",
+                      "on-secondary": "#ffffff",
+                      "success-soft": "#DCFCE7",
+                      "on-tertiary-container": "#c7ffca",
+                      "surface-variant": "#e8e1db"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "sm": "8px",
+                      "xl": "24px",
+                      "gutter": "12px",
+                      "2xl": "32px",
+                      "safe-margin": "16px",
+                      "lg": "16px",
+                      "3xl": "40px",
+                      "md": "12px"
+              },
+              "fontFamily": {
+                      "headline-sm": [
+                              "Nunito Sans"
+                      ],
+                      "headline-lg-mobile": [
+                              "Nunito Sans"
+                      ],
+                      "headline-md": [
+                              "Nunito Sans"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "amount-lg": [
+                              "Nunito Sans"
+                      ],
+                      "amount-md": [
+                              "Inter"
+                      ],
+                      "label-caps": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Nunito Sans"
+                      ]
+              },
+              "fontSize": {
+                      "headline-sm": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "34px",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "amount-lg": [
+                              "36px",
+                              {
+                                      "lineHeight": "44px",
+                                      "letterSpacing": "-0.04em",
+                                      "fontWeight": "900"
+                              }
+                      ],
+                      "amount-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "38px",
+                                      "letterSpacing": "-0.03em",
+                                      "fontWeight": "800"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background antialiased h-screen overflow-hidden flex flex-col font-body-lg">
+<div class="w-full max-w-[480px] mx-auto h-full flex flex-col relative bg-surface-bright shadow-2xl">
+<!-- Top App Bar (Task-Focused / Linear - Back button implies temporary departure) -->
+<header class="flex justify-between items-center w-full px-lg py-md max-w-[480px] mx-auto bg-background z-10 sticky top-0">
+<button aria-label="Go back" class="p-2 -ml-2 rounded-full hover:bg-surface-container-low transition-colors text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+</button>
+<h1 class="font-headline-sm text-headline-sm text-on-background">Pengeluaran Baru</h1>
+<div class="w-10"></div> <!-- Spacer for balance -->
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto pb-[100px] px-lg pt-sm">
+<!-- Type Toggle -->
+<div class="flex bg-surface-container-low rounded-full p-1 mb-xl shadow-sm border border-surface-variant">
+<button class="flex-1 py-2 rounded-full bg-primary text-on-primary font-label-caps text-label-caps shadow-sm text-center transition-all">Pengeluaran</button>
+<button class="flex-1 py-2 rounded-full text-text-secondary font-label-caps text-label-caps text-center hover:bg-surface transition-all">Transfer</button>
+</div>
+<!-- Amount Input Area -->
+<div class="mb-2xl flex flex-col items-center justify-center">
+<span class="text-text-secondary font-body-sm text-body-sm mb-xs">Jumlah (Rp)</span>
+<input class="w-full text-center bg-transparent border-none outline-none font-amount-lg text-amount-lg text-primary focus:ring-0 p-0 placeholder-primary-fixed-dim" inputmode="numeric" placeholder="0" type="text" value="0"/>
+<div class="h-[2px] w-3/4 bg-surface-variant mt-2 rounded-full"></div>
+</div>
+<!-- Quick Add Chips -->
+<div class="flex flex-wrap gap-sm justify-center mb-2xl">
+<button class="px-4 py-2 rounded-full bg-primary-soft text-primary font-label-caps text-label-caps border border-primary-fixed-dim hover:bg-primary-fixed transition-colors">+5k</button>
+<button class="px-4 py-2 rounded-full bg-primary-soft text-primary font-label-caps text-label-caps border border-primary-fixed-dim hover:bg-primary-fixed transition-colors">+10k</button>
+<button class="px-4 py-2 rounded-full bg-primary-soft text-primary font-label-caps text-label-caps border border-primary-fixed-dim hover:bg-primary-fixed transition-colors">+20k</button>
+<button class="px-4 py-2 rounded-full bg-primary-soft text-primary font-label-caps text-label-caps border border-primary-fixed-dim hover:bg-primary-fixed transition-colors">+50k</button>
+</div>
+<!-- Form Details Card -->
+<div class="bg-surface rounded-3xl p-lg shadow-[0_4px_20px_0_rgba(0,74,198,0.05)] border border-surface-variant flex flex-col gap-xl">
+<!-- Pocket Selector -->
+<div class="flex flex-col gap-sm">
+<label class="font-label-caps text-label-caps text-text-secondary">Sumber Pocket</label>
+<button class="flex items-center justify-between w-full p-md bg-surface-container-low rounded-xl border border-surface-variant hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-primary-soft flex items-center justify-center text-xl">☕</div>
+<div class="flex flex-col items-start">
+<span class="font-body-lg text-body-lg text-on-surface">Jajan &amp; Kopi</span>
+<span class="font-body-sm text-body-sm text-text-secondary">Sisa: Rp 150.000</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-text-secondary">expand_more</span>
+</button>
+</div>
+<!-- Category Selector -->
+<div class="flex flex-col gap-sm">
+<label class="font-label-caps text-label-caps text-text-secondary">Kategori</label>
+<button class="flex items-center justify-between w-full p-md bg-surface-container-low rounded-xl border border-surface-variant hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center text-text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">category</span>
+</div>
+<span class="font-body-lg text-body-lg text-text-secondary">Pilih Kategori</span>
+</div>
+<span class="material-symbols-outlined text-text-secondary">expand_more</span>
+</button>
+</div>
+<!-- Date / Time -->
+<div class="flex gap-md">
+<div class="flex flex-col gap-sm flex-1">
+<label class="font-label-caps text-label-caps text-text-secondary">Tanggal</label>
+<button class="flex items-center gap-sm p-md bg-surface-container-low rounded-xl border border-surface-variant hover:bg-surface-container transition-colors w-full">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 0;">calendar_today</span>
+<span class="font-body-lg text-body-lg text-on-surface">Hari Ini</span>
+</button>
+</div>
+<div class="flex flex-col gap-sm flex-1">
+<label class="font-label-caps text-label-caps text-text-secondary">Waktu</label>
+<button class="flex items-center gap-sm p-md bg-surface-container-low rounded-xl border border-surface-variant hover:bg-surface-container transition-colors w-full">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 0;">schedule</span>
+<span class="font-body-lg text-body-lg text-on-surface">14:30</span>
+</button>
+</div>
+</div>
+<!-- Notes -->
+<div class="flex flex-col gap-sm">
+<label class="font-label-caps text-label-caps text-text-secondary">Catatan (Opsional)</label>
+<textarea class="w-full p-md bg-surface-container-low rounded-xl border border-surface-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none font-body-lg text-body-lg text-on-surface resize-none h-24" placeholder="Cth: Makan siang bareng tim..."></textarea>
+</div>
+</div>
+</main>
+<!-- Sticky Bottom Action -->
+<div class="absolute bottom-0 left-0 right-0 p-safe-margin bg-gradient-to-t from-surface-bright via-surface-bright to-transparent pt-xl pb-safe">
+<button class="w-full bg-primary text-on-primary font-headline-sm text-headline-sm py-4 rounded-full shadow-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                Simpan Transaksi
+            </button>
+</div>
+</div>
+</body></html>

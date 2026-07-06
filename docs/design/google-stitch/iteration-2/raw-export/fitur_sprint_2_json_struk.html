@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Placeholder - Paste JSON Struk</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@700;800;900&amp;family=Inter:wght@400;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-fixed-variant": "#005320",
+                      "on-error-container": "#93000a",
+                      "secondary-fixed": "#ffdbca",
+                      "waspada-warning": "#F59E0B",
+                      "tertiary-fixed-dim": "#62df7d",
+                      "on-primary": "#ffffff",
+                      "on-tertiary-fixed": "#002109",
+                      "inverse-surface": "#33302c",
+                      "on-tertiary": "#ffffff",
+                      "on-surface-variant": "#434655",
+                      "outline-variant": "#c3c6d7",
+                      "surface-container-low": "#f9f2ec",
+                      "on-error": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "primary": "#004ac6",
+                      "surface-tint": "#0053db",
+                      "surface-dim": "#dfd9d2",
+                      "tertiary": "#006329",
+                      "on-primary-container": "#eeefff",
+                      "primary-soft": "#DBEAFE",
+                      "primary-fixed": "#dbe1ff",
+                      "inverse-primary": "#b4c5ff",
+                      "primary-container": "#2563eb",
+                      "on-secondary-fixed": "#341100",
+                      "text-primary": "#1F2937",
+                      "text-secondary": "#6B7280",
+                      "outline": "#737686",
+                      "background": "#fff8f2",
+                      "secondary": "#9d4300",
+                      "surface-container-highest": "#e8e1db",
+                      "error-container": "#ffdad6",
+                      "surface-variant": "#e8e1db",
+                      "on-secondary-fixed-variant": "#783200",
+                      "success-soft": "#DCFCE7",
+                      "surface-container-high": "#eee7e0",
+                      "error": "#ba1a1a",
+                      "danger-soft": "#FEE2E2",
+                      "aman-success": "#16A34A",
+                      "on-secondary-container": "#5c2400",
+                      "surface-container": "#f4ede6",
+                      "surface": "#FFFFFF",
+                      "tertiary-fixed": "#7ffc97",
+                      "warning-soft": "#FEF3C7",
+                      "surface-bright": "#fff8f2",
+                      "info-blue": "#0EA5E9",
+                      "on-surface": "#1e1b17",
+                      "tertiary-container": "#007f36",
+                      "on-primary-fixed": "#00174b",
+                      "secondary-container": "#fd761a",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "bahaya-danger": "#DC2626",
+                      "on-secondary": "#ffffff",
+                      "inverse-on-surface": "#f6f0e9",
+                      "on-tertiary-container": "#c7ffca",
+                      "secondary-fixed-dim": "#ffb690",
+                      "on-background": "#1e1b17"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sm": "8px",
+                      "gutter": "12px",
+                      "3xl": "40px",
+                      "safe-margin": "16px",
+                      "2xl": "32px",
+                      "lg": "16px",
+                      "xl": "24px",
+                      "md": "12px",
+                      "xs": "4px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Nunito Sans"],
+                      "headline-lg": ["Nunito Sans"],
+                      "amount-lg": ["Nunito Sans"],
+                      "body-lg": ["Inter"],
+                      "headline-lg-mobile": ["Nunito Sans"],
+                      "amount-md": ["Inter"],
+                      "label-caps": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "headline-sm": ["Nunito Sans"]
+              },
+              "fontSize": {
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                      "headline-lg": ["32px", {"lineHeight": "38px", "letterSpacing": "-0.03em", "fontWeight": "800"}],
+                      "amount-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.04em", "fontWeight": "900"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "800"}],
+                      "amount-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "700"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-sm": ["18px", {"lineHeight": "24px", "fontWeight": "700"}]
+              }
+            }
+          }
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .material-symbols-outlined {
+                font-family: 'Material Symbols Outlined';
+                font-weight: normal;
+                font-style: normal;
+                font-size: 24px;
+                line-height: 1;
+                letter-spacing: normal;
+                text-transform: none;
+                display: inline-block;
+                white-space: nowrap;
+                word-wrap: normal;
+                direction: ltr;
+                -webkit-font-feature-settings: 'liga';
+                -webkit-font-smoothing: antialiased;
+            }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-lg selection:bg-primary-soft selection:text-primary">
+<main class="flex-1 flex flex-col max-w-[480px] mx-auto w-full relative">
+<!-- Header / Back Navigation (Task-focused screen logic applied) -->
+<header class="p-safe-margin absolute top-0 w-full z-10">
+<button class="inline-flex items-center justify-center gap-xs px-md py-sm rounded-full bg-surface shadow-sm text-primary hover:bg-surface-container-low transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span class="font-label-caps text-label-caps">Kembali</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<div class="flex-1 flex flex-col items-center justify-center px-lg pb-3xl pt-2xl mt-xl text-center">
+<!-- Illustration Area with Soft Glow -->
+<div class="relative w-64 h-64 mb-xl flex items-center justify-center">
+<!-- Ambient Backdrop -->
+<div class="absolute inset-0 bg-primary-soft rounded-full blur-[40px] opacity-60"></div>
+<!-- Main Illustration -->
+<img class="relative z-10 w-48 h-48 object-contain animate-bounce" data-alt="A highly polished, friendly 2D flat vector illustration of a paper receipt being magically scanned by a sleek smartphone. The aesthetic is clean, modern, and inviting, suitable for a light-mode mobile personal finance app. The color palette primarily uses warm cream backgrounds, vibrant primary blue accents, and subtle energetic orange highlights to represent data processing. The mood is helpful, technologically advanced, and forward-looking, featuring soft rounded shapes and avoiding any harsh outlines or realistic grit." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBO68Q3atyaNjyMNWiv-OMADMOQCx-syq38vQfNRKBw7ZyaUJLG4LNXIg-XXqRazn6bYD3hGWZ0oBtbQpGd9j7yhkj2Ng5DWK9CUOxdiQ7-d70DBc4maa0FXhaSeB6oxCauoX_1J3zPjy8wSWZYCAXFFGeiBnwsc1ui_lPNM_9g6d4DEP7D3OAM4314ATSAHg1PDZ5iKv-6k3obMEU7TZMpDLs-4mpK6WrgKsqjehxVa7Q29XX9Z2YfFDBeuXESaA9NOzsS8H5XvZA" style="animation-duration: 3s; animation-timing-function: ease-in-out; animation-iteration-count: infinite;"/>
+<!-- Floating Decorative Elements -->
+<div class="absolute top-4 right-8 bg-surface rounded-full p-2 shadow-sm text-primary animate-pulse" style="animation-duration: 2s;">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">document_scanner</span>
+</div>
+<div class="absolute bottom-8 left-4 bg-surface rounded-full p-2 shadow-sm text-secondary-container animate-pulse" style="animation-duration: 2.5s;">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+</div>
+<!-- Text Content -->
+<div class="space-y-md w-full max-w-sm">
+<!-- Status Badge -->
+<div class="inline-flex items-center gap-2 bg-surface-container-low px-md py-sm rounded-full mb-sm">
+<span class="text-[16px]">🚧</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Fitur Mendatang</span>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">
+                    Paste JSON Struk
+                </h1>
+<h2 class="font-headline-sm text-headline-sm text-primary">
+                    Import dari AI eksternal
+                </h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                    Akan hadir setelah fondasi transaksi stabil.
+                </p>
+</div>
+</div>
+</main>
+</body></html>

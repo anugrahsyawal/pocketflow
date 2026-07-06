@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PocketFlow - Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@700;800;900&amp;family=Inter:wght@400;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#005320",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#ffdbca",
+                        "waspada-warning": "#F59E0B",
+                        "tertiary-fixed-dim": "#62df7d",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#002109",
+                        "inverse-surface": "#33302c",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#434655",
+                        "outline-variant": "#c3c6d7",
+                        "surface-container-low": "#f9f2ec",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#004ac6",
+                        "surface-tint": "#0053db",
+                        "surface-dim": "#dfd9d2",
+                        "tertiary": "#006329",
+                        "on-primary-container": "#eeefff",
+                        "primary-soft": "#DBEAFE",
+                        "primary-fixed": "#dbe1ff",
+                        "inverse-primary": "#b4c5ff",
+                        "primary-container": "#2563eb",
+                        "on-secondary-fixed": "#341100",
+                        "text-primary": "#1F2937",
+                        "text-secondary": "#6B7280",
+                        "outline": "#737686",
+                        "background": "#fff8f2",
+                        "secondary": "#9d4300",
+                        "surface-container-highest": "#e8e1db",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#e8e1db",
+                        "on-secondary-fixed-variant": "#783200",
+                        "success-soft": "#DCFCE7",
+                        "surface-container-high": "#eee7e0",
+                        "error": "#ba1a1a",
+                        "danger-soft": "#FEE2E2",
+                        "aman-success": "#16A34A",
+                        "on-secondary-container": "#5c2400",
+                        "surface-container": "#f4ede6",
+                        "surface": "#FFFFFF",
+                        "tertiary-fixed": "#7ffc97",
+                        "warning-soft": "#FEF3C7",
+                        "surface-bright": "#fff8f2",
+                        "info-blue": "#0EA5E9",
+                        "on-surface": "#1e1b17",
+                        "tertiary-container": "#007f36",
+                        "on-primary-fixed": "#00174b",
+                        "secondary-container": "#fd761a",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "bahaya-danger": "#DC2626",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#f6f0e9",
+                        "on-tertiary-container": "#c7ffca",
+                        "secondary-fixed-dim": "#ffb690",
+                        "on-background": "#1e1b17"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "gutter": "12px",
+                        "3xl": "40px",
+                        "safe-margin": "16px",
+                        "2xl": "32px",
+                        "lg": "16px",
+                        "xl": "24px",
+                        "md": "12px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Nunito Sans"],
+                        "headline-lg": ["Nunito Sans"],
+                        "amount-lg": ["Nunito Sans"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Nunito Sans"],
+                        "amount-md": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-sm": ["Nunito Sans"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "headline-lg": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+                        "amount-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.04em", "fontWeight": "900" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "34px", "fontWeight": "800" }],
+                        "amount-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #fff8f2; /* background color */
+        }
+        .illustration-pulse {
+            animation: softPulse 4s ease-in-out infinite alternate;
+        }
+        @keyframes softPulse {
+            0% { transform: translateY(0px) scale(1); }
+            100% { transform: translateY(-10px) scale(1.02); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col justify-between max-w-[480px] mx-auto overflow-hidden relative">
+<!-- Background Decoration -->
+<div class="absolute top-[-10%] left-[-20%] w-[150%] h-[60%] bg-gradient-to-b from-primary-fixed to-transparent opacity-40 rounded-full blur-3xl z-0 pointer-events-none"></div>
+<main class="flex-1 flex flex-col items-center justify-center px-safe-margin z-10 w-full pt-10 pb-8 h-full">
+<!-- Header / Logo -->
+<div class="text-center mb-8">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary mb-2 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-primary" data-weight="fill" style="font-size: 32px;">account_balance_wallet</span>
+                PocketFlow
+            </h1>
+</div>
+<!-- Illustration Area -->
+<div class="w-full max-w-[280px] aspect-square mb-8 relative flex items-center justify-center illustration-pulse">
+<!-- Simulated Illustration - usually an image, using a placeholder with data-alt for generation -->
+<img class="w-full h-full object-contain drop-shadow-2xl" data-alt="A cheerful, minimalist 3D illustration of an anthropomorphic pocket or wallet character in a bright, modern light-mode setting. The character is playful, smiling, and holding a few shiny gold coins or bills. The color palette features vibrant primary blue (#004ac6) and energetic orange accents against a soft cream background. The lighting is soft and inviting, emphasizing a friendly and un-intimidating personal finance theme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkH9du7GPpA5vH0TYQSTETPHIugYblJKAljB2tUsagSJrj3n1bv15s8DeCeG1nIkFC3FpOFcPGA2-QpzjYenIRsoGFkYl3pPPlv1FTibWUB-EDf07yjqgwvgKOwlSf5U3UtyhLLdSqvjUGEeSedMduq6TdAOkzKuL-CI5l3A3jqJPsRjORAFoHpfP_9AxyXCGzOJ4d5FdMt7WKvL-90XGtud85WOPjAPUEiVM9kvp88pNET7pbCHZKADBkiYCCw-82ENQEBXKZzn4"/>
+</div>
+<!-- Copy -->
+<div class="text-center mb-10 w-full max-w-sm">
+<p class="font-body-lg text-body-lg text-text-primary">
+                Kelola uangmu lebih asik dengan sistem kantong.
+            </p>
+</div>
+<!-- Actions -->
+<div class="w-full flex flex-col gap-4 max-w-sm">
+<!-- Google Login Button -->
+<button class="w-full py-md px-lg bg-surface text-text-primary font-body-lg text-body-lg font-bold rounded-full shadow-[0_4px_12px_rgba(0,74,198,0.1)] flex items-center justify-center gap-3 hover:bg-surface-container-lowest transition-all active:scale-95 border border-surface-container-highest">
+<!-- SVG Google Icon (Simplified) -->
+<svg class="w-6 h-6" viewbox="0 0 24 24">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
+</svg>
+                Masuk dengan Google
+            </button>
+<!-- Email Login Button -->
+<button class="w-full py-md px-lg bg-primary-soft text-primary font-body-lg text-body-lg font-bold rounded-full flex items-center justify-center gap-3 hover:bg-primary-fixed transition-all active:scale-95">
+<span class="material-symbols-outlined" data-weight="fill">mail</span>
+                Masuk dengan Email
+            </button>
+</div>
+</main>
+<!-- Suppressed TopAppBar and BottomNavBar due to transactional/login intent -->
+</body></html>

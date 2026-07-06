@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PocketFlow - Add Transaction</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&amp;family=Nunito+Sans:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#fff8f2",
+                        "warning-soft": "#FEF3C7",
+                        "error": "#ba1a1a",
+                        "inverse-on-surface": "#f6f0e9",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "surface-dim": "#dfd9d2",
+                        "surface-container-low": "#f9f2ec",
+                        "danger-soft": "#FEE2E2",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#7ffc97",
+                        "inverse-surface": "#33302c",
+                        "surface": "#FFFFFF",
+                        "secondary-fixed-dim": "#ffb690",
+                        "secondary-container": "#fd761a",
+                        "primary": "#004ac6",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#eee7e0",
+                        "secondary": "#9d4300",
+                        "info-blue": "#0EA5E9",
+                        "on-tertiary-fixed": "#002109",
+                        "on-background": "#1e1b17",
+                        "primary-container": "#2563eb",
+                        "primary-soft": "#DBEAFE",
+                        "waspada-warning": "#F59E0B",
+                        "primary-fixed": "#dbe1ff",
+                        "surface-container": "#f4ede6",
+                        "on-tertiary-fixed-variant": "#005320",
+                        "outline": "#737686",
+                        "text-primary": "#1F2937",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e8e1db",
+                        "on-primary-container": "#eeefff",
+                        "tertiary": "#006329",
+                        "on-secondary-fixed-variant": "#783200",
+                        "bahaya-danger": "#DC2626",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1e1b17",
+                        "background": "#fff8f2",
+                        "aman-success": "#16A34A",
+                        "secondary-fixed": "#ffdbca",
+                        "outline-variant": "#c3c6d7",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-tint": "#0053db",
+                        "text-secondary": "#6B7280",
+                        "on-secondary-fixed": "#341100",
+                        "on-primary-fixed": "#00174b",
+                        "tertiary-container": "#007f36",
+                        "on-surface-variant": "#434655",
+                        "on-secondary-container": "#5c2400",
+                        "tertiary-fixed-dim": "#62df7d",
+                        "on-secondary": "#ffffff",
+                        "success-soft": "#DCFCE7",
+                        "on-tertiary-container": "#c7ffca",
+                        "surface-variant": "#e8e1db"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "sm": "8px",
+                        "xl": "24px",
+                        "gutter": "12px",
+                        "2xl": "32px",
+                        "safe-margin": "16px",
+                        "lg": "16px",
+                        "3xl": "40px",
+                        "md": "12px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Nunito Sans"],
+                        "headline-lg-mobile": ["Nunito Sans"],
+                        "headline-md": ["Nunito Sans"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "amount-lg": ["Nunito Sans"],
+                        "amount-md": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "headline-lg": ["Nunito Sans"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "34px", "fontWeight": "800" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "amount-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.04em", "fontWeight": "900" }],
+                        "amount-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.03em", "fontWeight": "800" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .slide-up {
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background antialiased min-h-screen flex justify-center">
+<div class="w-full max-w-[480px] bg-background relative min-h-screen shadow-2xl flex flex-col overflow-hidden">
+<!-- TopAppBar Placeholder (Hidden under overlay) -->
+<header class="bg-background dark:bg-on-background font-headline-md text-headline-md flex justify-between items-center w-full px-lg py-md max-w-[480px] mx-auto docked full-width top-0 z-10">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-text-secondary" data-icon="person">person</span>
+</div>
+<h1 class="font-headline-md text-headline-md font-extrabold text-primary dark:text-primary-fixed">PocketFlow</h1>
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-text-secondary" data-icon="visibility">visibility</span>
+</button>
+</header>
+<!-- Main Content Area (Dimmed by Overlay) -->
+<main class="flex-1 px-lg py-xl space-y-xl opacity-20 filter blur-sm transition-all duration-300">
+<!-- Simulated Content -->
+<div class="bg-surface rounded-[32px] p-lg shadow-[0_8px_24px_rgba(0,74,198,0.1)] relative">
+<div class="flex justify-between items-start mb-sm">
+<h2 class="font-body-lg text-body-lg text-text-secondary">Main Pocket</h2>
+<span class="text-2xl">💰</span>
+</div>
+<div class="font-amount-md text-amount-md text-text-primary mb-xl">Rp 4.500.000</div>
+<div class="flex items-center space-x-sm mb-sm">
+<div class="px-3 py-1 bg-success-soft text-aman-success rounded-full font-label-caps text-label-caps">Aman</div>
+<span class="font-body-sm text-body-sm text-text-secondary">Rp 150k / hari</span>
+</div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="w-1/3 h-full bg-aman-success rounded-full"></div>
+</div>
+</div>
+<div class="space-y-md">
+<h3 class="font-headline-sm text-headline-sm text-text-primary">Hari Ini</h3>
+<div class="bg-surface rounded-xl p-md flex items-center shadow-[0_2px_8px_rgba(0,74,198,0.05)]">
+<div class="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center mr-md">
+<span class="text-xl">☕</span>
+</div>
+<div class="flex-1">
+<div class="font-body-lg text-body-lg text-text-primary font-bold">Kopi Sore</div>
+<div class="font-body-sm text-body-sm text-text-secondary">Main Pocket</div>
+</div>
+<div class="font-body-lg text-body-lg text-text-primary font-bold">-Rp 45.000</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Hidden under overlay) -->
+<nav class="bg-surface dark:bg-surface-container-highest shadow-[0_-4px_20px_0_rgba(0,74,198,0.1)] fixed bottom-0 left-0 right-0 w-full max-w-[480px] mx-auto flex justify-around items-end px-gutter pb-safe h-20 z-0 rounded-t-3xl opacity-20 filter blur-sm">
+<a class="flex flex-col items-center justify-center text-text-secondary dark:text-outline-variant p-2 hover:bg-surface-container-low dark:hover:bg-surface-dim transition-colors" href="#">
+<span class="material-symbols-outlined mb-xs" data-icon="home">home</span>
+<span class="font-label-caps text-label-caps">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-text-secondary dark:text-outline-variant p-2 hover:bg-surface-container-low dark:hover:bg-surface-dim transition-colors" href="#">
+<span class="material-symbols-outlined mb-xs" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-label-caps text-label-caps">Pockets</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim bg-primary text-on-primary rounded-full -translate-y-4 w-14 h-14 shadow-lg hover:bg-surface-container-low dark:hover:bg-surface-dim transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+<span class="font-label-caps text-label-caps sr-only">Add</span>
+</a>
+<a class="flex flex-col items-center justify-center text-text-secondary dark:text-outline-variant p-2 hover:bg-surface-container-low dark:hover:bg-surface-dim transition-colors" href="#">
+<span class="material-symbols-outlined mb-xs" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-caps text-label-caps">History</span>
+</a>
+<a class="flex flex-col items-center justify-center text-text-secondary dark:text-outline-variant p-2 hover:bg-surface-container-low dark:hover:bg-surface-dim transition-colors" href="#">
+<span class="material-symbols-outlined mb-xs" data-icon="bar_chart">bar_chart</span>
+<span class="font-label-caps text-label-caps">Reports</span>
+</a>
+</nav>
+<!-- Overlay Background -->
+<div class="absolute inset-0 bg-inverse-surface/40 backdrop-blur-sm z-40 transition-opacity" id="overlay-bg"></div>
+<!-- Add Transaction Bottom Sheet -->
+<div class="absolute bottom-0 left-0 right-0 bg-surface rounded-t-[32px] shadow-[0_-8px_30px_rgba(0,0,0,0.12)] z-50 slide-up pb-safe flex flex-col" id="bottom-sheet">
+<!-- Handle -->
+<div class="w-full flex justify-center pt-sm pb-md">
+<div class="w-12 h-1.5 bg-surface-variant rounded-full"></div>
+</div>
+<!-- Header -->
+<div class="px-lg pb-xl flex justify-between items-center border-b border-surface-container-highest">
+<h2 class="font-headline-md text-headline-md text-text-primary">Tambah Transaksi</h2>
+<button class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-text-secondary hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<!-- Content Options -->
+<div class="p-lg grid grid-cols-2 gap-md">
+<!-- Pengeluaran (Expense) -->
+<button class="bg-danger-soft/30 hover:bg-danger-soft/60 border border-danger-soft rounded-2xl p-md flex flex-col items-center justify-center text-center transition-all hover:scale-95 active:scale-90 group relative overflow-hidden">
+<div class="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center mb-sm group-hover:-translate-y-1 transition-transform">
+<span class="text-3xl">💸</span>
+</div>
+<span class="font-body-lg text-body-lg text-bahaya-danger font-bold">Pengeluaran</span>
+<span class="font-body-sm text-body-sm text-text-secondary mt-xs">Catat jajanmu</span>
+</button>
+<!-- Pemasukan (Income) -->
+<button class="bg-success-soft/30 hover:bg-success-soft/60 border border-success-soft rounded-2xl p-md flex flex-col items-center justify-center text-center transition-all hover:scale-95 active:scale-90 group relative overflow-hidden">
+<div class="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center mb-sm group-hover:-translate-y-1 transition-transform">
+<span class="text-3xl">🤑</span>
+</div>
+<span class="font-body-lg text-body-lg text-aman-success font-bold">Pemasukan</span>
+<span class="font-body-sm text-body-sm text-text-secondary mt-xs">Uang masuk!</span>
+</button>
+<!-- Transfer -->
+<button class="bg-primary-soft/30 hover:bg-primary-soft/60 border border-primary-soft rounded-2xl p-md flex flex-col items-center justify-center text-center transition-all hover:scale-95 active:scale-90 group relative overflow-hidden">
+<div class="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center mb-sm group-hover:-translate-y-1 transition-transform">
+<span class="text-3xl">🔄</span>
+</div>
+<span class="font-body-lg text-body-lg text-primary font-bold">Transfer</span>
+<span class="font-body-sm text-body-sm text-text-secondary mt-xs">Pindah kantong</span>
+</button>
+<!-- Paste JSON Receipt (Sprint 2) -->
+<button class="bg-surface-container-low hover:bg-surface-variant border border-surface-variant rounded-2xl p-md flex flex-col items-center justify-center text-center transition-all hover:scale-95 active:scale-90 group relative overflow-hidden opacity-80">
+<div class="absolute top-2 right-2 bg-warning-soft text-waspada-warning px-2 py-0.5 rounded-md font-label-caps text-label-caps text-[10px]">Sprint 2</div>
+<div class="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center mb-sm group-hover:-translate-y-1 transition-transform grayscale">
+<span class="text-3xl">🧾</span>
+</div>
+<span class="font-body-lg text-body-lg text-text-primary font-bold">Auto-Scan</span>
+<span class="font-body-sm text-body-sm text-text-secondary mt-xs">Paste Struk</span>
+</button>
+</div>
+<!-- Bottom safe area padding -->
+<div class="h-6"></div>
+</div>
+</div>
+<script>
+        // Simple script to handle bottom sheet closing interaction for demo purposes
+        document.querySelector('button[data-icon="close"]')?.parentElement.addEventListener('click', () => {
+            const sheet = document.getElementById('bottom-sheet');
+            const bg = document.getElementById('overlay-bg');
+            const main = document.querySelector('main');
+            const nav = document.querySelector('nav');
+            
+            sheet.style.transform = 'translateY(100%)';
+            sheet.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+            bg.style.opacity = '0';
+            
+            main.classList.remove('opacity-20', 'blur-sm');
+            nav.classList.remove('opacity-20', 'blur-sm');
+            
+            setTimeout(() => {
+                sheet.style.display = 'none';
+                bg.style.display = 'none';
+            }, 300);
+        });
+    </script>
+</body></html>

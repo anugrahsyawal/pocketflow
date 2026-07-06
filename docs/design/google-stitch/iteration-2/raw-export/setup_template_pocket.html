@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Setup Wizard - PocketFlow</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@700;800;900&amp;family=Inter:wght@400;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#005320",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#ffdbca",
+                        "waspada-warning": "#F59E0B",
+                        "tertiary-fixed-dim": "#62df7d",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#002109",
+                        "inverse-surface": "#33302c",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#434655",
+                        "outline-variant": "#c3c6d7",
+                        "surface-container-low": "#f9f2ec",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#004ac6",
+                        "surface-tint": "#0053db",
+                        "surface-dim": "#dfd9d2",
+                        "tertiary": "#006329",
+                        "on-primary-container": "#eeefff",
+                        "primary-soft": "#DBEAFE",
+                        "primary-fixed": "#dbe1ff",
+                        "inverse-primary": "#b4c5ff",
+                        "primary-container": "#2563eb",
+                        "on-secondary-fixed": "#341100",
+                        "text-primary": "#1F2937",
+                        "text-secondary": "#6B7280",
+                        "outline": "#737686",
+                        "background": "#fff8f2",
+                        "secondary": "#9d4300",
+                        "surface-container-highest": "#e8e1db",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#e8e1db",
+                        "on-secondary-fixed-variant": "#783200",
+                        "success-soft": "#DCFCE7",
+                        "surface-container-high": "#eee7e0",
+                        "error": "#ba1a1a",
+                        "danger-soft": "#FEE2E2",
+                        "aman-success": "#16A34A",
+                        "on-secondary-container": "#5c2400",
+                        "surface-container": "#f4ede6",
+                        "surface": "#FFFFFF",
+                        "tertiary-fixed": "#7ffc97",
+                        "warning-soft": "#FEF3C7",
+                        "surface-bright": "#fff8f2",
+                        "info-blue": "#0EA5E9",
+                        "on-surface": "#1e1b17",
+                        "tertiary-container": "#007f36",
+                        "on-primary-fixed": "#00174b",
+                        "secondary-container": "#fd761a",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "bahaya-danger": "#DC2626",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#f6f0e9",
+                        "on-tertiary-container": "#c7ffca",
+                        "secondary-fixed-dim": "#ffb690",
+                        "on-background": "#1e1b17"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "gutter": "12px",
+                        "3xl": "40px",
+                        "safe-margin": "16px",
+                        "2xl": "32px",
+                        "lg": "16px",
+                        "xl": "24px",
+                        "md": "12px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Nunito Sans"],
+                        "headline-lg": ["Nunito Sans"],
+                        "amount-lg": ["Nunito Sans"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Nunito Sans"],
+                        "amount-md": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-sm": ["Nunito Sans"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "headline-lg": ["32px", { "lineHeight": "38px", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+                        "amount-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.04em", "fontWeight": "900" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "34px", "fontWeight": "800" }],
+                        "amount-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #fff8f2; /* background */
+            color: #1e1b17; /* on-background */
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased min-h-screen flex flex-col items-center justify-start pb-3xl">
+<!-- Top Navigation suppressed as this is a linear onboarding flow -->
+<main class="w-full max-w-[480px] px-lg pt-2xl pb-3xl flex-grow flex flex-col">
+<!-- Header -->
+<header class="mb-xl">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-text-primary mb-sm">Pocket Template</h1>
+<p class="font-body-lg text-body-lg text-text-secondary">Pilih kantong awalmu. Tenang, kamu bisa ubah atau tambah nanti.</p>
+</header>
+<!-- Pockets List -->
+<div class="flex flex-col gap-md flex-grow">
+<!-- Pocket Item: Food -->
+<label class="flex items-center p-lg bg-surface rounded-[24px] shadow-[0_4px_12px_rgba(0,74,198,0.05)] border border-surface-container-highest cursor-pointer hover:bg-surface-container-low transition-colors group">
+<div class="w-12 h-12 bg-primary-soft rounded-full flex items-center justify-center mr-md text-primary">
+<span class="material-symbols-outlined icon-filled text-2xl" data-icon="restaurant">restaurant</span>
+</div>
+<div class="flex-grow">
+<span class="font-headline-sm text-headline-sm text-text-primary block">Food</span>
+<span class="font-body-sm text-body-sm text-text-secondary">Makan &amp; Minum sehari-hari</span>
+</div>
+<div class="ml-sm">
+<input checked="" class="form-checkbox h-6 w-6 text-primary rounded-md border-outline-variant focus:ring-primary focus:ring-opacity-50 transition-all duration-200" type="checkbox"/>
+</div>
+</label>
+<!-- Pocket Item: Transport -->
+<label class="flex items-center p-lg bg-surface rounded-[24px] shadow-[0_4px_12px_rgba(0,74,198,0.05)] border border-surface-container-highest cursor-pointer hover:bg-surface-container-low transition-colors group">
+<div class="w-12 h-12 bg-warning-soft rounded-full flex items-center justify-center mr-md text-waspada-warning">
+<span class="material-symbols-outlined icon-filled text-2xl" data-icon="directions_bus">directions_bus</span>
+</div>
+<div class="flex-grow">
+<span class="font-headline-sm text-headline-sm text-text-primary block">Transport</span>
+<span class="font-body-sm text-body-sm text-text-secondary">Bensin, KRL, Ojek</span>
+</div>
+<div class="ml-sm">
+<input checked="" class="form-checkbox h-6 w-6 text-primary rounded-md border-outline-variant focus:ring-primary focus:ring-opacity-50 transition-all duration-200" type="checkbox"/>
+</div>
+</label>
+<!-- Pocket Item: Housing -->
+<label class="flex items-center p-lg bg-surface rounded-[24px] shadow-[0_4px_12px_rgba(0,74,198,0.05)] border border-surface-container-highest cursor-pointer hover:bg-surface-container-low transition-colors group">
+<div class="w-12 h-12 bg-success-soft rounded-full flex items-center justify-center mr-md text-aman-success">
+<span class="material-symbols-outlined icon-filled text-2xl" data-icon="home">home</span>
+</div>
+<div class="flex-grow">
+<span class="font-headline-sm text-headline-sm text-text-primary block">Housing</span>
+<span class="font-body-sm text-body-sm text-text-secondary">Kos, Listrik, Internet</span>
+</div>
+<div class="ml-sm">
+<input checked="" class="form-checkbox h-6 w-6 text-primary rounded-md border-outline-variant focus:ring-primary focus:ring-opacity-50 transition-all duration-200" type="checkbox"/>
+</div>
+</label>
+<!-- Pocket Item: Entertainment -->
+<label class="flex items-center p-lg bg-surface rounded-[24px] shadow-[0_4px_12px_rgba(0,74,198,0.05)] border border-surface-container-highest cursor-pointer hover:bg-surface-container-low transition-colors group">
+<div class="w-12 h-12 bg-danger-soft rounded-full flex items-center justify-center mr-md text-bahaya-danger">
+<span class="material-symbols-outlined icon-filled text-2xl" data-icon="movie">movie</span>
+</div>
+<div class="flex-grow">
+<span class="font-headline-sm text-headline-sm text-text-primary block">Entertainment</span>
+<span class="font-body-sm text-body-sm text-text-secondary">Nonton, Langganan, Main</span>
+</div>
+<div class="ml-sm">
+<input class="form-checkbox h-6 w-6 text-primary rounded-md border-outline-variant focus:ring-primary focus:ring-opacity-50 transition-all duration-200" type="checkbox"/>
+</div>
+</label>
+</div>
+</main>
+<!-- Fixed Bottom Action (Thumb Zone) -->
+<div class="fixed bottom-0 w-full max-w-[480px] bg-background/80 backdrop-blur-md p-lg border-t border-surface-container-highest z-50">
+<button class="w-full bg-primary text-on-primary font-headline-sm text-headline-sm py-4 px-xl rounded-full shadow-lg hover:opacity-90 active:scale-95 transition-all duration-150 flex items-center justify-center">
+            Lanjut
+            <span class="material-symbols-outlined ml-2" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</body></html>

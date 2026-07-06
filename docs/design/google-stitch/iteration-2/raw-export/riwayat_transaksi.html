@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Transactions History - PocketFlow</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@700;800;900&amp;family=Inter:wght@400;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-bright": "#fff8f2",
+                      "warning-soft": "#FEF3C7",
+                      "error": "#ba1a1a",
+                      "inverse-on-surface": "#f6f0e9",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "surface-dim": "#dfd9d2",
+                      "surface-container-low": "#f9f2ec",
+                      "danger-soft": "#FEE2E2",
+                      "error-container": "#ffdad6",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "on-error": "#ffffff",
+                      "tertiary-fixed": "#7ffc97",
+                      "inverse-surface": "#33302c",
+                      "surface": "#FFFFFF",
+                      "secondary-fixed-dim": "#ffb690",
+                      "secondary-container": "#fd761a",
+                      "primary": "#004ac6",
+                      "on-tertiary": "#ffffff",
+                      "on-primary": "#ffffff",
+                      "surface-container-high": "#eee7e0",
+                      "secondary": "#9d4300",
+                      "info-blue": "#0EA5E9",
+                      "on-tertiary-fixed": "#002109",
+                      "on-background": "#1e1b17",
+                      "primary-container": "#2563eb",
+                      "primary-soft": "#DBEAFE",
+                      "waspada-warning": "#F59E0B",
+                      "primary-fixed": "#dbe1ff",
+                      "surface-container": "#f4ede6",
+                      "on-tertiary-fixed-variant": "#005320",
+                      "outline": "#737686",
+                      "text-primary": "#1F2937",
+                      "on-error-container": "#93000a",
+                      "surface-container-highest": "#e8e1db",
+                      "on-primary-container": "#eeefff",
+                      "tertiary": "#006329",
+                      "on-secondary-fixed-variant": "#783200",
+                      "bahaya-danger": "#DC2626",
+                      "surface-container-lowest": "#ffffff",
+                      "on-surface": "#1e1b17",
+                      "background": "#fff8f2",
+                      "aman-success": "#16A34A",
+                      "secondary-fixed": "#ffdbca",
+                      "outline-variant": "#c3c6d7",
+                      "inverse-primary": "#b4c5ff",
+                      "surface-tint": "#0053db",
+                      "text-secondary": "#6B7280",
+                      "on-secondary-fixed": "#341100",
+                      "on-primary-fixed": "#00174b",
+                      "tertiary-container": "#007f36",
+                      "on-surface-variant": "#434655",
+                      "on-secondary-container": "#5c2400",
+                      "tertiary-fixed-dim": "#62df7d",
+                      "on-secondary": "#ffffff",
+                      "success-soft": "#DCFCE7",
+                      "on-tertiary-container": "#c7ffca",
+                      "surface-variant": "#e8e1db"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "sm": "8px",
+                      "xl": "24px",
+                      "gutter": "12px",
+                      "2xl": "32px",
+                      "safe-margin": "16px",
+                      "lg": "16px",
+                      "3xl": "40px",
+                      "md": "12px"
+              },
+              "fontFamily": {
+                      "headline-sm": ["Nunito Sans"],
+                      "headline-lg-mobile": ["Nunito Sans"],
+                      "headline-md": ["Nunito Sans"],
+                      "body-sm": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "amount-lg": ["Nunito Sans"],
+                      "amount-md": ["Inter"],
+                      "label-caps": ["Inter"],
+                      "headline-lg": ["Nunito Sans"]
+              },
+              "fontSize": {
+                      "headline-sm": ["18px", {"lineHeight": "24px", "fontWeight": "700"}],
+                      "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "800"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "amount-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.04em", "fontWeight": "900"}],
+                      "amount-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "700"}],
+                      "headline-lg": ["32px", {"lineHeight": "38px", "letterSpacing": "-0.03em", "fontWeight": "800"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-sans antialiased min-h-screen relative pb-32">
+<!-- TopAppBar Shared Component -->
+<header class="bg-background dark:bg-on-background flat no shadows flex justify-between items-center w-full px-lg py-md max-w-[480px] mx-auto docked full-width top-0 sticky z-40">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high shrink-0">
+<img class="w-full h-full object-cover" data-alt="A minimalist 3D rendering of a friendly profile avatar, featuring soft rounded geometry and warm ambient lighting. Set against a clean cream background, embodying a modern, approachable aesthetic suitable for a light-mode personal finance app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsxjS_yBjohf93us1BQSD3H74h__LuQa8RHLGQvtruAnM69YRasNYQsaQpDLUp3LUIeihBtWwMP5oIrCO5_wB1nwd64Hex9NY2ypbyTk7ygWo6Kj6_J0k6LJCW_CwTlLafCKC-RoFNKTFtxfI-srfJRm0rLzIiCh4BT8-bFHJ7Zu-U912ROdmMPrFNiZGsYZ-od70GCRjoh3AKYx4lz0vvfqNkGByhq7XalzzQseHMJB6imb76p0MgItB3vsQK9nWjEGw5jto8ztg"/>
+</div>
+<h1 class="font-headline-md text-headline-md font-extrabold text-primary dark:text-primary-fixed">PocketFlow</h1>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:opacity-80 transition-opacity text-primary dark:text-primary-fixed">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">visibility</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-[480px] mx-auto flex flex-col pt-md">
+<!-- Search Bar -->
+<div class="px-safe-margin mb-md">
+<div class="relative w-full bg-surface rounded-full shadow-[0_4px_20px_0_rgba(0,74,198,0.05)] border border-surface-variant flex items-center px-lg py-3 focus-within:border-primary transition-colors">
+<span class="material-symbols-outlined text-outline mr-sm">search</span>
+<input class="bg-transparent border-none outline-none w-full font-body-lg text-body-lg text-text-primary placeholder:text-outline p-0 focus:ring-0" placeholder="Cari transaksi..." type="text"/>
+</div>
+</div>
+<!-- Filter Chips -->
+<div class="flex gap-sm overflow-x-auto no-scrollbar px-safe-margin pb-md snap-x">
+<button class="snap-start shrink-0 bg-primary text-on-primary rounded-full px-5 py-2.5 font-label-caps text-label-caps shadow-sm">
+                Semua
+            </button>
+<button class="snap-start shrink-0 bg-surface text-text-secondary border border-outline-variant hover:bg-surface-container-low rounded-full px-5 py-2.5 font-label-caps text-label-caps transition-colors">
+                Pengeluaran
+            </button>
+<button class="snap-start shrink-0 bg-surface text-text-secondary border border-outline-variant hover:bg-surface-container-low rounded-full px-5 py-2.5 font-label-caps text-label-caps transition-colors">
+                Pemasukan
+            </button>
+<button class="snap-start shrink-0 bg-surface text-text-secondary border border-outline-variant hover:bg-surface-container-low rounded-full px-5 py-2.5 font-label-caps text-label-caps transition-colors">
+                Transfer
+            </button>
+</div>
+<!-- Transactions List -->
+<div class="px-safe-margin flex flex-col gap-xl">
+<!-- Group: Hari ini -->
+<section>
+<h2 class="font-headline-sm text-headline-sm text-text-primary mb-sm">Hari ini</h2>
+<div class="flex flex-col gap-sm">
+<!-- Expense Card -->
+<div class="bg-surface rounded-[24px] p-lg flex items-center justify-between shadow-[0_8px_24px_rgba(0,74,198,0.04)] border border-surface-variant/50 relative overflow-hidden group hover:shadow-[0_8px_24px_rgba(0,74,198,0.08)] transition-all">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-2xl bg-warning-soft flex items-center justify-center text-2xl">
+                                🍜
+                            </div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[16px] leading-[22px] font-bold text-text-primary">Makan siang</span>
+<span class="font-body-sm text-body-sm text-text-secondary">Cash</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-amount-md text-amount-md text-text-primary">-Rp18.000</span>
+</div>
+</div>
+<!-- Transfer Card -->
+<div class="bg-surface rounded-[24px] p-lg flex items-center justify-between shadow-[0_8px_24px_rgba(0,74,198,0.04)] border border-surface-variant/50 relative overflow-hidden group hover:shadow-[0_8px_24px_rgba(0,74,198,0.08)] transition-all">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-2xl bg-surface-container-low border border-outline-variant/30 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">sync_alt</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[16px] leading-[22px] font-bold text-text-primary flex items-center gap-1">
+                                    Top up NFC 
+                                </span>
+<span class="font-body-sm text-body-sm text-text-secondary flex items-center gap-1">
+                                    Transp <span class="material-symbols-outlined text-[14px]">arrow_forward</span> NFC
+                                </span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-amount-md text-amount-md text-text-primary">Rp50.000</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Group: Kemarin -->
+<section>
+<h2 class="font-headline-sm text-headline-sm text-text-primary mb-sm">Kemarin</h2>
+<div class="flex flex-col gap-sm">
+<!-- Expense Card -->
+<div class="bg-surface rounded-[24px] p-lg flex items-center justify-between shadow-[0_8px_24px_rgba(0,74,198,0.04)] border border-surface-variant/50 relative overflow-hidden group hover:shadow-[0_8px_24px_rgba(0,74,198,0.08)] transition-all">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-2xl bg-primary-soft flex items-center justify-center text-2xl">
+                                ☕
+                            </div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-[16px] leading-[22px] font-bold text-text-primary">Kopi pagi</span>
+<span class="font-body-sm text-body-sm text-text-secondary">Gopay</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-amount-md text-amount-md text-text-primary">-Rp25.000</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar Shared Component -->
+<nav class="bg-surface dark:bg-surface-container-highest shadow-[0_-4px_20px_0_rgba(0,74,198,0.1)] shadow-lg fixed bottom-0 w-full z-50 rounded-t-3xl fixed bottom-0 left-0 right-0 w-full max-w-[480px] mx-auto flex justify-around items-end px-gutter pb-safe h-20">
+<!-- 1: Home (Inactive) -->
+<a class="flex flex-col items-center justify-center text-text-secondary dark:text-outline-variant p-2 hover:bg-surface-container-low dark:hover:bg-surface-dim transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:opacity-80 transition-opacity">home</span>
+<span class="font-label-caps text-label-caps mt-1">Home</span>
+</a>
+<!-- 2: Pockets (Inactive) -->
+<a class="flex flex-col items-center justify-center text-text-secondary dark:text-outline-variant p-2 hover:bg-surface-container-low dark:hover:bg-surface-dim transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:opacity-80 transition-opacity">account_balance_wallet</span>
+<span class="font-label-caps text-label-caps mt-1">Pockets</span>
+</a>
+<!-- 3: Add (Inactive) -->
+<a class="flex flex-col items-center justify-center text-text-secondary dark:text-outline-variant p-2 hover:bg-surface-container-low dark:hover:bg-surface-dim transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:opacity-80 transition-opacity">add</span>
+<span class="font-label-caps text-label-caps mt-1">Add</span>
+</a>
+<!-- 4: History (Active Match) -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim [&amp;:nth-child(3)]:bg-primary [&amp;:nth-child(3)]:text-on-primary [&amp;:nth-child(3)]:rounded-full [&amp;:nth-child(3)]:-translate-y-4 [&amp;:nth-child(3)]:w-14 [&amp;:nth-child(3)]:h-14 [&amp;:nth-child(3)]:shadow-lg scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<span class="font-label-caps text-label-caps mt-1">History</span>
+</a>
+<!-- 5: Reports (Inactive) -->
+<a class="flex flex-col items-center justify-center text-text-secondary dark:text-outline-variant p-2 hover:bg-surface-container-low dark:hover:bg-surface-dim transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:opacity-80 transition-opacity">bar_chart</span>
+<span class="font-label-caps text-label-caps mt-1">Reports</span>
+</a>
+</nav>
+</body></html>

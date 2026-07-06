@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Tambah Pemasukan - PocketFlow</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&amp;family=Nunito+Sans:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Hide scrollbar for a cleaner mobile look */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+        
+        /* Smooth transitions */
+        .interactive-element {
+            transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .interactive-element:active {
+            transform: scale(0.97);
+        }
+    </style>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed-variant": "#005320",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed": "#ffdbca",
+                    "waspada-warning": "#F59E0B",
+                    "tertiary-fixed-dim": "#62df7d",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed": "#002109",
+                    "inverse-surface": "#33302c",
+                    "on-tertiary": "#ffffff",
+                    "on-surface-variant": "#434655",
+                    "outline-variant": "#c3c6d7",
+                    "surface-container-low": "#f9f2ec",
+                    "on-error": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "primary": "#004ac6",
+                    "surface-tint": "#0053db",
+                    "surface-dim": "#dfd9d2",
+                    "tertiary": "#006329",
+                    "on-primary-container": "#eeefff",
+                    "primary-soft": "#DBEAFE",
+                    "primary-fixed": "#dbe1ff",
+                    "inverse-primary": "#b4c5ff",
+                    "primary-container": "#2563eb",
+                    "on-secondary-fixed": "#341100",
+                    "text-primary": "#1F2937",
+                    "text-secondary": "#6B7280",
+                    "outline": "#737686",
+                    "background": "#fff8f2",
+                    "secondary": "#9d4300",
+                    "surface-container-highest": "#e8e1db",
+                    "error-container": "#ffdad6",
+                    "surface-variant": "#e8e1db",
+                    "on-secondary-fixed-variant": "#783200",
+                    "success-soft": "#DCFCE7",
+                    "surface-container-high": "#eee7e0",
+                    "error": "#ba1a1a",
+                    "danger-soft": "#FEE2E2",
+                    "aman-success": "#16A34A",
+                    "on-secondary-container": "#5c2400",
+                    "surface-container": "#f4ede6",
+                    "surface": "#FFFFFF",
+                    "tertiary-fixed": "#7ffc97",
+                    "warning-soft": "#FEF3C7",
+                    "surface-bright": "#fff8f2",
+                    "info-blue": "#0EA5E9",
+                    "on-surface": "#1e1b17",
+                    "tertiary-container": "#007f36",
+                    "on-primary-fixed": "#00174b",
+                    "secondary-container": "#fd761a",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "bahaya-danger": "#DC2626",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f6f0e9",
+                    "on-tertiary-container": "#c7ffca",
+                    "secondary-fixed-dim": "#ffb690",
+                    "on-background": "#1e1b17"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "2xl": "1rem",
+                    "3xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "gutter": "12px",
+                    "3xl": "40px",
+                    "safe-margin": "16px",
+                    "2xl": "32px",
+                    "lg": "16px",
+                    "xl": "24px",
+                    "md": "12px",
+                    "xs": "4px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Nunito Sans"],
+                    "headline-lg": ["Nunito Sans"],
+                    "amount-lg": ["Nunito Sans"],
+                    "body-lg": ["Inter"],
+                    "headline-lg-mobile": ["Nunito Sans"],
+                    "amount-md": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-sm": ["Nunito Sans"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-lg": ["32px", {"lineHeight": "38px", "letterSpacing": "-0.03em", "fontWeight": "800"}],
+                    "amount-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.04em", "fontWeight": "900"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "800"}],
+                    "amount-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "700"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-sm": ["18px", {"lineHeight": "24px", "fontWeight": "700"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-lg min-h-screen flex flex-col mx-auto max-w-[480px] relative antialiased">
+<!-- Top App Bar (Customized for Transactional Flow - Suppressing Global Nav) -->
+<header class="flex justify-between items-center w-full px-lg py-md bg-background z-10 sticky top-0">
+<button class="interactive-element flex items-center justify-center w-10 h-10 rounded-full bg-surface-container hover:bg-surface-container-highest text-on-surface-variant">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">close</span>
+</button>
+<h1 class="font-headline-sm text-headline-sm text-tertiary">Pemasukan</h1>
+<div class="w-10 h-10"></div> <!-- Balancer -->
+</header>
+<!-- Main Content Scrollable Area -->
+<main class="flex-1 overflow-y-auto px-lg pb-[120px] flex flex-col gap-xl">
+<!-- Large Amount Input Zone -->
+<section class="flex flex-col items-center justify-center pt-md pb-lg">
+<span class="font-body-sm text-body-sm text-tertiary mb-xs bg-success-soft px-md py-xs rounded-full inline-flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+                Tambah Saldo
+            </span>
+<div class="relative w-full mt-md">
+<div class="absolute left-0 top-1/2 -translate-y-1/2 font-amount-lg text-amount-lg text-text-secondary opacity-50 pl-xl">Rp</div>
+<input class="w-full bg-transparent border-none text-center font-amount-lg text-amount-lg text-tertiary focus:ring-0 placeholder-tertiary/30 py-sm" placeholder="0" type="tel" value="0"/>
+<div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-2/3 h-[2px] bg-outline-variant/30 rounded-full"></div>
+<div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-[2px] bg-tertiary rounded-full scale-0 transition-transform duration-300 origin-center focus-within:scale-100"></div>
+</div>
+<!-- Quick Chips -->
+<div class="flex gap-sm mt-lg justify-center overflow-x-auto w-full px-sm py-xs scrollbar-hide">
+<button class="interactive-element whitespace-nowrap bg-success-soft text-tertiary font-label-caps text-label-caps px-md py-sm rounded-full border border-tertiary/20">
+                    +Rp50k
+                </button>
+<button class="interactive-element whitespace-nowrap bg-success-soft text-tertiary font-label-caps text-label-caps px-md py-sm rounded-full border border-tertiary/20">
+                    +Rp100k
+                </button>
+<button class="interactive-element whitespace-nowrap bg-success-soft text-tertiary font-label-caps text-label-caps px-md py-sm rounded-full border border-tertiary/20">
+                    +Rp500k
+                </button>
+</div>
+</section>
+<!-- Form Fields (Bento-style layout) -->
+<section class="flex flex-col gap-md">
+<!-- Pocket Tujuan -->
+<div class="bg-surface p-md rounded-2xl shadow-[0_4px_20px_0_rgba(0,99,41,0.05)] border border-surface-container-high interactive-element flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-xl bg-tertiary-container text-on-tertiary-container flex items-center justify-center text-xl">
+                        🏦
+                    </div>
+<div>
+<p class="font-label-caps text-label-caps text-text-secondary mb-xs">POCKET TUJUAN</p>
+<p class="font-headline-sm text-headline-sm text-text-primary">Rekening Utama</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+<!-- Sumber/Kategori -->
+<div class="bg-surface p-md rounded-2xl shadow-[0_4px_20px_0_rgba(0,99,41,0.05)] border border-surface-container-high">
+<p class="font-label-caps text-label-caps text-text-secondary mb-md">SUMBER / KATEGORI</p>
+<div class="flex flex-wrap gap-sm">
+<button class="interactive-element bg-tertiary text-on-tertiary font-body-sm text-body-sm px-md py-sm rounded-full border border-transparent">
+                        💼 Gaji
+                    </button>
+<button class="interactive-element bg-surface-container-low text-text-primary font-body-sm text-body-sm px-md py-sm rounded-full border border-outline-variant/30 hover:bg-surface-container">
+                        🎁 Bonus
+                    </button>
+<button class="interactive-element bg-surface-container-low text-text-primary font-body-sm text-body-sm px-md py-sm rounded-full border border-outline-variant/30 hover:bg-surface-container">
+                        💸 Cashback
+                    </button>
+<button class="interactive-element bg-surface-container-low text-text-primary font-body-sm text-body-sm px-md py-sm rounded-full border border-outline-variant/30 hover:bg-surface-container flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">add</span> Lainnya
+                    </button>
+</div>
+</div>
+<!-- Tanggal & Waktu (2 Columns) -->
+<div class="grid grid-cols-2 gap-md">
+<div class="bg-surface p-md rounded-2xl shadow-[0_4px_20px_0_rgba(0,99,41,0.05)] border border-surface-container-high interactive-element flex flex-col justify-center">
+<p class="font-label-caps text-label-caps text-text-secondary mb-xs">TANGGAL</p>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-tertiary text-[20px]">calendar_today</span>
+<span class="font-body-lg text-body-lg text-text-primary">Hari ini</span>
+</div>
+</div>
+<div class="bg-surface p-md rounded-2xl shadow-[0_4px_20px_0_rgba(0,99,41,0.05)] border border-surface-container-high interactive-element flex flex-col justify-center">
+<p class="font-label-caps text-label-caps text-text-secondary mb-xs">WAKTU</p>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-tertiary text-[20px]">schedule</span>
+<span class="font-body-lg text-body-lg text-text-primary">14:30</span>
+</div>
+</div>
+</div>
+<!-- Catatan -->
+<div class="bg-surface p-md rounded-2xl shadow-[0_4px_20px_0_rgba(0,99,41,0.05)] border border-surface-container-high focus-within:border-tertiary transition-colors">
+<p class="font-label-caps text-label-caps text-text-secondary mb-xs">CATATAN (OPSIONAL)</p>
+<textarea class="w-full bg-transparent border-none p-0 focus:ring-0 font-body-lg text-body-lg text-text-primary resize-none h-[60px] placeholder-outline-variant" placeholder="Tuliskan detail pemasukan..."></textarea>
+</div>
+</section>
+</main>
+<!-- Sticky Footer Action -->
+<div class="fixed bottom-0 left-0 right-0 w-full max-w-[480px] mx-auto p-lg bg-gradient-to-t from-background via-background to-transparent pb-safe-margin">
+<button class="interactive-element w-full bg-tertiary text-on-tertiary font-headline-sm text-headline-sm py-xl rounded-full shadow-[0_8px_16px_rgba(0,99,41,0.25)] flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+            Simpan Pemasukan
+        </button>
+</div>
+<script>
+        // Simple interaction for the amount input underline effect
+        const amountInput = document.querySelector('input[type="tel"]');
+        const activeLine = amountInput.nextElementSibling.nextElementSibling;
+
+        amountInput.addEventListener('focus', () => {
+            activeLine.style.transform = 'translate(-50%) scaleX(1)';
+        });
+        amountInput.addEventListener('blur', () => {
+            activeLine.style.transform = 'translate(-50%) scaleX(0)';
+        });
+        
+        // Auto-format currency (basic implementation)
+        amountInput.addEventListener('input', function(e) {
+            let val = this.value.replace(/[^0-9]/g, '');
+            if(val) {
+                this.value = parseInt(val).toLocaleString('id-ID');
+            } else {
+                this.value = '0';
+            }
+        });
+    </script>
+</body></html>
