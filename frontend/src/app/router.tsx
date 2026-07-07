@@ -1,9 +1,11 @@
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { AppShell } from '@/components/layout/AppShell';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { ProtectedRoute } from '@/components/layout/ProtectedRoute';
+import { LoginPage } from '@/features/auth/LoginPage';
+import { useAuthStore } from '@/features/auth/useAuthStore';
 
 function PlaceholderPage({ name }: { name: string }) {
   return (
@@ -25,6 +27,17 @@ function NotFoundPage() {
   );
 }
 
+/**
+ * Redirect authenticated users away from /login to /.
+ */
+function AuthRedirect({ children }: { children: React.ReactNode }) {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
+  return <>{children}</>;
+}
+
 export function AppRouter() {
   const [isAddSheetOpen, setIsAddSheetOpen] = useState(false);
   const navigate = useNavigate();
@@ -37,8 +50,8 @@ export function AppRouter() {
   return (
     <>
       <Routes>
-        {/* Public routes */}
-        <Route path="/login" element={<AppShell showBottomNav={false}><PlaceholderPage name="Login" /></AppShell>} />
+        {/* Public routes — redirect to / if already authenticated */}
+        <Route path="/login" element={<AuthRedirect><LoginPage /></AuthRedirect>} />
         <Route path="/setup" element={<AppShell showBottomNav={false}><PlaceholderPage name="Setup Wizard" /></AppShell>} />
 
         {/* Main pages with bottom nav */}
