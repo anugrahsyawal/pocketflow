@@ -1,8 +1,6 @@
-import type { Category } from '@/types/category';
+import type { TemplateCategory } from '@/types/category';
 
-type DefaultCategory = Omit<Category, 'createdAt' | 'updatedAt'>;
-
-export const DEFAULT_CATEGORIES: DefaultCategory[] = [
+export const DEFAULT_CATEGORIES: TemplateCategory[] = [
   // Food & Groceries
   { id: 'cat-food-1', name: 'Sarapan', emoji: '\ud83c\udf05', pocketId: 'food-groceries', isArchived: false },
   { id: 'cat-food-2', name: 'Makan siang', emoji: '\ud83c\udf71', pocketId: 'food-groceries', isArchived: false },

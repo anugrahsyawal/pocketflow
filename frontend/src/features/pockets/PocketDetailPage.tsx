@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { usePocketStore } from '@/features/pockets/usePocketStore';
-import { DEFAULT_CATEGORIES } from '@/data/defaultCategories';
+import { useCategoryStore } from '@/features/categories/useCategoryStore';
 import { POCKET_GROUPS } from '@/data/constants';
 import { formatRupiah } from '@/lib/currency';
 
@@ -42,10 +42,10 @@ export function PocketDetailPage() {
   const hasAllocation = pocket.monthlyAllocation !== null;
   const pocketGroup = POCKET_GROUPS.find((g) => g.id === pocket.groupId);
 
-  // Filter default categories assigned to this pocket
+  const getCategoriesByPocketId = useCategoryStore((s) => s.getCategoriesByPocketId);
   const pocketCategories = useMemo(() => {
-    return DEFAULT_CATEGORIES.filter((c) => c.pocketId === pocket.id && !c.isArchived);
-  }, [pocket.id]);
+    return getCategoriesByPocketId(pocket.id);
+  }, [pocket.id, getCategoriesByPocketId]);
 
   // Stepper/Progress variables for UI compliance (0% used, Aman)
   const progressPercent = 0;
