@@ -15,6 +15,7 @@ import { SetupRequiredRoute } from '@/components/layout/SetupRequiredRoute';
 import { useSetupStore } from '@/features/setup/useSetupStore';
 import { useStoreHydration } from '@/lib/storeHydration';
 import { PocketListPage } from '@/features/pockets/PocketListPage';
+import { PocketDetailPage } from '@/features/pockets/PocketDetailPage';
 
 function PlaceholderPage({ name }: { name: string }) {
   return (
@@ -98,7 +99,7 @@ export function AppRouter() {
         } />
 
         {/* Detail pages without bottom nav */}
-        <Route path="/pockets/:id" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Detail Pocket" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
+        <Route path="/pockets/:id" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PocketDetailPage /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
         <Route path="/pockets/:id/categories" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Kelola Kategori" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
         <Route path="/transactions/add/expense" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Catat Pengeluaran" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
         <Route path="/transactions/add/income" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Tambah Pemasukan" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
