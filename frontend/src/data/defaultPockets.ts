@@ -1,6 +1,6 @@
-import type { Pocket } from '@/types/pocket';
+import type { TemplatePocket } from '@/types/pocket';
 
-export const DEFAULT_POCKETS: Omit<Pocket, 'createdAt' | 'updatedAt'>[] = [
+export const DEFAULT_POCKETS: TemplatePocket[] = [
   { id: 'food-groceries', name: 'Food & Groceries', emoji: '\ud83c\udf5c', groupId: 'daily', monthlyAllocation: 1300000, initialBalance: 1300000, isSpendable: true, isArchived: false },
   { id: 'cash', name: 'Cash', emoji: '\ud83d\udcb5', groupId: 'daily', monthlyAllocation: null, initialBalance: 0, isSpendable: true, isArchived: false },
   { id: 'transportation', name: 'Transportation', emoji: '\ud83d\ude87', groupId: 'daily', monthlyAllocation: 200000, initialBalance: 200000, isSpendable: true, isArchived: false },

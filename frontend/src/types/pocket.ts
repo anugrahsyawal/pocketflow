@@ -6,7 +6,7 @@ export interface PocketGroup {
   labelEn: string;
 }
 
-export interface Pocket {
+export interface TemplatePocket {
   id: string;
   name: string;
   emoji: string;
@@ -15,6 +15,11 @@ export interface Pocket {
   initialBalance: number;
   isSpendable: boolean;
   isArchived: boolean;
+}
+
+export interface Pocket extends TemplatePocket {
+  currentBalance: number;
+  isActive: boolean;
   createdAt: string;
   updatedAt: string;
 }
