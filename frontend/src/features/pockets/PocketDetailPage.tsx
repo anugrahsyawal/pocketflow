@@ -147,9 +147,17 @@ export function PocketDetailPage() {
 
         {/* Section: Categories inside pocket */}
         <div className="flex flex-col gap-2">
-          <span className="text-label-caps text-text-secondary font-bold px-1">
-            Kategori di Pocket Ini ({pocketCategories.length})
-          </span>
+          <div className="flex items-center justify-between px-1">
+            <span className="text-label-caps text-text-secondary font-bold">
+              Kategori di Pocket Ini ({pocketCategories.length})
+            </span>
+            <button
+              onClick={() => navigate(`/pockets/${pocket.id}/categories`)}
+              className="text-xs font-bold text-primary hover:underline"
+            >
+              Kelola kategori
+            </button>
+          </div>
           {pocketCategories.length > 0 ? (
             <div className="grid grid-cols-3 gap-2">
               {pocketCategories.map((cat) => (
