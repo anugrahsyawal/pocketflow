@@ -14,6 +14,7 @@ import { SetupReviewPage } from '@/features/setup/SetupReviewPage';
 import { SetupRequiredRoute } from '@/components/layout/SetupRequiredRoute';
 import { useSetupStore } from '@/features/setup/useSetupStore';
 import { useStoreHydration } from '@/lib/storeHydration';
+import { PocketListPage } from '@/features/pockets/PocketListPage';
 
 function PlaceholderPage({ name }: { name: string }) {
   return (
@@ -87,7 +88,7 @@ export function AppRouter() {
           <ProtectedRoute><SetupRequiredRoute><AppShell><PlaceholderPage name="Beranda" /><BottomNav onAddClick={() => setIsAddSheetOpen(true)} /></AppShell></SetupRequiredRoute></ProtectedRoute>
         } />
         <Route path="/pockets" element={
-          <ProtectedRoute><SetupRequiredRoute><AppShell><PlaceholderPage name="Pocket Saya" /><BottomNav onAddClick={() => setIsAddSheetOpen(true)} /></AppShell></SetupRequiredRoute></ProtectedRoute>
+          <ProtectedRoute><SetupRequiredRoute><AppShell><PocketListPage /><BottomNav onAddClick={() => setIsAddSheetOpen(true)} /></AppShell></SetupRequiredRoute></ProtectedRoute>
         } />
         <Route path="/transactions" element={
           <ProtectedRoute><SetupRequiredRoute><AppShell><PlaceholderPage name="Riwayat Transaksi" /><BottomNav onAddClick={() => setIsAddSheetOpen(true)} /></AppShell></SetupRequiredRoute></ProtectedRoute>
