@@ -6,6 +6,11 @@ import { BottomSheet } from '@/components/ui/BottomSheet';
 import { ProtectedRoute } from '@/components/layout/ProtectedRoute';
 import { LoginPage } from '@/features/auth/LoginPage';
 import { useAuthStore } from '@/features/auth/useAuthStore';
+import { SetupWelcomePage } from '@/features/setup/SetupWelcomePage';
+import { SetupBudgetPeriodPage } from '@/features/setup/SetupBudgetPeriodPage';
+import { SetupPocketTemplatePage } from '@/features/setup/SetupPocketTemplatePage';
+import { SetupInitialBalancePage } from '@/features/setup/SetupInitialBalancePage';
+import { SetupReviewPage } from '@/features/setup/SetupReviewPage';
 
 function PlaceholderPage({ name }: { name: string }) {
   return (
@@ -52,7 +57,14 @@ export function AppRouter() {
       <Routes>
         {/* Public routes — redirect to / if already authenticated */}
         <Route path="/login" element={<AuthRedirect><LoginPage /></AuthRedirect>} />
-        <Route path="/setup" element={<AppShell showBottomNav={false}><PlaceholderPage name="Setup Wizard" /></AppShell>} />
+
+        {/* Setup wizard routes — require authentication */}
+        <Route path="/setup" element={<ProtectedRoute><Navigate to="/setup/welcome" replace /></ProtectedRoute>} />
+        <Route path="/setup/welcome" element={<ProtectedRoute><SetupWelcomePage /></ProtectedRoute>} />
+        <Route path="/setup/period" element={<ProtectedRoute><SetupBudgetPeriodPage /></ProtectedRoute>} />
+        <Route path="/setup/pockets" element={<ProtectedRoute><SetupPocketTemplatePage /></ProtectedRoute>} />
+        <Route path="/setup/balances" element={<ProtectedRoute><SetupInitialBalancePage /></ProtectedRoute>} />
+        <Route path="/setup/review" element={<ProtectedRoute><SetupReviewPage /></ProtectedRoute>} />
 
         {/* Main pages with bottom nav */}
         <Route path="/" element={
