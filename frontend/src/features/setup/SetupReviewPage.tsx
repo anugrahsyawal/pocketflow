@@ -20,6 +20,7 @@ export function SetupReviewPage() {
   const budgetPeriodStartDay = useSetupStore((s) => s.budgetPeriodStartDay);
   const selectedPocketIds = useSetupStore((s) => s.selectedPocketIds);
   const initialBalances = useSetupStore((s) => s.initialBalances);
+  const markSetupComplete = useSetupStore((s) => s.markSetupComplete);
 
   // Filter selected pockets
   const selectedPockets = DEFAULT_POCKETS.filter((p) => selectedPocketIds.includes(p.id));
@@ -29,11 +30,19 @@ export function SetupReviewPage() {
     (sum, p) => sum + (p.monthlyAllocation ?? 0),
     0
   );
-  const cashBalance = initialBalances['cash'] ?? 0;
-  const nfcBalance = initialBalances['nfc-card'] ?? 0;
+  const hasCashSelected = selectedPocketIds.includes('cash');
+  const hasNfcSelected = selectedPocketIds.includes('nfc-card');
+  const cashBalance = hasCashSelected ? (initialBalances['cash'] ?? 0) : 0;
+  const nfcBalance = hasNfcSelected ? (initialBalances['nfc-card'] ?? 0) : 0;
   const totalStartingBalance = totalAllocation + cashBalance + nfcBalance;
 
   const isWarningVisible = selectedPocketIds.length === 0;
+
+  const handleComplete = () => {
+    if (isWarningVisible) return;
+    markSetupComplete();
+    navigate('/', { replace: true });
+  };
 
   return (
     <AppShell showBottomNav={false}>
@@ -170,37 +179,43 @@ export function SetupReviewPage() {
           </div>
 
           {/* Section: Balances */}
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center justify-between px-1">
-              <span className="text-label-caps text-text-secondary font-bold">Saldo Awal Teratur</span>
-              <button
-                onClick={() => navigate('/setup/balances')}
-                className="text-xs font-bold text-primary hover:underline"
-              >
-                Ubah saldo awal
-              </button>
+          {(hasCashSelected || hasNfcSelected) && (
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between px-1">
+                <span className="text-label-caps text-text-secondary font-bold">Saldo Awal Teratur</span>
+                <button
+                  onClick={() => navigate('/setup/balances')}
+                  className="text-xs font-bold text-primary hover:underline"
+                >
+                  Ubah saldo awal
+                </button>
+              </div>
+              <Card variant="flat" className="divide-y divide-border/60" padding={false}>
+                {hasCashSelected && (
+                  <div className="flex items-center justify-between px-4 py-3">
+                    <div className="flex items-center gap-3">
+                      <span className="text-xl">💵</span>
+                      <span className="text-body-sm font-medium text-text-primary">Cash</span>
+                    </div>
+                    <span className="text-body-sm font-semibold text-text-primary">
+                      {formatRupiah(cashBalance)}
+                    </span>
+                  </div>
+                )}
+                {hasNfcSelected && (
+                  <div className="flex items-center justify-between px-4 py-3">
+                    <div className="flex items-center gap-3">
+                      <span className="text-xl">💳</span>
+                      <span className="text-body-sm font-medium text-text-primary">NFC Transportation Card</span>
+                    </div>
+                    <span className="text-body-sm font-semibold text-text-primary">
+                      {formatRupiah(nfcBalance)}
+                    </span>
+                  </div>
+                )}
+              </Card>
             </div>
-            <Card variant="flat" className="divide-y divide-border/60" padding={false}>
-              <div className="flex items-center justify-between px-4 py-3">
-                <div className="flex items-center gap-3">
-                  <span className="text-xl">💵</span>
-                  <span className="text-body-sm font-medium text-text-primary">Cash</span>
-                </div>
-                <span className="text-body-sm font-semibold text-text-primary">
-                  {formatRupiah(cashBalance)}
-                </span>
-              </div>
-              <div className="flex items-center justify-between px-4 py-3">
-                <div className="flex items-center gap-3">
-                  <span className="text-xl">💳</span>
-                  <span className="text-body-sm font-medium text-text-primary">NFC Transportation Card</span>
-                </div>
-                <span className="text-body-sm font-semibold text-text-primary">
-                  {formatRupiah(nfcBalance)}
-                </span>
-              </div>
-            </Card>
-          </div>
+          )}
 
           {/* Section: Total allocation summary */}
           <div className="flex flex-col gap-2 mt-2">
@@ -237,16 +252,12 @@ export function SetupReviewPage() {
             variant="primary"
             size="lg"
             fullWidth
-            disabled
-            className="opacity-50 cursor-not-allowed"
+            disabled={isWarningVisible}
+            onClick={handleComplete}
           >
             Mulai Sekarang
           </Button>
         </div>
-
-        <p className="text-[11px] text-text-muted text-center mt-3">
-          Aktivasi setup akan dilakukan di fase berikutnya.
-        </p>
       </div>
     </AppShell>
   );

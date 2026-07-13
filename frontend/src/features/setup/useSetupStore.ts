@@ -12,16 +12,12 @@ interface SetupState {
   /** Pocket IDs the user has selected during setup. */
   selectedPocketIds: string[];
 
-  /** Whether the user has initialized the pocket selection (so empty selected means 0 selected, not first visit). */
-  hasInitializedPocketSelection: boolean;
-
   /** Initial balances for pockets without monthly allocation (Cash, NFC). */
   initialBalances: Record<string, number>;
 
   // --- Actions ---
   setBudgetPeriodStartDay: (day: number) => void;
   setSelectedPocketIds: (ids: string[]) => void;
-  setHasInitializedPocketSelection: (val: boolean) => void;
   setInitialBalance: (pocketId: string, amount: number) => void;
   markSetupComplete: () => void;
   resetSetup: () => void;
@@ -33,7 +29,6 @@ export const useSetupStore = create<SetupState>()(
       isSetupComplete: false,
       budgetPeriodStartDay: DEFAULT_BUDGET_START_DAY,
       selectedPocketIds: [],
-      hasInitializedPocketSelection: false,
       initialBalances: {},
 
       setBudgetPeriodStartDay: (day) => {
@@ -42,10 +37,6 @@ export const useSetupStore = create<SetupState>()(
 
       setSelectedPocketIds: (ids) => {
         set({ selectedPocketIds: ids });
-      },
-
-      setHasInitializedPocketSelection: (val) => {
-        set({ hasInitializedPocketSelection: val });
       },
 
       setInitialBalance: (pocketId, amount) => {
@@ -66,7 +57,6 @@ export const useSetupStore = create<SetupState>()(
           isSetupComplete: false,
           budgetPeriodStartDay: DEFAULT_BUDGET_START_DAY,
           selectedPocketIds: [],
-          hasInitializedPocketSelection: false,
           initialBalances: {},
         });
       },
@@ -77,7 +67,6 @@ export const useSetupStore = create<SetupState>()(
         isSetupComplete: state.isSetupComplete,
         budgetPeriodStartDay: state.budgetPeriodStartDay,
         selectedPocketIds: state.selectedPocketIds,
-        hasInitializedPocketSelection: state.hasInitializedPocketSelection,
         initialBalances: state.initialBalances,
       }),
     }

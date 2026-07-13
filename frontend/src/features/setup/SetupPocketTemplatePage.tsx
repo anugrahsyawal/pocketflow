@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppShell } from '@/components/layout/AppShell';
 import { TopBar } from '@/components/layout/TopBar';
@@ -17,17 +16,6 @@ export function SetupPocketTemplatePage() {
   const selectedPocketIds = useSetupStore((s) => s.selectedPocketIds);
   const setSelectedPocketIds = useSetupStore((s) => s.setSelectedPocketIds);
 
-  const hasInitializedPocketSelection = useSetupStore((s) => s.hasInitializedPocketSelection);
-  const setHasInitializedPocketSelection = useSetupStore((s) => s.setHasInitializedPocketSelection);
-
-  // Auto-select all pockets on first visit only
-  useEffect(() => {
-    if (!hasInitializedPocketSelection) {
-      setSelectedPocketIds([...ALL_POCKET_IDS]);
-      setHasInitializedPocketSelection(true);
-    }
-  }, [hasInitializedPocketSelection, setSelectedPocketIds, setHasInitializedPocketSelection]);
-
   const selectedCount = selectedPocketIds.length;
   const allSelected = selectedCount === ALL_POCKET_IDS.length;
 
@@ -44,7 +32,7 @@ export function SetupPocketTemplatePage() {
   };
 
   const handleReset = () => {
-    setSelectedPocketIds([...ALL_POCKET_IDS]);
+    setSelectedPocketIds([]);
   };
 
   return (

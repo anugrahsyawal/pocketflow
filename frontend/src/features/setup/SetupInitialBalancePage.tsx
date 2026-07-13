@@ -40,6 +40,7 @@ export function SetupInitialBalancePage() {
   const navigate = useNavigate();
   const initialBalances = useSetupStore((s) => s.initialBalances);
   const setInitialBalance = useSetupStore((s) => s.setInitialBalance);
+  const selectedPocketIds = useSetupStore((s) => s.selectedPocketIds);
 
   const handleInputChange = (pocketId: string, rawValue: string) => {
     // Keep only digits to prevent negative values, decimals, and special characters
@@ -47,6 +48,8 @@ export function SetupInitialBalancePage() {
     const amount = digitsOnly === '' ? 0 : parseInt(digitsOnly, 10);
     setInitialBalance(pocketId, amount);
   };
+
+  const visiblePockets = BALANCE_POCKETS.filter((p) => selectedPocketIds.includes(p.id));
 
   return (
     <AppShell showBottomNav={false}>
@@ -78,82 +81,94 @@ export function SetupInitialBalancePage() {
             </p>
           </div>
 
-          <div className="flex flex-col gap-6">
-            {BALANCE_POCKETS.map((pocket) => {
-              const currentBalance = initialBalances[pocket.id] ?? 0;
+          {visiblePockets.length > 0 ? (
+            <div className="flex flex-col gap-6">
+              {visiblePockets.map((pocket) => {
+                const currentBalance = initialBalances[pocket.id] ?? 0;
 
-              return (
-                <Card key={pocket.id} variant="flat" className="flex flex-col gap-4">
-                  {/* Pocket info header */}
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl flex-shrink-0" role="img" aria-hidden="true">
-                      {pocket.emoji}
-                    </span>
-                    <div>
-                      <h3 className="text-body-sm font-semibold text-text-primary">
-                        {pocket.name}
-                      </h3>
-                      <p className="text-body-sm text-text-secondary">
-                        {pocket.helperText}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Input container */}
-                  <div className="flex flex-col gap-2">
-                    <div className="relative">
-                      <Input
-                        type="text"
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        placeholder="0"
-                        value={currentBalance === 0 ? '' : currentBalance.toString()}
-                        onChange={(e) => handleInputChange(pocket.id, e.target.value)}
-                        className="pr-20 text-right font-semibold"
-                      />
-                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-body-lg font-semibold text-text-secondary">
-                        Rp
+                return (
+                  <Card key={pocket.id} variant="flat" className="flex flex-col gap-4">
+                    {/* Pocket info header */}
+                    <div className="flex items-center gap-3">
+                      <span className="text-3xl flex-shrink-0" role="img" aria-hidden="true">
+                        {pocket.emoji}
                       </span>
+                      <div>
+                        <h3 className="text-body-sm font-semibold text-text-primary">
+                          {pocket.name}
+                        </h3>
+                        <p className="text-body-sm text-text-secondary">
+                          {pocket.helperText}
+                        </p>
+                      </div>
                     </div>
 
-                    {/* Preview formatted amount */}
-                    <div className="flex justify-between items-center text-[11px] text-text-muted px-1">
-                      <span>Preview:</span>
-                      <span className="font-semibold text-text-primary text-body-sm">
-                        {formatRupiah(currentBalance)}
-                      </span>
-                    </div>
-                  </div>
+                    {/* Input container */}
+                    <div className="flex flex-col gap-2">
+                      <div className="relative">
+                        <Input
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          placeholder="0"
+                          value={currentBalance === 0 ? '' : currentBalance.toString()}
+                          onChange={(e) => handleInputChange(pocket.id, e.target.value)}
+                          className="pr-20 text-right font-semibold"
+                        />
+                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-body-lg font-semibold text-text-secondary">
+                          Rp
+                        </span>
+                      </div>
 
-                  {/* Quick amount chips */}
-                  <div className="flex flex-wrap gap-2">
-                    {QUICK_CHIPS.map((chip) => {
-                      const isSelected = currentBalance === chip.value;
-                      return (
-                        <button
-                          key={chip.value}
-                          type="button"
-                          onClick={() => setInitialBalance(pocket.id, chip.value)}
-                          className={`
-                            inline-flex items-center justify-center h-8 px-3
-                            rounded-pill text-body-sm font-semibold
-                            transition-all duration-200 active:scale-95
-                            ${isSelected
-                              ? 'bg-primary text-on-primary shadow-card'
-                              : 'bg-surface text-text-primary border border-outline-variant hover:bg-surface-container-low'
-                            }
-                          `}
-                          aria-pressed={isSelected}
-                        >
-                          {chip.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </Card>
-              );
-            })}
-          </div>
+                      {/* Preview formatted amount */}
+                      <div className="flex justify-between items-center text-[11px] text-text-muted px-1">
+                        <span>Preview:</span>
+                        <span className="font-semibold text-text-primary text-body-sm">
+                          {formatRupiah(currentBalance)}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Quick amount chips */}
+                    <div className="flex flex-wrap gap-2">
+                      {QUICK_CHIPS.map((chip) => {
+                        const isSelected = currentBalance === chip.value;
+                        return (
+                          <button
+                            key={chip.value}
+                            type="button"
+                            onClick={() => setInitialBalance(pocket.id, chip.value)}
+                            className={`
+                              inline-flex items-center justify-center h-8 px-3
+                              rounded-pill text-body-sm font-semibold
+                              transition-all duration-200 active:scale-95
+                              ${isSelected
+                                ? 'bg-primary text-on-primary shadow-card'
+                                : 'bg-surface text-text-primary border border-outline-variant hover:bg-surface-container-low'
+                              }
+                            `}
+                            aria-pressed={isSelected}
+                          >
+                            {chip.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
+          ) : (
+            <Card variant="flat" className="py-12 text-center flex flex-col items-center gap-3">
+              <span className="text-4xl">💡</span>
+              <div>
+                <p className="text-body-lg font-bold text-text-primary">Tidak Ada Saldo Awal</p>
+                <p className="text-body-sm text-text-secondary mt-1">
+                  Tidak ada saldo awal khusus yang perlu diatur.
+                </p>
+              </div>
+            </Card>
+          )}
         </div>
 
         {/* Navigation */}

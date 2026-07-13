@@ -11,6 +11,9 @@ import { SetupBudgetPeriodPage } from '@/features/setup/SetupBudgetPeriodPage';
 import { SetupPocketTemplatePage } from '@/features/setup/SetupPocketTemplatePage';
 import { SetupInitialBalancePage } from '@/features/setup/SetupInitialBalancePage';
 import { SetupReviewPage } from '@/features/setup/SetupReviewPage';
+import { SetupRequiredRoute } from '@/components/layout/SetupRequiredRoute';
+import { useSetupStore } from '@/features/setup/useSetupStore';
+import { useStoreHydration } from '@/lib/storeHydration';
 
 function PlaceholderPage({ name }: { name: string }) {
   return (
@@ -33,12 +36,25 @@ function NotFoundPage() {
 }
 
 /**
- * Redirect authenticated users away from /login to /.
+ * Redirect authenticated users away from /login.
+ * Setup-aware and hydration-safe.
  */
 function AuthRedirect({ children }: { children: React.ReactNode }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isSetupComplete = useSetupStore((s) => s.isSetupComplete);
+  const isAuthHydrated = useStoreHydration(useAuthStore);
+  const isSetupHydrated = useStoreHydration(useSetupStore);
+
+  if (!isAuthHydrated || !isSetupHydrated) {
+    return (
+      <div className="min-h-screen min-h-dvh bg-background flex items-center justify-center">
+        <span className="material-symbols-rounded animate-spin text-primary text-3xl">progress_activity</span>
+      </div>
+    );
+  }
+
   if (isAuthenticated) {
-    return <Navigate to="/" replace />;
+    return <Navigate to={isSetupComplete ? "/" : "/setup/welcome"} replace />;
   }
   return <>{children}</>;
 }
@@ -68,28 +84,28 @@ export function AppRouter() {
 
         {/* Main pages with bottom nav */}
         <Route path="/" element={
-          <ProtectedRoute><AppShell><PlaceholderPage name="Beranda" /><BottomNav onAddClick={() => setIsAddSheetOpen(true)} /></AppShell></ProtectedRoute>
+          <ProtectedRoute><SetupRequiredRoute><AppShell><PlaceholderPage name="Beranda" /><BottomNav onAddClick={() => setIsAddSheetOpen(true)} /></AppShell></SetupRequiredRoute></ProtectedRoute>
         } />
         <Route path="/pockets" element={
-          <ProtectedRoute><AppShell><PlaceholderPage name="Pocket Saya" /><BottomNav onAddClick={() => setIsAddSheetOpen(true)} /></AppShell></ProtectedRoute>
+          <ProtectedRoute><SetupRequiredRoute><AppShell><PlaceholderPage name="Pocket Saya" /><BottomNav onAddClick={() => setIsAddSheetOpen(true)} /></AppShell></SetupRequiredRoute></ProtectedRoute>
         } />
         <Route path="/transactions" element={
-          <ProtectedRoute><AppShell><PlaceholderPage name="Riwayat Transaksi" /><BottomNav onAddClick={() => setIsAddSheetOpen(true)} /></AppShell></ProtectedRoute>
+          <ProtectedRoute><SetupRequiredRoute><AppShell><PlaceholderPage name="Riwayat Transaksi" /><BottomNav onAddClick={() => setIsAddSheetOpen(true)} /></AppShell></SetupRequiredRoute></ProtectedRoute>
         } />
         <Route path="/reports" element={
-          <ProtectedRoute><AppShell><PlaceholderPage name="Laporan" /><BottomNav onAddClick={() => setIsAddSheetOpen(true)} /></AppShell></ProtectedRoute>
+          <ProtectedRoute><SetupRequiredRoute><AppShell><PlaceholderPage name="Laporan" /><BottomNav onAddClick={() => setIsAddSheetOpen(true)} /></AppShell></SetupRequiredRoute></ProtectedRoute>
         } />
 
         {/* Detail pages without bottom nav */}
-        <Route path="/pockets/:id" element={<ProtectedRoute><AppShell showBottomNav={false}><PlaceholderPage name="Detail Pocket" /></AppShell></ProtectedRoute>} />
-        <Route path="/pockets/:id/categories" element={<ProtectedRoute><AppShell showBottomNav={false}><PlaceholderPage name="Kelola Kategori" /></AppShell></ProtectedRoute>} />
-        <Route path="/transactions/add/expense" element={<ProtectedRoute><AppShell showBottomNav={false}><PlaceholderPage name="Catat Pengeluaran" /></AppShell></ProtectedRoute>} />
-        <Route path="/transactions/add/income" element={<ProtectedRoute><AppShell showBottomNav={false}><PlaceholderPage name="Tambah Pemasukan" /></AppShell></ProtectedRoute>} />
-        <Route path="/transactions/add/transfer" element={<ProtectedRoute><AppShell showBottomNav={false}><PlaceholderPage name="Tambah Transfer" /></AppShell></ProtectedRoute>} />
-        <Route path="/transactions/:id" element={<ProtectedRoute><AppShell showBottomNav={false}><PlaceholderPage name="Detail Transaksi" /></AppShell></ProtectedRoute>} />
-        <Route path="/transactions/:id/edit" element={<ProtectedRoute><AppShell showBottomNav={false}><PlaceholderPage name="Edit Transaksi" /></AppShell></ProtectedRoute>} />
-        <Route path="/settings" element={<ProtectedRoute><AppShell showBottomNav={false}><PlaceholderPage name="Pengaturan" /></AppShell></ProtectedRoute>} />
-        <Route path="/placeholder/:feature" element={<ProtectedRoute><AppShell showBottomNav={false}><PlaceholderPage name="Segera Hadir" /></AppShell></ProtectedRoute>} />
+        <Route path="/pockets/:id" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Detail Pocket" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
+        <Route path="/pockets/:id/categories" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Kelola Kategori" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
+        <Route path="/transactions/add/expense" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Catat Pengeluaran" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
+        <Route path="/transactions/add/income" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Tambah Pemasukan" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
+        <Route path="/transactions/add/transfer" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Tambah Transfer" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
+        <Route path="/transactions/:id" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Detail Transaksi" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
+        <Route path="/transactions/:id/edit" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Edit Transaksi" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
+        <Route path="/settings" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Pengaturan" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
+        <Route path="/placeholder/:feature" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Segera Hadir" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
 
         {/* 404 */}
         <Route path="*" element={<AppShell showBottomNav={false}><NotFoundPage /></AppShell>} />

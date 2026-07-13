@@ -1,6 +1,7 @@
 import { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/features/auth/useAuthStore';
+import { useSetupStore } from '@/features/setup/useSetupStore';
 import { APP_NAME } from '@/data/constants';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -28,7 +29,8 @@ export function LoginPage() {
       if (result) {
         setError(result);
       } else {
-        navigate('/', { replace: true });
+        const isSetupComplete = useSetupStore.getState().isSetupComplete;
+        navigate(isSetupComplete ? '/' : '/setup/welcome', { replace: true });
       }
     }, 400);
   };
