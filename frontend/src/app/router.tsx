@@ -20,6 +20,7 @@ import { CategoryManagementPage } from '@/features/categories/CategoryManagement
 import { AddExpensePage } from '@/features/transactions/AddExpensePage';
 import { AddIncomePage } from '@/features/transactions/AddIncomePage';
 import { AddTransferPage } from '@/features/transactions/AddTransferPage';
+import { TransactionHistoryPage } from '@/features/transactions/TransactionHistoryPage';
 
 function PlaceholderPage({ name }: { name: string }) {
   return (
@@ -96,7 +97,7 @@ export function AppRouter() {
           <ProtectedRoute><SetupRequiredRoute><AppShell><PocketListPage /><BottomNav onAddClick={() => setIsAddSheetOpen(true)} /></AppShell></SetupRequiredRoute></ProtectedRoute>
         } />
         <Route path="/transactions" element={
-          <ProtectedRoute><SetupRequiredRoute><AppShell><PlaceholderPage name="Riwayat Transaksi" /><BottomNav onAddClick={() => setIsAddSheetOpen(true)} /></AppShell></SetupRequiredRoute></ProtectedRoute>
+          <ProtectedRoute><SetupRequiredRoute><AppShell><TransactionHistoryPage /><BottomNav onAddClick={() => setIsAddSheetOpen(true)} /></AppShell></SetupRequiredRoute></ProtectedRoute>
         } />
         <Route path="/reports" element={
           <ProtectedRoute><SetupRequiredRoute><AppShell><PlaceholderPage name="Laporan" /><BottomNav onAddClick={() => setIsAddSheetOpen(true)} /></AppShell></SetupRequiredRoute></ProtectedRoute>

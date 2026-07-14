@@ -9,8 +9,10 @@ import { ProgressBar } from '@/components/ui/ProgressBar';
 import { usePocketStore } from '@/features/pockets/usePocketStore';
 import { useCategoryStore } from '@/features/categories/useCategoryStore';
 import { useTransactionStore } from '@/features/transactions/useTransactionStore';
-import { POCKET_GROUPS } from '@/data/constants';
+import { POCKET_GROUPS, INCOME_SOURCE_LABELS, TRANSFER_TYPE_LABELS } from '@/data/constants';
 import { formatRupiah } from '@/lib/currency';
+import { formatDateGroup, sortTransactions } from '@/lib/transactionDisplay';
+import type { Transaction } from '@/types/transaction';
 import {
   getPocketEffectiveBalance,
   getPocketUsedAmount,
@@ -51,6 +53,7 @@ export function PocketDetailPage() {
   const transactions = useTransactionStore((s) => s.transactions);
 
   const getCategoriesByPocketId = useCategoryStore((s) => s.getCategoriesByPocketId);
+  const getCategoryById = useCategoryStore((s) => s.getCategoryById);
   const pocketCategories = useMemo(() => {
     return getCategoriesByPocketId(pocket.id);
   }, [pocket.id, getCategoriesByPocketId]);
@@ -66,6 +69,36 @@ export function PocketDetailPage() {
   const { progress, status, label: statusLabel } = useMemo(() => {
     return getPocketBudgetStatus(usedAmount, pocket.monthlyAllocation);
   }, [usedAmount, pocket.monthlyAllocation]);
+
+  const pocketTransactions = useMemo(() => {
+    const filtered = transactions.filter((t) => {
+      if (t.isArchived) return false;
+      if (t.type === 'transfer') {
+        return t.fromPocketId === pocket.id || t.toPocketId === pocket.id;
+      }
+      return t.pocketId === pocket.id;
+    });
+    return sortTransactions(filtered);
+  }, [pocket.id, transactions]);
+
+  const latestTransactions = useMemo(() => {
+    return pocketTransactions.slice(0, 5);
+  }, [pocketTransactions]);
+
+  const groupedPocketTransactions = useMemo(() => {
+    const groups: Record<string, Transaction[]> = {};
+    for (const t of latestTransactions) {
+      if (!groups[t.date]) {
+        groups[t.date] = [];
+      }
+      groups[t.date]!.push(t);
+    }
+    return groups;
+  }, [latestTransactions]);
+
+  const sortedPocketDates = useMemo(() => {
+    return Object.keys(groupedPocketTransactions).sort((a, b) => b.localeCompare(a));
+  }, [groupedPocketTransactions]);
 
   return (
     <AppShell showBottomNav={false}>
@@ -198,11 +231,133 @@ export function PocketDetailPage() {
 
         {/* Section: Transactions list */}
         <div className="flex flex-col gap-2">
-          <span className="text-label-caps text-text-secondary font-bold px-1">Transaksi Terbaru</span>
-          <Card variant="flat" className="py-8 text-center text-text-muted text-body-sm flex flex-col items-center gap-2">
-            <span className="text-2xl" role="img" aria-label="No transactions">📝</span>
-            <p>Belum ada transaksi di pocket ini.</p>
-          </Card>
+          <div className="flex items-center justify-between px-1">
+            <span className="text-label-caps text-text-secondary font-bold">
+              Transaksi Terbaru
+            </span>
+            {pocketTransactions.length > 5 && (
+              <button
+                onClick={() => navigate('/transactions')}
+                className="text-xs font-bold text-primary hover:underline"
+              >
+                Lihat semua
+              </button>
+            )}
+          </div>
+
+          {pocketTransactions.length === 0 ? (
+            <Card variant="flat" className="py-8 text-center text-text-muted text-body-sm flex flex-col items-center gap-2">
+              <span className="text-2xl" role="img" aria-label="No transactions">📝</span>
+              <p className="font-semibold text-text-primary">Belum ada transaksi di pocket ini.</p>
+              <p className="text-xs text-text-secondary">Transaksi yang menggunakan pocket ini akan muncul di sini.</p>
+            </Card>
+          ) : (
+            <div className="flex flex-col gap-4">
+              {sortedPocketDates.map((dateStr) => {
+                const txns = groupedPocketTransactions[dateStr] || [];
+                return (
+                  <div key={dateStr} className="flex flex-col gap-2">
+                    <h4 className="text-[10px] font-bold text-text-muted tracking-wider uppercase px-1">
+                      {formatDateGroup(dateStr)}
+                    </h4>
+                    <div className="flex flex-col gap-2">
+                      {txns.map((t) => {
+                        let title = '';
+                        let sub = '';
+                        let iconName = '';
+                        let iconBg = '';
+                        let iconColor = '';
+                        let amountText = '';
+                        let amountColor = '';
+
+                        if (t.type === 'expense') {
+                          const category = t.categoryId ? getCategoryById(t.categoryId) : undefined;
+                          title = category ? `${category.emoji} ${category.name}` : 'Tanpa kategori';
+                          sub = 'Pengeluaran';
+                          iconName = 'remove_circle';
+                          iconBg = 'bg-bahaya-soft';
+                          iconColor = 'text-bahaya';
+                          amountText = `-${formatRupiah(t.amount)}`;
+                          amountColor = 'text-bahaya';
+                        } else if (t.type === 'income') {
+                          const sourceLabel = t.incomeSource ? (INCOME_SOURCE_LABELS[t.incomeSource] || 'Pemasukan') : 'Pemasukan';
+                          title = sourceLabel;
+                          sub = 'Pemasukan';
+                          iconName = 'add_circle';
+                          iconBg = 'bg-aman-soft';
+                          iconColor = 'text-aman';
+                          amountText = `+${formatRupiah(t.amount)}`;
+                          amountColor = 'text-aman';
+                        } else if (t.type === 'transfer') {
+                          const transferLabel = t.transferType ? (TRANSFER_TYPE_LABELS[t.transferType] || 'Transfer') : 'Transfer';
+                          title = transferLabel;
+                          
+                          if (t.fromPocketId === pocket.id) {
+                            const toP = t.toPocketId ? getPocketById(t.toPocketId) : undefined;
+                            sub = toP ? `Ke ${toP.name}` : 'Ke Pocket tidak tersedia';
+                            amountText = `-${formatRupiah(t.amount)}`;
+                            amountColor = 'text-bahaya';
+                          } else {
+                            const fromP = t.fromPocketId ? getPocketById(t.fromPocketId) : undefined;
+                            sub = fromP ? `Dari ${fromP.name}` : 'Dari Pocket tidak tersedia';
+                            amountText = `+${formatRupiah(t.amount)}`;
+                            amountColor = 'text-aman';
+                          }
+
+                          iconName = 'swap_horiz';
+                          iconBg = 'bg-primary-soft';
+                          iconColor = 'text-primary';
+                        }
+
+                        return (
+                          <button
+                            key={t.id}
+                            type="button"
+                            onClick={() => navigate(`/transactions/${t.id}`)}
+                            className="w-full text-left cursor-pointer active:scale-[0.99] transition-transform focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-card"
+                          >
+                            <Card
+                              variant="flat"
+                              className="flex items-center justify-between gap-3 border border-border/40 hover:border-primary/20 hover:shadow-card transition-all p-3"
+                            >
+                              <div className="flex items-center gap-3 min-w-0">
+                                <div className={`flex items-center justify-center w-10 h-10 rounded-full flex-shrink-0 ${iconBg}`}>
+                                  <span className={`material-symbols-rounded ${iconColor} text-xl`}>
+                                    {iconName}
+                                  </span>
+                                </div>
+                                <div className="min-w-0">
+                                  <div className="font-display text-body-md font-bold text-text-primary truncate">
+                                    {title}
+                                  </div>
+                                  {t.note && (
+                                    <div className="text-[11px] text-text-muted italic truncate max-w-[200px] mb-0.5">
+                                      "{t.note}"
+                                    </div>
+                                  )}
+                                  <div className="text-[10px] text-text-secondary font-medium">
+                                    {sub}
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="text-right flex-shrink-0">
+                                <span className={`font-display text-body-md font-bold ${amountColor} block`}>
+                                  {amountText}
+                                </span>
+                                <span className="text-[10px] text-text-muted font-body">
+                                  {t.time}
+                                </span>
+                              </div>
+                            </Card>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Quick Action: Add Expense */}
