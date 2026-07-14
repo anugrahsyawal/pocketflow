@@ -8,8 +8,14 @@ import { Badge } from '@/components/ui/Badge';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { usePocketStore } from '@/features/pockets/usePocketStore';
 import { useCategoryStore } from '@/features/categories/useCategoryStore';
+import { useTransactionStore } from '@/features/transactions/useTransactionStore';
 import { POCKET_GROUPS } from '@/data/constants';
 import { formatRupiah } from '@/lib/currency';
+import {
+  getPocketEffectiveBalance,
+  getPocketUsedAmount,
+  getPocketBudgetStatus,
+} from '@/lib/balanceCalculations';
 
 export function PocketDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -42,15 +48,24 @@ export function PocketDetailPage() {
   const hasAllocation = pocket.monthlyAllocation !== null;
   const pocketGroup = POCKET_GROUPS.find((g) => g.id === pocket.groupId);
 
+  const transactions = useTransactionStore((s) => s.transactions);
+
   const getCategoriesByPocketId = useCategoryStore((s) => s.getCategoriesByPocketId);
   const pocketCategories = useMemo(() => {
     return getCategoriesByPocketId(pocket.id);
   }, [pocket.id, getCategoriesByPocketId]);
 
-  // Stepper/Progress variables for UI compliance (0% used, Aman)
-  const progressPercent = 0;
-  const statusLabel = 'Aman';
-  const statusVariant = 'aman';
+  const effectiveBalance = useMemo(() => {
+    return getPocketEffectiveBalance(pocket, transactions);
+  }, [pocket, transactions]);
+
+  const usedAmount = useMemo(() => {
+    return getPocketUsedAmount(pocket.id, transactions);
+  }, [pocket.id, transactions]);
+
+  const { progress, status, label: statusLabel } = useMemo(() => {
+    return getPocketBudgetStatus(usedAmount, pocket.monthlyAllocation);
+  }, [usedAmount, pocket.monthlyAllocation]);
 
   return (
     <AppShell showBottomNav={false}>
@@ -80,13 +95,13 @@ export function PocketDetailPage() {
               Saldo Saat Ini
             </span>
             <span className="font-display text-amount-lg text-primary leading-none mt-1 block">
-              {formatRupiah(pocket.currentBalance)}
+              {formatRupiah(effectiveBalance)}
             </span>
           </div>
 
           {/* Badge indicator */}
           {hasAllocation ? (
-            <Badge variant={statusVariant} className="mt-1">
+            <Badge variant={status} className="mt-1">
               {statusLabel}
             </Badge>
           ) : (
@@ -103,11 +118,11 @@ export function PocketDetailPage() {
             <Card variant="flat" className="flex flex-col gap-3">
               <div className="flex justify-between items-center text-xs">
                 <span className="text-text-secondary">Progress Anggaran</span>
-                <span className="font-semibold text-text-primary">0% Terpakai</span>
+                <span className="font-semibold text-text-primary">{Math.round(progress)}% Terpakai</span>
               </div>
-              <ProgressBar value={progressPercent} variant="aman" height="sm" />
+              <ProgressBar value={progress / 100} variant={status} height="sm" />
               <div className="flex justify-between items-center text-[11px] text-text-muted mt-0.5">
-                <span>Terpakai: Rp0</span>
+                <span>Terpakai: {formatRupiah(usedAmount)}</span>
                 <span>Limit: {formatRupiah(pocket.monthlyAllocation!)}</span>
               </div>
             </Card>
@@ -121,7 +136,7 @@ export function PocketDetailPage() {
             <div className="flex justify-between items-center py-1">
               <span className="text-body-sm text-text-secondary">Saldo saat ini</span>
               <span className="font-display text-body-lg font-bold text-text-primary">
-                {formatRupiah(pocket.currentBalance)}
+                {formatRupiah(effectiveBalance)}
               </span>
             </div>
             <div className="flex justify-between items-center py-1 border-t border-border/40">
@@ -129,17 +144,19 @@ export function PocketDetailPage() {
                 {hasAllocation ? 'Alokasi bulanan' : 'Saldo wallet'}
               </span>
               <span className="font-body text-body-sm font-semibold text-text-primary">
-                {hasAllocation ? formatRupiah(pocket.monthlyAllocation!) : formatRupiah(pocket.currentBalance)}
+                {hasAllocation ? formatRupiah(pocket.monthlyAllocation!) : formatRupiah(effectiveBalance)}
               </span>
             </div>
             <div className="flex justify-between items-center py-1 border-t border-border/40">
               <span className="text-body-sm text-text-secondary">Terpakai periode ini</span>
-              <span className="font-body text-body-sm font-semibold text-text-primary">Rp0</span>
+              <span className="font-body text-body-sm font-semibold text-text-primary">
+                {formatRupiah(usedAmount)}
+              </span>
             </div>
             <div className="flex justify-between items-center py-1 border-t border-border/40">
               <span className="text-body-sm text-text-secondary">Sisa</span>
               <span className="font-display text-body-lg font-bold text-text-primary">
-                {formatRupiah(pocket.currentBalance)}
+                {formatRupiah(effectiveBalance)}
               </span>
             </div>
           </Card>

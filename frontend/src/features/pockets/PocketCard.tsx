@@ -5,18 +5,29 @@ import { Badge } from '@/components/ui/Badge';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { formatRupiah } from '@/lib/currency';
 
+import { useTransactionStore } from '@/features/transactions/useTransactionStore';
+import {
+  getPocketEffectiveBalance,
+  getPocketUsedAmount,
+  getPocketBudgetStatus,
+} from '@/lib/balanceCalculations';
+
 interface PocketCardProps {
   pocket: Pocket;
 }
 
 export function PocketCard({ pocket }: PocketCardProps) {
   const navigate = useNavigate();
-  const hasAllocation = pocket.monthlyAllocation !== null;
+  const transactions = useTransactionStore((s) => s.transactions);
 
-  // Since transactions are not implemented yet, used amount = 0, progress = 0
-  const progressPercent = 0;
-  const statusLabel = 'Aman';
-  const statusVariant = 'aman'; // maps to green (Aman)
+  const hasAllocation = pocket.monthlyAllocation !== null;
+  const effectiveBalance = getPocketEffectiveBalance(pocket, transactions);
+  const usedAmount = getPocketUsedAmount(pocket.id, transactions);
+  
+  const { progress, status, label: statusLabel } = getPocketBudgetStatus(
+    usedAmount,
+    pocket.monthlyAllocation
+  );
 
   const handleClick = () => {
     navigate(`/pockets/${pocket.id}`);
@@ -47,7 +58,7 @@ export function PocketCard({ pocket }: PocketCardProps) {
           {/* Balance */}
           <div className="text-right">
             <span className="font-body text-body-lg font-bold text-text-primary block">
-              {formatRupiah(pocket.currentBalance)}
+              {formatRupiah(effectiveBalance)}
             </span>
             {hasAllocation && (
               <span className="text-[11px] text-text-muted">
@@ -62,11 +73,11 @@ export function PocketCard({ pocket }: PocketCardProps) {
           <div className="flex flex-col gap-1.5 pt-1 border-t border-border/40">
             <div className="flex justify-between items-center text-[11px]">
               <span className="text-text-secondary">
-                Terpakai: <span className="font-semibold text-text-primary">Rp0 (0%)</span>
+                Terpakai: <span className="font-semibold text-text-primary">{formatRupiah(usedAmount)} ({Math.round(progress)}%)</span>
               </span>
-              <Badge variant={statusVariant}>{statusLabel}</Badge>
+              <Badge variant={status}>{statusLabel}</Badge>
             </div>
-            <ProgressBar value={progressPercent} variant="aman" height="sm" />
+            <ProgressBar value={progress / 100} variant={status} height="sm" />
           </div>
         ) : null}
       </Card>

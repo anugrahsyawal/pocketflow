@@ -1,29 +1,33 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePocketStore } from '@/features/pockets/usePocketStore';
+import { useTransactionStore } from '@/features/transactions/useTransactionStore';
 import { POCKET_GROUPS } from '@/data/constants';
 import { formatRupiah } from '@/lib/currency';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { PocketCard } from './PocketCard';
+import {
+  getTotalEffectiveBalance,
+  getSpendableEffectiveBalance,
+} from '@/lib/balanceCalculations';
 
 export function PocketListPage() {
   const navigate = useNavigate();
   const pockets = usePocketStore((s) => s.pockets);
+  const transactions = useTransactionStore((s) => s.transactions);
 
   const activePockets = useMemo(() => {
     return pockets.filter((p) => p.isActive && !p.isArchived);
   }, [pockets]);
 
   const totalBalance = useMemo(() => {
-    return activePockets.reduce((sum, p) => sum + p.currentBalance, 0);
-  }, [activePockets]);
+    return getTotalEffectiveBalance(activePockets, transactions);
+  }, [activePockets, transactions]);
 
   const spendableBalance = useMemo(() => {
-    return activePockets
-      .filter((p) => p.groupId === 'daily' && p.isSpendable)
-      .reduce((sum, p) => sum + p.currentBalance, 0);
-  }, [activePockets]);
+    return getSpendableEffectiveBalance(activePockets, transactions);
+  }, [activePockets, transactions]);
 
   const isEmpty = activePockets.length === 0;
 
