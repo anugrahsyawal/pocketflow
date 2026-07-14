@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { usePocketStore } from '@/features/pockets/usePocketStore';
@@ -14,6 +14,7 @@ type FilterType = 'all' | 'expense' | 'income' | 'transfer';
 
 export function TransactionHistoryPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [filter, setFilter] = useState<FilterType>('all');
 
   // Store access
@@ -74,7 +75,7 @@ export function TransactionHistoryPage() {
 
   // Navigation handlers
   const handleRowClick = (id: string) => {
-    navigate(`/transactions/${id}`);
+    navigate(`/transactions/${id}`, { state: { from: location.pathname } });
   };
 
   // State checks

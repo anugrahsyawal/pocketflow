@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { AppShell } from '@/components/layout/AppShell';
 import { TopBar } from '@/components/layout/TopBar';
 import { Card } from '@/components/ui/Card';
@@ -22,6 +22,7 @@ import {
 export function PocketDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   
   const getPocketById = usePocketStore((s) => s.getPocketById);
   const pocket = useMemo(() => (id ? getPocketById(id) : undefined), [id, getPocketById]);
@@ -313,7 +314,7 @@ export function PocketDetailPage() {
                           <button
                             key={t.id}
                             type="button"
-                            onClick={() => navigate(`/transactions/${t.id}`)}
+                            onClick={() => navigate(`/transactions/${t.id}`, { state: { from: location.pathname } })}
                             className="w-full text-left cursor-pointer active:scale-[0.99] transition-transform focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-card"
                           >
                             <Card
