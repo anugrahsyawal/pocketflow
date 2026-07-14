@@ -19,6 +19,7 @@ import { PocketDetailPage } from '@/features/pockets/PocketDetailPage';
 import { CategoryManagementPage } from '@/features/categories/CategoryManagementPage';
 import { AddExpensePage } from '@/features/transactions/AddExpensePage';
 import { AddIncomePage } from '@/features/transactions/AddIncomePage';
+import { AddTransferPage } from '@/features/transactions/AddTransferPage';
 
 function PlaceholderPage({ name }: { name: string }) {
   return (
@@ -106,7 +107,7 @@ export function AppRouter() {
         <Route path="/pockets/:id/categories" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><CategoryManagementPage /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
         <Route path="/transactions/add/expense" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><AddExpensePage /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
         <Route path="/transactions/add/income" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><AddIncomePage /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
-        <Route path="/transactions/add/transfer" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Tambah Transfer" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
+        <Route path="/transactions/add/transfer" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><AddTransferPage /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
         <Route path="/transactions/:id" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Detail Transaksi" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
         <Route path="/transactions/:id/edit" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Edit Transaksi" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Pengaturan" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
