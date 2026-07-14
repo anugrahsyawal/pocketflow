@@ -291,7 +291,21 @@ export function TransactionDetailPage() {
         {!transaction.isArchived && (
           <div className="pt-2">
             <Button
-              onClick={() => navigate(`/transactions/${transaction.id}/edit`)}
+              onClick={() => {
+                const currentState = location.state as { from?: string } | null;
+                const originalReturnTo =
+                  currentState?.from === '/transactions' ||
+                  currentState?.from?.startsWith('/pockets/')
+                    ? currentState.from
+                    : '/transactions';
+
+                navigate(`/transactions/${transaction.id}/edit`, {
+                  state: {
+                    from: location.pathname,
+                    returnTo: originalReturnTo,
+                  },
+                });
+              }}
               variant="secondary"
               size="lg"
               fullWidth

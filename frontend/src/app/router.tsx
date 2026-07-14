@@ -22,6 +22,7 @@ import { AddIncomePage } from '@/features/transactions/AddIncomePage';
 import { AddTransferPage } from '@/features/transactions/AddTransferPage';
 import { TransactionHistoryPage } from '@/features/transactions/TransactionHistoryPage';
 import { TransactionDetailPage } from '@/features/transactions/TransactionDetailPage';
+import { TransactionEditPage } from '@/features/transactions/TransactionEditPage';
 
 function PlaceholderPage({ name }: { name: string }) {
   return (
@@ -111,7 +112,7 @@ export function AppRouter() {
         <Route path="/transactions/add/income" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><AddIncomePage /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
         <Route path="/transactions/add/transfer" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><AddTransferPage /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
         <Route path="/transactions/:id" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><TransactionDetailPage /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
-        <Route path="/transactions/:id/edit" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Edit Transaksi" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
+        <Route path="/transactions/:id/edit" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><TransactionEditPage /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Pengaturan" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
         <Route path="/placeholder/:feature" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Segera Hadir" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
 
