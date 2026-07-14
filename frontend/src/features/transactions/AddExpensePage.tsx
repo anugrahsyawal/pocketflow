@@ -8,6 +8,7 @@ import { useCategoryStore } from '@/features/categories/useCategoryStore';
 import { useTransactionStore } from '@/features/transactions/useTransactionStore';
 import { formatRupiah } from '@/lib/currency';
 import { getPocketEffectiveBalance } from '@/lib/balanceCalculations';
+import { PocketPickerField } from '@/features/transactions/components/PocketPickerField';
 import type { Pocket } from '@/types/pocket';
 import type { Category } from '@/types/category';
 
@@ -214,46 +215,15 @@ export function AddExpensePage() {
         </Card>
 
         {/* Pocket Selector */}
-        <div className="flex flex-col gap-2">
-          <label className="text-label-caps text-text-secondary font-bold px-1 tracking-wider">
-            Dari Pocket
-          </label>
-          <div className="flex flex-col gap-2">
-            {activePockets.map((p) => {
-              const isSelected = p.id === selectedPocketId;
-              const pocketBal = getPocketEffectiveBalance(p, transactions);
-              return (
-                <button
-                  key={p.id}
-                  type="button"
-                  onClick={() => handlePocketChange(p.id)}
-                  className={`flex items-center gap-3 p-3 rounded-card border transition-all text-left ${
-                    isSelected
-                      ? 'border-primary bg-primary-soft/30 shadow-card'
-                      : 'border-border/40 bg-surface-container hover:border-primary/30'
-                  }`}
-                >
-                  <div className="flex items-center justify-center w-10 h-10 rounded-pocket bg-surface-container-high text-xl">
-                    {p.emoji}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-display text-body-lg font-bold text-text-primary truncate">
-                      {p.name}
-                    </div>
-                    <div className="text-[11px] text-text-muted">
-                      Saldo: {formatRupiah(pocketBal)}
-                    </div>
-                  </div>
-                  {isSelected && (
-                    <span className="material-symbols-rounded text-primary text-xl flex-shrink-0">
-                      check_circle
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        <PocketPickerField
+          label="Dari Pocket"
+          title="Pilih Pocket Pengeluaran"
+          placeholder="Pilih pocket pengeluaran"
+          pockets={activePockets}
+          transactions={transactions}
+          selectedPocketId={selectedPocketId}
+          onSelect={handlePocketChange}
+        />
 
         {/* Category Selector */}
         {selectedPocketId && (
