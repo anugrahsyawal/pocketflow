@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { TopBar } from '@/components/layout/TopBar';
 import { Card } from '@/components/ui/Card';
@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/Badge';
 import { usePocketStore } from '@/features/pockets/usePocketStore';
 import { useCategoryStore } from '@/features/categories/useCategoryStore';
 import { useTransactionStore } from '@/features/transactions/useTransactionStore';
+import { TransactionConfirmationSheet } from '@/features/transactions/components/TransactionConfirmationSheet';
 import { formatRupiah } from '@/lib/currency';
 import { INCOME_SOURCE_LABELS, TRANSFER_TYPE_LABELS } from '@/data/constants';
 
@@ -14,34 +15,49 @@ interface TransactionDetailLocationState {
   from?: string;
 }
 
+type PendingAction = null | 'archive' | 'restore' | 'delete';
+
 export function TransactionDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const getTransactionById = useTransactionStore((s) => s.getTransactionById);
+  const archiveTransaction = useTransactionStore((s) => s.archiveTransaction);
+  const restoreTransaction = useTransactionStore((s) => s.restoreTransaction);
+  const deleteTransaction = useTransactionStore((s) => s.deleteTransaction);
   const getPocketById = usePocketStore((s) => s.getPocketById);
   const getCategoryById = useCategoryStore((s) => s.getCategoryById);
 
-  // Load transaction safely
-  const transaction = useMemo(() => {
-    return id ? getTransactionById(id) : undefined;
-  }, [id, getTransactionById]);
+  // Action state
+  const [pendingAction, setPendingAction] = useState<PendingAction>(null);
+  const [showArchiveSheet, setShowArchiveSheet] = useState(false);
+  const [showDeleteSheet, setShowDeleteSheet] = useState(false);
 
-  // Safe back navigation logic
-  const handleBack = () => {
+  // Load transaction safely reactively
+  const transaction = useTransactionStore((state) =>
+    id ? state.transactions.find((item) => item.id === id) : undefined
+  );
+
+  // Compute safe origin path from location state
+  const safeOrigin = useMemo(() => {
     const state = location.state as TransactionDetailLocationState | null;
     const fromPath = state?.from;
 
     if (
       fromPath &&
       typeof fromPath === 'string' &&
-      (fromPath.startsWith('/transactions') || fromPath.startsWith('/pockets/'))
+      (fromPath === '/transactions' ||
+       fromPath === '/transactions?status=archived' ||
+       fromPath.startsWith('/pockets/'))
     ) {
-      navigate(fromPath);
-    } else {
-      navigate('/transactions');
+      return fromPath;
     }
+    return '/transactions';
+  }, [location.state]);
+
+  // Safe back navigation logic
+  const handleBack = () => {
+    navigate(safeOrigin);
   };
 
   // Date formatter
@@ -55,7 +71,7 @@ export function TransactionDetailPage() {
         month: 'long',
         year: 'numeric',
       }).format(dateObj);
-    } catch (e) {
+    } catch {
       return transaction.date;
     }
   }, [transaction]);
@@ -68,9 +84,45 @@ export function TransactionDetailPage() {
         dateStyle: 'medium',
         timeStyle: 'short',
       }).format(dateObj);
-    } catch (e) {
+    } catch {
       return isoString;
     }
+  };
+
+  // Archive handler
+  const handleArchiveConfirm = () => {
+    if (!transaction || transaction.isArchived || pendingAction) {
+      return;
+    }
+    setPendingAction('archive');
+    archiveTransaction(transaction.id);
+    setShowArchiveSheet(false);
+    setPendingAction(null);
+  };
+
+  // Restore handler
+  const handleRestore = () => {
+    if (!transaction || !transaction.isArchived || pendingAction) {
+      return;
+    }
+    setPendingAction('restore');
+    restoreTransaction(transaction.id);
+    setPendingAction(null);
+  };
+
+  // Delete handler
+  const handleDeleteConfirm = () => {
+    if (!transaction || !transaction.isArchived || pendingAction) {
+      return;
+    }
+    setPendingAction('delete');
+    deleteTransaction(transaction.id);
+    setShowDeleteSheet(false);
+
+    // Navigate away — prefer archived history
+    const deleteDestination = '/transactions?status=archived';
+
+    navigate(deleteDestination, { replace: true });
   };
 
   // Transaction not found view
@@ -128,6 +180,12 @@ export function TransactionDetailPage() {
     typeIcon = 'swap_horiz';
     typeIconColor = 'text-primary';
   }
+
+  // Transaction summary for confirmation sheets
+  const txnSummaryPocket =
+    transaction.type === 'transfer'
+      ? `${fromPocket?.name || '?'} → ${toPocket?.name || '?'}`
+      : pocket?.name || 'Pocket tidak tersedia';
 
   return (
     <>
@@ -287,9 +345,9 @@ export function TransactionDetailPage() {
           </Card>
         </div>
 
-        {/* Edit Button (hidden or disabled if archived) */}
+        {/* Active transaction actions: Edit + Archive */}
         {!transaction.isArchived && (
-          <div className="pt-2">
+          <div className="flex flex-col gap-3 pt-2">
             <Button
               onClick={() => {
                 const currentState = location.state as { from?: string } | null;
@@ -313,9 +371,108 @@ export function TransactionDetailPage() {
             >
               Edit Transaksi
             </Button>
+
+            <Button
+              onClick={() => setShowArchiveSheet(true)}
+              variant="secondary"
+              size="lg"
+              fullWidth
+              disabled={pendingAction !== null}
+              className="border-bahaya/30 text-bahaya hover:bg-bahaya-soft/20"
+              icon={<span className="material-symbols-rounded text-xl">archive</span>}
+            >
+              Arsipkan Transaksi
+            </Button>
+          </div>
+        )}
+
+        {/* Archived transaction actions: Restore + Delete Permanently */}
+        {transaction.isArchived && (
+          <div className="flex flex-col gap-3 pt-2">
+            <Button
+              onClick={handleRestore}
+              variant="primary"
+              size="lg"
+              fullWidth
+              disabled={pendingAction !== null}
+              loading={pendingAction === 'restore'}
+              icon={<span className="material-symbols-rounded text-xl">unarchive</span>}
+            >
+              Pulihkan Transaksi
+            </Button>
+
+            <Button
+              onClick={() => setShowDeleteSheet(true)}
+              variant="secondary"
+              size="lg"
+              fullWidth
+              disabled={pendingAction !== null}
+              className="border-bahaya/30 text-bahaya hover:bg-bahaya-soft/20"
+              icon={<span className="material-symbols-rounded text-xl">delete_forever</span>}
+            >
+              Hapus Permanen
+            </Button>
           </div>
         )}
       </div>
+
+      {/* Archive Confirmation Sheet */}
+      <TransactionConfirmationSheet
+        isOpen={showArchiveSheet}
+        title="Arsipkan transaksi?"
+        description="Transaksi akan dihapus dari riwayat aktif dan dampaknya pada saldo akan dibatalkan. Transaksi masih dapat dipulihkan."
+        confirmLabel="Arsipkan Transaksi"
+        confirmVariant="danger"
+        isProcessing={pendingAction === 'archive'}
+        onConfirm={handleArchiveConfirm}
+        onClose={() => setShowArchiveSheet(false)}
+      >
+        <div className="flex flex-col gap-1.5 text-body-sm">
+          <div className="flex justify-between items-center">
+            <span className="text-text-secondary">Tipe</span>
+            <span className="font-semibold text-text-primary">{typeLabel}</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-text-secondary">Nominal</span>
+            <span className={`font-display font-bold ${amountColor}`}>{heroAmount}</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-text-secondary">Pocket</span>
+            <span className="font-semibold text-text-primary">{txnSummaryPocket}</span>
+          </div>
+        </div>
+      </TransactionConfirmationSheet>
+
+      {/* Delete Confirmation Sheet */}
+      <TransactionConfirmationSheet
+        isOpen={showDeleteSheet}
+        title="Hapus transaksi secara permanen?"
+        description="Transaksi akan dihapus selamanya dan tidak dapat dipulihkan. Tindakan ini tidak dapat dibatalkan."
+        confirmLabel="Hapus Permanen"
+        confirmVariant="danger"
+        isProcessing={pendingAction === 'delete'}
+        onConfirm={handleDeleteConfirm}
+        onClose={() => setShowDeleteSheet(false)}
+      >
+        <div className="flex flex-col gap-1.5 text-body-sm">
+          <div className="flex justify-between items-center">
+            <span className="text-text-secondary">Tipe</span>
+            <span className="font-semibold text-text-primary">{typeLabel}</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-text-secondary">Nominal</span>
+            <span className={`font-display font-bold ${amountColor}`}>{heroAmount}</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-text-secondary">Tanggal</span>
+            <span className="font-semibold text-text-primary">{transaction.date}</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-text-secondary">Pocket</span>
+            <span className="font-semibold text-text-primary">{txnSummaryPocket}</span>
+          </div>
+        </div>
+      </TransactionConfirmationSheet>
     </>
   );
 }

@@ -11,6 +11,7 @@ interface TransactionState {
   addTransaction: (input: TransactionInput) => { success: boolean; errors: string[]; transaction?: Transaction };
   updateTransaction: (id: string, updates: TransactionUpdate) => void;
   archiveTransaction: (id: string) => void;
+  restoreTransaction: (id: string) => void;
   deleteTransaction: (id: string) => void;
   resetTransactionStore: () => void;
 
@@ -68,6 +69,15 @@ export const useTransactionStore = create<TransactionState>()(
         set((state) => ({
           transactions: state.transactions.map((t) =>
             t.id === id ? { ...t, isArchived: true, updatedAt: now } : t
+          ),
+        }));
+      },
+
+      restoreTransaction: (id) => {
+        const now = new Date().toISOString();
+        set((state) => ({
+          transactions: state.transactions.map((t) =>
+            t.id === id ? { ...t, isArchived: false, updatedAt: now } : t
           ),
         }));
       },

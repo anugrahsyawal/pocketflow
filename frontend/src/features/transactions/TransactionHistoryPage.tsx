@@ -1,7 +1,8 @@
 import { useState, useMemo } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { Badge } from '@/components/ui/Badge';
 import { usePocketStore } from '@/features/pockets/usePocketStore';
 import { useCategoryStore } from '@/features/categories/useCategoryStore';
 import { useTransactionStore } from '@/features/transactions/useTransactionStore';
@@ -11,28 +12,49 @@ import { formatDateGroup, sortTransactions } from '@/lib/transactionDisplay';
 import type { Transaction } from '@/types/transaction';
 
 type FilterType = 'all' | 'expense' | 'income' | 'transfer';
+type StatusMode = 'active' | 'archived';
 
 export function TransactionHistoryPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [filter, setFilter] = useState<FilterType>('all');
+
+  // Derive status mode from URL query parameter
+  const statusMode: StatusMode = useMemo(() => {
+    const statusParam = searchParams.get('status');
+    if (statusParam === 'archived') return 'archived';
+    return 'active';
+  }, [searchParams]);
+
+  const setStatusMode = (mode: StatusMode) => {
+    setFilter('all'); // Reset type filter on mode change
+    if (mode === 'archived') {
+      setSearchParams({ status: 'archived' });
+    } else {
+      setSearchParams({});
+    }
+  };
 
   // Store access
   const transactions = useTransactionStore((s) => s.transactions);
   const getPocketById = usePocketStore((s) => s.getPocketById);
   const getCategoryById = useCategoryStore((s) => s.getCategoryById);
 
-  // Active, non-archived transactions
-  const activeTransactions = useMemo(() => {
+  // Filter by status mode
+  const modeTransactions = useMemo(() => {
+    if (statusMode === 'archived') {
+      return transactions.filter((t) => t.isArchived);
+    }
     return transactions.filter((t) => !t.isArchived);
-  }, [transactions]);
+  }, [transactions, statusMode]);
 
-  // Sorted active transactions
+  // Sorted transactions
   const sortedTransactions = useMemo(() => {
-    return sortTransactions(activeTransactions);
-  }, [activeTransactions]);
+    return sortTransactions(modeTransactions);
+  }, [modeTransactions]);
 
-  // Filtered transactions
+  // Type-filtered transactions
   const filteredTransactions = useMemo(() => {
     return sortedTransactions.filter((t) => {
       if (filter === 'all') return true;
@@ -40,7 +62,7 @@ export function TransactionHistoryPage() {
     });
   }, [sortedTransactions, filter]);
 
-  // Grouped by date: Map<dateStr, Transaction[]>
+  // Grouped by date
   const groupedTransactions = useMemo(() => {
     const groups: Record<string, Transaction[]> = {};
     for (const t of filteredTransactions) {
@@ -52,12 +74,12 @@ export function TransactionHistoryPage() {
     return groups;
   }, [filteredTransactions]);
 
-  // Distinct sorted dates list
+  // Distinct sorted dates
   const sortedDates = useMemo(() => {
     return Object.keys(groupedTransactions).sort((a, b) => b.localeCompare(a));
   }, [groupedTransactions]);
 
-  // Totals for current filter (excluding transfers)
+  // Totals for active mode
   const totals = useMemo(() => {
     let totalExpense = 0;
     let totalIncome = 0;
@@ -73,16 +95,27 @@ export function TransactionHistoryPage() {
     return { totalExpense, totalIncome };
   }, [filteredTransactions]);
 
-  // Navigation handlers
+  // Navigation handlers — pass full origin path with query
   const handleRowClick = (id: string) => {
-    navigate(`/transactions/${id}`, { state: { from: location.pathname } });
+    const originPath = `${location.pathname}${location.search}`;
+    navigate(`/transactions/${id}`, { state: { from: originPath } });
   };
 
   // State checks
-  const hasNoTransactionsAtAll = activeTransactions.length === 0;
+  const hasNoTransactionsInMode = modeTransactions.length === 0;
   const isFilterEmpty = filteredTransactions.length === 0;
 
-  if (hasNoTransactionsAtAll) {
+  // Check if any archived transactions exist at all (for showing status toggle)
+  const hasAnyArchived = useMemo(() => {
+    return transactions.some((t) => t.isArchived);
+  }, [transactions]);
+
+  const hasAnyActive = useMemo(() => {
+    return transactions.some((t) => !t.isArchived);
+  }, [transactions]);
+
+  // Active mode: no transactions at all
+  if (statusMode === 'active' && hasNoTransactionsInMode && !hasAnyArchived) {
     return (
       <div className="flex flex-col gap-6 px-safe py-6 min-h-screen bg-background">
         <div>
@@ -141,28 +174,85 @@ export function TransactionHistoryPage() {
         </p>
       </div>
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-2 gap-3">
-        <Card variant="flat" className="bg-bahaya-soft/40 border border-bahaya-soft/30 p-4">
-          <span className="text-[10px] font-bold text-bahaya tracking-wider uppercase block">
-            Pengeluaran
-          </span>
-          <span className="font-display text-amount-md text-bahaya mt-1 block">
-            -{formatRupiah(totals.totalExpense)}
-          </span>
-        </Card>
+      {/* Status Mode Switch */}
+      {(hasAnyArchived || statusMode === 'archived') && (
+        <div className="flex gap-2">
+          <button
+            onClick={() => setStatusMode('active')}
+            className={`flex-1 py-2.5 rounded-card text-body-sm font-semibold border transition-all ${
+              statusMode === 'active'
+                ? 'border-primary bg-primary-soft text-primary shadow-sm'
+                : 'border-border/30 bg-surface text-text-secondary hover:border-primary/20'
+            }`}
+          >
+            Aktif
+            {hasAnyActive && (
+              <span className="ml-1.5 text-[10px] opacity-70">
+                ({transactions.filter((t) => !t.isArchived).length})
+              </span>
+            )}
+          </button>
+          <button
+            onClick={() => setStatusMode('archived')}
+            className={`flex-1 py-2.5 rounded-card text-body-sm font-semibold border transition-all ${
+              statusMode === 'archived'
+                ? 'border-primary bg-primary-soft text-primary shadow-sm'
+                : 'border-border/30 bg-surface text-text-secondary hover:border-primary/20'
+            }`}
+          >
+            Diarsipkan
+            {hasAnyArchived && (
+              <span className="ml-1.5 text-[10px] opacity-70">
+                ({transactions.filter((t) => t.isArchived).length})
+              </span>
+            )}
+          </button>
+        </div>
+      )}
 
-        <Card variant="flat" className="bg-aman-soft/40 border border-aman-soft/30 p-4">
-          <span className="text-[10px] font-bold text-aman tracking-wider uppercase block">
-            Pemasukan
-          </span>
-          <span className="font-display text-amount-md text-aman mt-1 block">
-            +{formatRupiah(totals.totalIncome)}
-          </span>
-        </Card>
-      </div>
+      {/* Active mode: Summary Cards */}
+      {statusMode === 'active' && !hasNoTransactionsInMode && (
+        <div className="grid grid-cols-2 gap-3">
+          <Card variant="flat" className="bg-bahaya-soft/40 border border-bahaya-soft/30 p-4">
+            <span className="text-[10px] font-bold text-bahaya tracking-wider uppercase block">
+              Pengeluaran
+            </span>
+            <span className="font-display text-amount-md text-bahaya mt-1 block">
+              -{formatRupiah(totals.totalExpense)}
+            </span>
+          </Card>
 
-      {/* Filters */}
+          <Card variant="flat" className="bg-aman-soft/40 border border-aman-soft/30 p-4">
+            <span className="text-[10px] font-bold text-aman tracking-wider uppercase block">
+              Pemasukan
+            </span>
+            <span className="font-display text-amount-md text-aman mt-1 block">
+              +{formatRupiah(totals.totalIncome)}
+            </span>
+          </Card>
+        </div>
+      )}
+
+      {/* Archived mode: Informational Card */}
+      {statusMode === 'archived' && !hasNoTransactionsInMode && (
+        <Card variant="flat" className="bg-surface-container border border-border/30 p-4">
+          <div className="flex items-start gap-3">
+            <span className="material-symbols-rounded text-2xl text-text-muted flex-shrink-0 mt-0.5">
+              archive
+            </span>
+            <div>
+              <h3 className="font-display text-body-md font-bold text-text-primary">
+                Transaksi diarsipkan
+              </h3>
+              <p className="text-[11px] text-text-secondary mt-1 leading-relaxed">
+                Transaksi ini tidak memengaruhi saldo atau ringkasan aktif. Pulihkan transaksi untuk menerapkan kembali dampaknya.
+              </p>
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {/* Type Filters */}
       <div className="flex gap-1.5 overflow-x-auto -mx-safe px-safe pb-1 scrollbar-none">
         {(
           [
@@ -189,8 +279,57 @@ export function TransactionHistoryPage() {
         })}
       </div>
 
-      {/* Grouped Lists */}
-      {isFilterEmpty ? (
+      {/* Empty states */}
+      {hasNoTransactionsInMode && statusMode === 'archived' && (
+        <Card variant="flat" className="py-12 px-6 text-center flex flex-col items-center gap-4">
+          <span className="text-4xl" role="img" aria-label="No archived">
+            📦
+          </span>
+          <div>
+            <h3 className="font-display text-headline-sm text-text-primary">
+              Belum ada transaksi diarsipkan.
+            </h3>
+            <p className="text-body-sm text-text-secondary mt-2 max-w-[280px] mx-auto">
+              Transaksi yang kamu arsipkan akan muncul di sini.
+            </p>
+          </div>
+          <Button onClick={() => setStatusMode('active')} variant="secondary" size="md">
+            Kembali ke Transaksi Aktif
+          </Button>
+        </Card>
+      )}
+
+      {hasNoTransactionsInMode && statusMode === 'active' && (
+        <Card variant="flat" className="py-12 px-6 text-center flex flex-col items-center gap-4">
+          <span className="text-4xl" role="img" aria-label="No active transactions">
+            📝
+          </span>
+          <div>
+            <h3 className="font-display text-headline-sm text-text-primary">
+              Tidak ada transaksi aktif.
+            </h3>
+            <p className="text-body-sm text-text-secondary mt-2 max-w-[280px] mx-auto">
+              Semua transaksi telah diarsipkan. Buat transaksi baru atau pulihkan yang telah diarsipkan.
+            </p>
+          </div>
+          <div className="flex flex-col gap-2 w-full max-w-[200px] mt-2">
+            <Button
+              onClick={() => navigate('/transactions/add/expense')}
+              variant="primary"
+              size="md"
+            >
+              Catat Pengeluaran
+            </Button>
+            {hasAnyArchived && (
+              <Button onClick={() => setStatusMode('archived')} variant="secondary" size="md">
+                Lihat Arsip
+              </Button>
+            )}
+          </div>
+        </Card>
+      )}
+
+      {isFilterEmpty && !hasNoTransactionsInMode && (
         <Card variant="flat" className="py-12 px-6 text-center flex flex-col items-center gap-4">
           <span className="text-4xl" role="img" aria-label="No results">
             🔎
@@ -207,7 +346,10 @@ export function TransactionHistoryPage() {
             Kembali ke Semua
           </Button>
         </Card>
-      ) : (
+      )}
+
+      {/* Grouped Transaction Lists */}
+      {!isFilterEmpty && !hasNoTransactionsInMode && (
         <div className="flex flex-col gap-6">
           {sortedDates.map((dateStr) => {
             const txns = groupedTransactions[dateStr] || [];
@@ -227,7 +369,7 @@ export function TransactionHistoryPage() {
                     const toPocket = t.toPocketId ? getPocketById(t.toPocketId) : undefined;
 
                     // Resolve Category/Source Text Details
-                    let title = '';
+                    let rowTitle = '';
                     let sub = '';
                     let iconName = '';
                     let iconBg = '';
@@ -237,7 +379,7 @@ export function TransactionHistoryPage() {
 
                     if (t.type === 'expense') {
                       const category = t.categoryId ? getCategoryById(t.categoryId) : undefined;
-                      title = category ? `${category.emoji} ${category.name}` : 'Tanpa kategori';
+                      rowTitle = category ? `${category.emoji} ${category.name}` : 'Tanpa kategori';
                       sub = pocket ? pocket.name : 'Pocket tidak tersedia';
                       iconName = 'remove_circle';
                       iconBg = 'bg-bahaya-soft';
@@ -246,7 +388,7 @@ export function TransactionHistoryPage() {
                       amountColor = 'text-bahaya';
                     } else if (t.type === 'income') {
                       const sourceLabel = t.incomeSource ? (INCOME_SOURCE_LABELS[t.incomeSource] || 'Pemasukan') : 'Pemasukan';
-                      title = sourceLabel;
+                      rowTitle = sourceLabel;
                       sub = pocket ? pocket.name : 'Pocket tidak tersedia';
                       iconName = 'add_circle';
                       iconBg = 'bg-aman-soft';
@@ -255,7 +397,7 @@ export function TransactionHistoryPage() {
                       amountColor = 'text-aman';
                     } else if (t.type === 'transfer') {
                       const transferLabel = t.transferType ? (TRANSFER_TYPE_LABELS[t.transferType] || 'Transfer') : 'Transfer';
-                      title = transferLabel;
+                      rowTitle = transferLabel;
                       const fromName = fromPocket ? fromPocket.name : 'Pocket tidak tersedia';
                       const toName = toPocket ? toPocket.name : 'Pocket tidak tersedia';
                       sub = `${fromName} → ${toName}`;
@@ -267,10 +409,11 @@ export function TransactionHistoryPage() {
                     }
 
                     return (
-                      <div
+                      <button
                         key={t.id}
+                        type="button"
                         onClick={() => handleRowClick(t.id)}
-                        className="cursor-pointer active:scale-[0.99] transition-transform"
+                        className="w-full text-left cursor-pointer active:scale-[0.99] transition-transform focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-card"
                       >
                         <Card
                           variant="flat"
@@ -287,8 +430,13 @@ export function TransactionHistoryPage() {
 
                             {/* Detail Labels */}
                             <div className="min-w-0">
-                              <div className="font-display text-body-md font-bold text-text-primary truncate">
-                                {title}
+                              <div className="font-display text-body-md font-bold text-text-primary truncate flex items-center gap-1.5">
+                                {rowTitle}
+                                {statusMode === 'archived' && (
+                                  <Badge variant="neutral" className="text-[9px] px-1.5 py-0">
+                                    Diarsipkan
+                                  </Badge>
+                                )}
                               </div>
                               {t.note && (
                                 <div className="text-[11px] text-text-muted italic truncate max-w-[200px] mb-0.5">
@@ -311,7 +459,7 @@ export function TransactionHistoryPage() {
                             </span>
                           </div>
                         </Card>
-                      </div>
+                      </button>
                     );
                   })}
                 </div>
