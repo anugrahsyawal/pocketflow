@@ -17,6 +17,8 @@ import { useStoreHydration } from '@/lib/storeHydration';
 import { PocketListPage } from '@/features/pockets/PocketListPage';
 import { PocketDetailPage } from '@/features/pockets/PocketDetailPage';
 import { CategoryManagementPage } from '@/features/categories/CategoryManagementPage';
+import { AddExpensePage } from '@/features/transactions/AddExpensePage';
+import { AddIncomePage } from '@/features/transactions/AddIncomePage';
 
 function PlaceholderPage({ name }: { name: string }) {
   return (
@@ -102,8 +104,8 @@ export function AppRouter() {
         {/* Detail pages without bottom nav */}
         <Route path="/pockets/:id" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PocketDetailPage /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
         <Route path="/pockets/:id/categories" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><CategoryManagementPage /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
-        <Route path="/transactions/add/expense" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Catat Pengeluaran" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
-        <Route path="/transactions/add/income" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Tambah Pemasukan" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
+        <Route path="/transactions/add/expense" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><AddExpensePage /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
+        <Route path="/transactions/add/income" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><AddIncomePage /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
         <Route path="/transactions/add/transfer" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Tambah Transfer" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
         <Route path="/transactions/:id" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Detail Transaksi" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />
         <Route path="/transactions/:id/edit" element={<ProtectedRoute><SetupRequiredRoute><AppShell showBottomNav={false}><PlaceholderPage name="Edit Transaksi" /></AppShell></SetupRequiredRoute></ProtectedRoute>} />

@@ -204,6 +204,19 @@ export function PocketDetailPage() {
             <p>Belum ada transaksi di pocket ini.</p>
           </Card>
         </div>
+
+        {/* Quick Action: Add Expense */}
+        <div className="pt-1 pb-4">
+          <Button
+            onClick={() => navigate(`/transactions/add/expense?pocketId=${pocket.id}`)}
+            variant="primary"
+            size="md"
+            fullWidth
+            icon={<span className="material-symbols-rounded text-xl">remove_circle</span>}
+          >
+            Tambah Pengeluaran
+          </Button>
+        </div>
       </div>
     </AppShell>
   );
