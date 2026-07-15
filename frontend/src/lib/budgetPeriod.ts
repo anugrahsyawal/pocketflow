@@ -91,6 +91,41 @@ export function getBudgetPeriod(today: Date = new Date()): BudgetPeriod {
 }
 
 /**
+ * Returns the budget period corresponding to a numeric offset from the current period.
+ *
+ * @param offset - Numeric offset (0: current period, -1: previous period, etc.). Clamped to <= 0.
+ * @param today - The reference date. Defaults to `new Date()`.
+ */
+export function getBudgetPeriodByOffset(
+  offset: number,
+  today: Date = new Date()
+): BudgetPeriod {
+  const safeOffset = offset > 0 ? 0 : offset;
+  const year = today.getFullYear();
+  const month = today.getMonth(); // 0-indexed
+  const day = today.getDate();
+
+  let baseStartMonth: number;
+  if (day >= 26) {
+    baseStartMonth = month;
+  } else {
+    baseStartMonth = month - 1;
+  }
+
+  const targetStartMonth = baseStartMonth + safeOffset;
+  const targetEndMonth = targetStartMonth + 1;
+
+  const startDate = new Date(year, targetStartMonth, 26);
+  const endDate = new Date(year, targetEndMonth, 25);
+
+  return {
+    startDate: toLocalDateStr(startDate),
+    endDate: toLocalDateStr(endDate),
+    label: formatBudgetPeriodLabel(startDate, endDate),
+  };
+}
+
+/**
  * Validates if a string is a valid local date in YYYY-MM-DD format.
  */
 export function isValidLocalDateString(value: string): boolean {
