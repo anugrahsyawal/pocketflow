@@ -23,6 +23,7 @@ import { AddTransferPage } from '@/features/transactions/AddTransferPage';
 import { TransactionHistoryPage } from '@/features/transactions/TransactionHistoryPage';
 import { TransactionDetailPage } from '@/features/transactions/TransactionDetailPage';
 import { TransactionEditPage } from '@/features/transactions/TransactionEditPage';
+import { HomePage } from '@/features/home/HomePage';
 
 function PlaceholderPage({ name }: { name: string }) {
   return (
@@ -93,7 +94,7 @@ export function AppRouter() {
 
         {/* Main pages with bottom nav */}
         <Route path="/" element={
-          <ProtectedRoute><SetupRequiredRoute><AppShell><PlaceholderPage name="Beranda" /><BottomNav onAddClick={() => setIsAddSheetOpen(true)} /></AppShell></SetupRequiredRoute></ProtectedRoute>
+          <ProtectedRoute><SetupRequiredRoute><AppShell><HomePage /><BottomNav onAddClick={() => setIsAddSheetOpen(true)} /></AppShell></SetupRequiredRoute></ProtectedRoute>
         } />
         <Route path="/pockets" element={
           <ProtectedRoute><SetupRequiredRoute><AppShell><PocketListPage /><BottomNav onAddClick={() => setIsAddSheetOpen(true)} /></AppShell></SetupRequiredRoute></ProtectedRoute>
