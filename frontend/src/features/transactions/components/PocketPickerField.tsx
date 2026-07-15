@@ -94,12 +94,12 @@ export function PocketPickerField({
         disabled={disabled}
         aria-haspopup="dialog"
         aria-expanded={isOpen}
-        className={`w-full text-left flex items-center justify-between p-3 border rounded-card transition-all focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary ${
+        className={`w-full text-left flex items-center justify-between p-3 border rounded-card transition-all focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary ${
           disabled
-            ? 'bg-surface-container/50 border-border/30 opacity-60 cursor-not-allowed'
+            ? 'bg-surface-container/50 border-border opacity-60 cursor-not-allowed'
             : selectedPocket
-            ? 'bg-surface-container border-border/40 hover:border-primary/30 active:scale-[0.99]'
-            : 'bg-surface-container border-border/40 text-text-muted hover:border-primary/30 active:scale-[0.99]'
+            ? 'bg-background border-border hover:border-primary/40 active:scale-[0.99]'
+            : 'bg-background border-border text-text-muted hover:border-primary/40 active:scale-[0.99]'
         }`}
       >
         {selectedPocket ? (
@@ -139,7 +139,7 @@ export function PocketPickerField({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari nama pocket..."
-              className="w-full h-10 pl-9 pr-4 rounded-card border border-border/40 bg-surface-container text-text-primary text-body-sm font-body focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-text-disabled"
+              className="w-full h-10 pl-9 pr-4 rounded-card border border-border bg-background text-text-primary text-body-sm font-body focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all placeholder:text-text-disabled"
             />
           </div>
 

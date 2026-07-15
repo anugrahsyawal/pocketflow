@@ -4,11 +4,23 @@ import { STORAGE_KEYS } from '@/data/constants';
 import type { Transaction, TransactionInput, TransactionType, TransactionUpdate } from '@/types/transaction';
 import { validateTransaction } from '@/lib/transactionValidation';
 
+export interface BatchTransactionError {
+  index: number;
+  errors: string[];
+}
+
+export interface AddTransactionsResult {
+  success: boolean;
+  errors: BatchTransactionError[];
+  transactions?: Transaction[];
+}
+
 interface TransactionState {
   transactions: Transaction[];
 
   // Actions
   addTransaction: (input: TransactionInput) => { success: boolean; errors: string[]; transaction?: Transaction };
+  addTransactions: (inputs: TransactionInput[]) => AddTransactionsResult;
   updateTransaction: (id: string, updates: TransactionUpdate) => void;
   archiveTransaction: (id: string) => void;
   restoreTransaction: (id: string) => void;
@@ -53,6 +65,44 @@ export const useTransactionStore = create<TransactionState>()(
         }));
 
         return { success: true, errors: [], transaction: newTransaction };
+      },
+
+      addTransactions: (inputs) => {
+        if (!inputs || inputs.length === 0) {
+          return { success: false, errors: [{ index: -1, errors: ['Input transaksi kosong.'] }] };
+        }
+
+        const batchErrors: BatchTransactionError[] = [];
+
+        // Validate each transaction
+        inputs.forEach((input, index) => {
+          const validation = validateTransaction(input);
+          if (!validation.valid) {
+            batchErrors.push({
+              index,
+              errors: validation.errors,
+            });
+          }
+        });
+
+        if (batchErrors.length > 0) {
+          return { success: false, errors: batchErrors };
+        }
+
+        const now = new Date().toISOString();
+        const newTransactions: Transaction[] = inputs.map((input, index) => ({
+          ...input,
+          id: `txn-${Date.now()}-${index}-${Math.random().toString(36).substr(2, 9)}`,
+          isArchived: false,
+          createdAt: now,
+          updatedAt: now,
+        }));
+
+        set((state) => ({
+          transactions: [...newTransactions, ...state.transactions],
+        }));
+
+        return { success: true, errors: [], transactions: newTransactions };
       },
 
       updateTransaction: (id, updates) => {
