@@ -132,8 +132,9 @@ export function TransactionEditPage() {
     // Safe edit Back destination: only accept editLocationState.from when it exactly equals detailPath, otherwise use detailPath
     const safeBackPath = editLocationState?.from === detailPath ? editLocationState.from : detailPath;
 
-    // Safe post-save return destination: accept exactly /transactions or paths starting with /pockets/
+    // Safe post-save return destination: accept exactly /, /transactions, or paths starting with /pockets/
     const safeReturnTo =
+      editLocationState?.returnTo === '/' ||
       editLocationState?.returnTo === '/transactions' ||
       editLocationState?.returnTo?.startsWith('/pockets/')
         ? editLocationState.returnTo
@@ -252,6 +253,7 @@ export function TransactionEditPage() {
     const detailPath = `/transactions/${transaction.id}`;
     
     const safeReturnTo =
+      editLocationState?.returnTo === '/' ||
       editLocationState?.returnTo === '/transactions' ||
       editLocationState?.returnTo?.startsWith('/pockets/')
         ? editLocationState.returnTo

@@ -53,3 +53,77 @@ export function sortTransactions(txns: Transaction[]): Transaction[] {
     return b.createdAt.localeCompare(a.createdAt);
   });
 }
+
+const MONTH_SHORT_ID = [
+  'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
+  'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des',
+];
+
+/**
+ * Formats a transaction date and time into a compact, localized Indonesian string.
+ */
+export function formatCompactTransactionDateTime(
+  dateStr: string,
+  timeStr: string,
+  today: Date = new Date()
+): string {
+  const timeSuffix = timeStr ? ` • ${timeStr}` : '';
+
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+    return `${dateStr}${timeSuffix}`;
+  }
+
+  try {
+    const parts = dateStr.split('-').map(Number);
+    const year = parts[0];
+    const month = parts[1];
+    const day = parts[2];
+
+    if (
+      year === undefined ||
+      month === undefined ||
+      day === undefined ||
+      isNaN(year) ||
+      isNaN(month) ||
+      isNaN(day)
+    ) {
+      return `${dateStr}${timeSuffix}`;
+    }
+
+    const dateObj = new Date(year, month - 1, day);
+    if (
+      dateObj.getFullYear() !== year ||
+      dateObj.getMonth() !== month - 1 ||
+      dateObj.getDate() !== day
+    ) {
+      return `${dateStr}${timeSuffix}`;
+    }
+
+    // Determine today and yesterday strings in YYYY-MM-DD
+    const todayY = today.getFullYear();
+    const todayM = String(today.getMonth() + 1).padStart(2, '0');
+    const todayD = String(today.getDate()).padStart(2, '0');
+    const todayStr = `${todayY}-${todayM}-${todayD}`;
+
+    const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+    const yesterdayY = yesterday.getFullYear();
+    const yesterdayM = String(yesterday.getMonth() + 1).padStart(2, '0');
+    const yesterdayD = String(yesterday.getDate()).padStart(2, '0');
+    const yesterdayStr = `${yesterdayY}-${yesterdayM}-${yesterdayD}`;
+
+    if (dateStr === todayStr) {
+      return `Hari ini${timeSuffix}`;
+    }
+    if (dateStr === yesterdayStr) {
+      return `Kemarin${timeSuffix}`;
+    }
+
+    const monthLabel = MONTH_SHORT_ID[dateObj.getMonth()];
+    if (year === todayY) {
+      return `${day} ${monthLabel}${timeSuffix}`;
+    }
+    return `${day} ${monthLabel} ${year}${timeSuffix}`;
+  } catch {
+    return `${dateStr}${timeSuffix}`;
+  }
+}

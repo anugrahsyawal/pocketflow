@@ -46,7 +46,8 @@ export function TransactionDetailPage() {
     if (
       fromPath &&
       typeof fromPath === 'string' &&
-      (fromPath === '/transactions' ||
+      (fromPath === '/' ||
+       fromPath === '/transactions' ||
        fromPath === '/transactions?status=archived' ||
        fromPath.startsWith('/pockets/'))
     ) {
@@ -352,6 +353,7 @@ export function TransactionDetailPage() {
               onClick={() => {
                 const currentState = location.state as { from?: string } | null;
                 const originalReturnTo =
+                  currentState?.from === '/' ||
                   currentState?.from === '/transactions' ||
                   currentState?.from?.startsWith('/pockets/')
                     ? currentState.from

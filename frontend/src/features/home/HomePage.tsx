@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/features/auth/useAuthStore';
 import { usePocketStore } from '@/features/pockets/usePocketStore';
+import { useCategoryStore } from '@/features/categories/useCategoryStore';
 import { useTransactionStore } from '@/features/transactions/useTransactionStore';
 import {
   getTotalEffectiveBalance,
@@ -10,6 +11,8 @@ import {
 } from '@/lib/balanceCalculations';
 import { getBudgetPeriod, isValidLocalDateString } from '@/lib/budgetPeriod';
 import { formatRupiah } from '@/lib/currency';
+import { sortTransactions, formatCompactTransactionDateTime } from '@/lib/transactionDisplay';
+import { INCOME_SOURCE_LABELS, TRANSFER_TYPE_LABELS } from '@/data/constants';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { ProgressBar } from '@/components/ui/ProgressBar';
@@ -38,6 +41,15 @@ export function HomePage() {
     () => transactions.filter((t) => !t.isArchived),
     [transactions]
   );
+
+  // ─── Recent active transactions (latest 5) ───────────────────────────────
+  const recentTransactions = useMemo(
+    () => sortTransactions(activeTransactions).slice(0, 5),
+    [activeTransactions]
+  );
+
+  const getPocketById = usePocketStore((s) => s.getPocketById);
+  const getCategoryById = useCategoryStore((s) => s.getCategoryById);
 
   // ─── Total effective balance (all active pockets) ─────────────────────────
   const totalBalance = useMemo(
@@ -263,6 +275,143 @@ export function HomePage() {
             </span>
           </button>
         </div>
+      </div>
+
+      {/* ── Transaksi Terbaru ─────────────────────────────────────────────── */}
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center justify-between px-1">
+          <span className="text-label-caps text-text-secondary font-bold uppercase tracking-wider">
+            Transaksi Terbaru
+          </span>
+          {recentTransactions.length > 0 && (
+            <button
+              type="button"
+              onClick={() => navigate('/transactions')}
+              className="text-body-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+            >
+              Lihat semua
+            </button>
+          )}
+        </div>
+
+        {recentTransactions.length === 0 ? (
+          <Card variant="flat" className="py-6 px-4 text-center flex flex-col items-center gap-3">
+            <span className="text-2xl" role="img" aria-label="No transactions">📝</span>
+            <div>
+              <h3 className="font-display text-body-md font-bold text-text-primary">
+                Belum ada transaksi.
+              </h3>
+              <p className="text-[11px] text-text-secondary mt-1 max-w-[200px] mx-auto">
+                Transaksi terbaru kamu akan muncul di sini.
+              </p>
+            </div>
+            <div className="w-full max-w-[150px]">
+              <Button
+                onClick={() => navigate('/transactions/add/expense')}
+                variant="secondary"
+                size="sm"
+                fullWidth
+              >
+                Catat transaksi
+              </Button>
+            </div>
+          </Card>
+        ) : (
+          <div className="flex flex-col gap-2.5">
+            {recentTransactions.map((t) => {
+              // Resolve Pocket Names
+              const pocket = t.pocketId ? getPocketById(t.pocketId) : undefined;
+              const fromPocket = t.fromPocketId ? getPocketById(t.fromPocketId) : undefined;
+              const toPocket = t.toPocketId ? getPocketById(t.toPocketId) : undefined;
+
+              // Resolve Category/Source/Transfer details
+              let rowTitle = '';
+              let sub = '';
+              let iconName = '';
+              let iconBg = '';
+              let iconColor = '';
+              let amountText = '';
+              let amountColor = '';
+
+              if (t.type === 'expense') {
+                const category = t.categoryId ? getCategoryById(t.categoryId) : undefined;
+                rowTitle = category ? `${category.emoji} ${category.name}` : 'Tanpa kategori';
+                sub = pocket ? pocket.name : 'Pocket tidak tersedia';
+                iconName = 'remove_circle';
+                iconBg = 'bg-bahaya-soft';
+                iconColor = 'text-bahaya';
+                amountText = `-${formatRupiah(t.amount)}`;
+                amountColor = 'text-bahaya';
+              } else if (t.type === 'income') {
+                const sourceLabel = t.incomeSource ? (INCOME_SOURCE_LABELS[t.incomeSource] || 'Pemasukan') : 'Pemasukan';
+                rowTitle = sourceLabel;
+                sub = pocket ? pocket.name : 'Pocket tidak tersedia';
+                iconName = 'add_circle';
+                iconBg = 'bg-aman-soft';
+                iconColor = 'text-aman';
+                amountText = `+${formatRupiah(t.amount)}`;
+                amountColor = 'text-aman';
+              } else if (t.type === 'transfer') {
+                const transferLabel = t.transferType ? (TRANSFER_TYPE_LABELS[t.transferType] || 'Transfer') : 'Transfer';
+                rowTitle = transferLabel;
+                const fromName = fromPocket ? fromPocket.name : 'Pocket tidak tersedia';
+                const toName = toPocket ? toPocket.name : 'Pocket tidak tersedia';
+                sub = `${fromName} → ${toName}`;
+                iconName = 'swap_horiz';
+                iconBg = 'bg-primary-soft';
+                iconColor = 'text-primary';
+                amountText = formatRupiah(t.amount);
+                amountColor = 'text-text-primary';
+              }
+
+              // Localized compact date label
+              const timeLabel = formatCompactTransactionDateTime(t.date, t.time);
+
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => navigate(`/transactions/${t.id}`, { state: { from: '/' } })}
+                  className="w-full text-left cursor-pointer active:scale-[0.99] transition-transform focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-card"
+                >
+                  <Card
+                    variant="flat"
+                    className="flex items-center justify-between gap-3 border border-border/40 hover:border-primary/20 hover:shadow-card transition-all p-3"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      {/* Circular icon */}
+                      <div className={`flex items-center justify-center w-10 h-10 rounded-full flex-shrink-0 ${iconBg}`}>
+                        <span className={`material-symbols-rounded ${iconColor} text-xl`}>
+                          {iconName}
+                        </span>
+                      </div>
+
+                      {/* Text descriptions */}
+                      <div className="min-w-0">
+                        <div className="font-display text-body-md font-bold text-text-primary truncate">
+                          {rowTitle}
+                        </div>
+                        <div className="text-[10px] text-text-secondary font-medium">
+                          {sub}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Amount & Time Display */}
+                    <div className="text-right flex-shrink-0">
+                      <span className={`font-display text-body-md font-bold ${amountColor} block`}>
+                        {amountText}
+                      </span>
+                      <span className="text-[10px] text-text-muted font-body">
+                        {timeLabel}
+                      </span>
+                    </div>
+                  </Card>
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* ── Navigation Links ─────────────────────────────────────────────── */}
