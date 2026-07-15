@@ -131,7 +131,8 @@ export function AddTransferPage() {
       fromPath === '/pockets' ||
       fromPath?.startsWith('/pockets/') ||
       fromPath === '/transactions' ||
-      fromPath === '/transactions?status=archived'
+      fromPath === '/transactions?status=archived' ||
+      fromPath === '/reports'
         ? fromPath
         : (fromPocketId ? `/pockets/${fromPocketId}` : '/pockets');
 

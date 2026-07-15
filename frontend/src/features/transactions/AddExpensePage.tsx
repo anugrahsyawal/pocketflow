@@ -109,7 +109,8 @@ export function AddExpensePage() {
       fromPath === '/pockets' ||
       fromPath?.startsWith('/pockets/') ||
       fromPath === '/transactions' ||
-      fromPath === '/transactions?status=archived'
+      fromPath === '/transactions?status=archived' ||
+      fromPath === '/reports'
         ? fromPath
         : (activePocketId ? `/pockets/${activePocketId}` : '/pockets');
 

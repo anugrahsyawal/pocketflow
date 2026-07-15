@@ -24,6 +24,7 @@ import { TransactionHistoryPage } from '@/features/transactions/TransactionHisto
 import { TransactionDetailPage } from '@/features/transactions/TransactionDetailPage';
 import { TransactionEditPage } from '@/features/transactions/TransactionEditPage';
 import { HomePage } from '@/features/home/HomePage';
+import { ReportsPage } from '@/features/reports/ReportsPage';
 
 function PlaceholderPage({ name }: { name: string }) {
   return (
@@ -82,7 +83,8 @@ export function AppRouter() {
       currentPath === '/' ||
       currentPath === '/pockets' ||
       currentPath === '/transactions' ||
-      currentPath === '/transactions?status=archived';
+      currentPath === '/transactions?status=archived' ||
+      currentPath === '/reports';
 
     if (isValidOrigin) {
       navigate(path, {
@@ -120,7 +122,7 @@ export function AppRouter() {
           <ProtectedRoute><SetupRequiredRoute><AppShell><TransactionHistoryPage /><BottomNav onAddClick={() => setIsAddSheetOpen(true)} /></AppShell></SetupRequiredRoute></ProtectedRoute>
         } />
         <Route path="/reports" element={
-          <ProtectedRoute><SetupRequiredRoute><AppShell><PlaceholderPage name="Laporan" /><BottomNav onAddClick={() => setIsAddSheetOpen(true)} /></AppShell></SetupRequiredRoute></ProtectedRoute>
+          <ProtectedRoute><SetupRequiredRoute><AppShell><ReportsPage /><BottomNav onAddClick={() => setIsAddSheetOpen(true)} /></AppShell></SetupRequiredRoute></ProtectedRoute>
         } />
 
         {/* Detail pages without bottom nav */}

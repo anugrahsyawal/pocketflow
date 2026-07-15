@@ -99,7 +99,8 @@ export function AddIncomePage() {
       fromPath === '/pockets' ||
       fromPath?.startsWith('/pockets/') ||
       fromPath === '/transactions' ||
-      fromPath === '/transactions?status=archived'
+      fromPath === '/transactions?status=archived' ||
+      fromPath === '/reports'
         ? fromPath
         : (selectedPocketId ? `/pockets/${selectedPocketId}` : '/pockets');
 
