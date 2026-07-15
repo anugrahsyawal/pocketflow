@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { TopBar } from '@/components/layout/TopBar';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -28,8 +28,13 @@ function getLocalTime(): string {
   return `${h}:${min}`;
 }
 
+interface AddTransactionLocationState {
+  from?: string;
+}
+
 export function AddTransferPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   
   const queryFromPocketId = searchParams.get('fromPocketId') || '';
@@ -118,12 +123,20 @@ export function AddTransferPage() {
   }, []);
 
   const handleBack = useCallback(() => {
-    if (fromPocketId) {
-      navigate(`/pockets/${fromPocketId}`);
-    } else {
-      navigate('/pockets');
-    }
-  }, [navigate, fromPocketId]);
+    const addLocationState = location.state as AddTransactionLocationState | null;
+    const fromPath = addLocationState?.from;
+
+    const safeBackPath =
+      fromPath === '/' ||
+      fromPath === '/pockets' ||
+      fromPath?.startsWith('/pockets/') ||
+      fromPath === '/transactions' ||
+      fromPath === '/transactions?status=archived'
+        ? fromPath
+        : (fromPocketId ? `/pockets/${fromPocketId}` : '/pockets');
+
+    navigate(safeBackPath);
+  }, [navigate, fromPocketId, location.state]);
 
   // Submit
   const handleSubmit = useCallback(() => {

@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { AppShell } from '@/components/layout/AppShell';
 import { BottomNav } from '@/components/layout/BottomNav';
@@ -72,10 +72,27 @@ function AuthRedirect({ children }: { children: React.ReactNode }) {
 export function AppRouter() {
   const [isAddSheetOpen, setIsAddSheetOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSheetNav = (path: string) => {
     setIsAddSheetOpen(false);
-    navigate(path);
+
+    const currentPath = `${location.pathname}${location.search}`;
+    const isValidOrigin =
+      currentPath === '/' ||
+      currentPath === '/pockets' ||
+      currentPath === '/transactions' ||
+      currentPath === '/transactions?status=archived';
+
+    if (isValidOrigin) {
+      navigate(path, {
+        state: {
+          from: currentPath,
+        },
+      });
+    } else {
+      navigate(path);
+    }
   };
 
   return (

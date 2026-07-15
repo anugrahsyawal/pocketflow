@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { TopBar } from '@/components/layout/TopBar';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -29,8 +29,13 @@ function getLocalTime(): string {
   return `${h}:${min}`;
 }
 
+interface AddTransactionLocationState {
+  from?: string;
+}
+
 export function AddIncomePage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const preselectedPocketId = searchParams.get('pocketId') || '';
 
@@ -86,12 +91,20 @@ export function AddIncomePage() {
   }, []);
 
   const handleBack = useCallback(() => {
-    if (selectedPocketId) {
-      navigate(`/pockets/${selectedPocketId}`);
-    } else {
-      navigate('/pockets');
-    }
-  }, [navigate, selectedPocketId]);
+    const addLocationState = location.state as AddTransactionLocationState | null;
+    const fromPath = addLocationState?.from;
+
+    const safeBackPath =
+      fromPath === '/' ||
+      fromPath === '/pockets' ||
+      fromPath?.startsWith('/pockets/') ||
+      fromPath === '/transactions' ||
+      fromPath === '/transactions?status=archived'
+        ? fromPath
+        : (selectedPocketId ? `/pockets/${selectedPocketId}` : '/pockets');
+
+    navigate(safeBackPath);
+  }, [navigate, selectedPocketId, location.state]);
 
   // Submit
   const handleSubmit = useCallback(() => {

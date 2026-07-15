@@ -238,7 +238,7 @@ export function HomePage() {
         <div className="grid grid-cols-3 gap-2.5">
           <button
             id="home-quick-expense"
-            onClick={() => navigate('/transactions/add/expense')}
+            onClick={() => navigate('/transactions/add/expense', { state: { from: '/' } })}
             className="flex flex-col items-center justify-center gap-2 p-3.5 rounded-card bg-bahaya-soft/50 border border-bahaya-soft/40 hover:bg-bahaya-soft/80 active:scale-[0.97] transition-all"
           >
             <span className="flex items-center justify-center w-10 h-10 rounded-full bg-bahaya-soft">
@@ -251,7 +251,7 @@ export function HomePage() {
 
           <button
             id="home-quick-income"
-            onClick={() => navigate('/transactions/add/income')}
+            onClick={() => navigate('/transactions/add/income', { state: { from: '/' } })}
             className="flex flex-col items-center justify-center gap-2 p-3.5 rounded-card bg-aman-soft/50 border border-aman-soft/40 hover:bg-aman-soft/80 active:scale-[0.97] transition-all"
           >
             <span className="flex items-center justify-center w-10 h-10 rounded-full bg-aman-soft">
@@ -264,7 +264,7 @@ export function HomePage() {
 
           <button
             id="home-quick-transfer"
-            onClick={() => navigate('/transactions/add/transfer')}
+            onClick={() => navigate('/transactions/add/transfer', { state: { from: '/' } })}
             className="flex flex-col items-center justify-center gap-2 p-3.5 rounded-card bg-primary-soft/50 border border-primary-soft/40 hover:bg-primary-soft/80 active:scale-[0.97] transition-all"
           >
             <span className="flex items-center justify-center w-10 h-10 rounded-full bg-primary-soft">
@@ -307,7 +307,7 @@ export function HomePage() {
             </div>
             <div className="w-full max-w-[150px]">
               <Button
-                onClick={() => navigate('/transactions/add/expense')}
+                onClick={() => navigate('/transactions/add/expense', { state: { from: '/' } })}
                 variant="secondary"
                 size="sm"
                 fullWidth
