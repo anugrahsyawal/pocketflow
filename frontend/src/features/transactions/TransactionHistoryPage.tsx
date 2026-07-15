@@ -253,7 +253,7 @@ export function TransactionHistoryPage() {
       )}
 
       {/* Type Filters */}
-      <div className="flex gap-1.5 overflow-x-auto -mx-safe px-safe pb-1 scrollbar-none">
+      <div className="flex gap-1.5 overflow-x-auto -mx-safe px-safe pb-1 scrollbar-hide">
         {(
           [
             { id: 'all', label: 'Semua' },
