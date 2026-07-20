@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/Button';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { getBudgetPeriodByOffset, isValidLocalDateString } from '@/lib/budgetPeriod';
 import { formatRupiah } from '@/lib/currency';
-import { getPocketBudgetStatus } from '@/lib/balanceCalculations';
+import { getPocketBudgetStatus, getPocketEffectiveBalance } from '@/lib/balanceCalculations';
 import {
   calculateReportTotals,
   calculateExpenseBreakdownByCategory,
@@ -16,11 +16,15 @@ import {
   calculateDailyCashFlow,
   prepareCategoryChartData,
   prepareTopPocketSpending,
+  calculatePocketBudgetActuals,
+  calculateWeeklyBudgetUsage,
 } from '@/lib/reportCalculations';
 import { generateCsvString, downloadCsv } from '@/lib/reportCsv';
 import { CashFlowTimelineChart } from '@/features/reports/components/CashFlowTimelineChart';
 import { CategoryDistributionChart } from '@/features/reports/components/CategoryDistributionChart';
 import { TopPocketSpendingChart } from '@/features/reports/components/TopPocketSpendingChart';
+import { BudgetVsActualPocketChart } from '@/features/reports/components/BudgetVsActualPocketChart';
+import { WeeklyBudgetUsageChart } from '@/features/reports/components/WeeklyBudgetUsageChart';
 
 export function ReportsPage() {
   const navigate = useNavigate();
@@ -113,6 +117,30 @@ export function ReportsPage() {
   const topPocketSpendingData = useMemo(() => {
     return prepareTopPocketSpending(pocketBreakdown);
   }, [pocketBreakdown]);
+
+  // Phase 6C: Budget vs Actual Pocket data
+  const allActiveTransactions = useMemo(() => {
+    return transactions.filter((t) => !t.isArchived);
+  }, [transactions]);
+
+  const budgetActualData = useMemo(() => {
+    return calculatePocketBudgetActuals(
+      activePeriodTransactions,
+      pockets,
+      allActiveTransactions,
+      getPocketEffectiveBalance
+    );
+  }, [activePeriodTransactions, pockets, allActiveTransactions]);
+
+  // Phase 6C: Weekly Budget Usage data
+  const weeklyUsageData = useMemo(() => {
+    return calculateWeeklyBudgetUsage(
+      activePeriodTransactions,
+      selectedPeriod.startDate,
+      selectedPeriod.endDate,
+      totalMonthlyAllocation
+    );
+  }, [activePeriodTransactions, selectedPeriod, totalMonthlyAllocation]);
 
   const handlePrevPeriod = () => {
     setPeriodOffset((prev) => prev - 1);
@@ -303,17 +331,54 @@ export function ReportsPage() {
         </Card>
       )}
 
-      {/* 7. Distribusi Kategori Donut */}
+      {/* 7. Budget vs Aktual Pocket or historical placeholder */}
+      {isCurrentPeriod ? (
+        <BudgetVsActualPocketChart
+          items={budgetActualData}
+          isCurrentPeriod={isCurrentPeriod}
+        />
+      ) : (
+        <Card variant="flat" className="flex flex-col gap-2 p-4 border border-border/30 bg-surface shadow-sm">
+          <span className="text-label-caps text-text-secondary font-bold uppercase tracking-wider">
+            Budget vs Aktual Pocket
+          </span>
+          <p className="text-[11px] text-text-muted leading-relaxed">
+            Analisis budget historis belum tersedia karena PocketFlow belum menyimpan snapshot alokasi untuk periode ini.
+          </p>
+        </Card>
+      )}
+
+      {/* 8. Distribusi Kategori Donut */}
       {hasSelectedPeriodTransactions && (
         <CategoryDistributionChart items={categoryChartData} totalExpense={totals.totalExpense} />
       )}
 
-      {/* 8. Pocket Pengeluaran Terbesar Bars */}
+      {/* 9. Pocket Pengeluaran Terbesar Bars */}
       {hasSelectedPeriodTransactions && (
         <TopPocketSpendingChart items={topPocketSpendingData} totalExpense={totals.totalExpense} />
       )}
 
-      {/* 9. Compact Transaction Activity Summary */}
+      {/* 10. Pemakaian Mingguan or historical placeholder */}
+      {isCurrentPeriod ? (
+        <WeeklyBudgetUsageChart
+          items={weeklyUsageData}
+          totalMonthlyAllocation={totalMonthlyAllocation}
+        />
+      ) : (
+        <Card variant="flat" className="flex flex-col gap-2 p-4 border border-border/30 bg-surface shadow-sm">
+          <span className="text-label-caps text-text-secondary font-bold uppercase tracking-wider">
+            Pemakaian Mingguan
+          </span>
+          <p className="text-[11px] font-medium text-text-secondary">
+            Pemakaian mingguan historis belum tersedia.
+          </p>
+          <p className="text-[11px] text-text-muted leading-relaxed">
+            PocketFlow belum menyimpan snapshot alokasi untuk periode ini.
+          </p>
+        </Card>
+      )}
+
+      {/* 11. Compact Transaction Activity Summary */}
       {hasSelectedPeriodTransactions && (
         <Card variant="flat" className="p-4 bg-surface border border-border/30 shadow-sm flex flex-col gap-3">
           <span className="text-label-caps text-text-secondary font-bold uppercase tracking-wider">
@@ -346,7 +411,7 @@ export function ReportsPage() {
         </Card>
       )}
 
-      {/* 10. Unified Page-level Empty Action when the entire selected period has no transactions */}
+      {/* 12. Unified Page-level Empty Action when the entire selected period has no transactions */}
       {!hasSelectedPeriodTransactions && (
         <Card variant="flat" className="py-8 px-4 text-center flex flex-col items-center gap-3 border border-border/20 bg-surface shadow-sm">
           {isCurrentPeriod ? (

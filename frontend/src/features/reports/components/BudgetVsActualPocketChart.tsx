@@ -1,0 +1,248 @@
+import { useState } from 'react';
+import { Card } from '@/components/ui/Card';
+import { ProgressBar } from '@/components/ui/ProgressBar';
+import { formatRupiah } from '@/lib/currency';
+import { formatUsagePercent, type PocketBudgetActualItem } from '@/lib/reportCalculations';
+
+interface BudgetVsActualPocketChartProps {
+  items: PocketBudgetActualItem[];
+  isCurrentPeriod: boolean;
+}
+
+const statusColors: Record<string, string> = {
+  aman: 'text-aman',
+  waspada: 'text-waspada',
+  bahaya: 'text-bahaya',
+  overbudget: 'text-bahaya',
+  'tanpa-alokasi': 'text-text-muted',
+};
+
+const statusLabels: Record<string, string> = {
+  aman: 'Aman',
+  waspada: 'Waspada',
+  bahaya: 'Bahaya',
+  overbudget: 'Overbudget',
+  'tanpa-alokasi': 'Tanpa alokasi',
+};
+
+const progressVariantMap: Record<string, 'aman' | 'waspada' | 'bahaya' | 'neutral'> = {
+  aman: 'aman',
+  waspada: 'waspada',
+  bahaya: 'bahaya',
+  overbudget: 'bahaya',
+  'tanpa-alokasi': 'neutral',
+};
+
+export function BudgetVsActualPocketChart({
+  items,
+  isCurrentPeriod,
+}: BudgetVsActualPocketChartProps) {
+  const [expandedPockets, setExpandedPockets] = useState<Record<string, boolean>>({});
+
+  const toggleExpand = (id: string) => {
+    setExpandedPockets((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
+  return (
+    <Card
+      variant="flat"
+      className="p-4 bg-surface border border-border/30 shadow-sm flex flex-col gap-3"
+    >
+      <span className="text-label-caps text-text-secondary font-bold uppercase tracking-wider">
+        Budget vs Aktual Pocket
+      </span>
+
+      {items.length === 0 ? (
+        <p className="text-[11px] text-text-muted">
+          Belum ada pocket untuk dianalisis.
+        </p>
+      ) : (
+        <div className="flex flex-col gap-4">
+          {items.map((item) => {
+            const hasAllocation = item.allocation > 0;
+            const progressValue = hasAllocation
+              ? Math.min(1, Math.max(0, item.usageRatio))
+              : 0;
+            const isExpanded = !!expandedPockets[item.id];
+            const disclosureId = `pocket-disclosure-${item.id}`;
+
+            return (
+              <div
+                key={item.id}
+                className="flex flex-col gap-1.5 pb-2 border-b border-border/10 last:border-0 last:pb-0"
+              >
+                {/* Pocket header row */}
+                <div className="flex items-center justify-between gap-2">
+                  <button
+                    type="button"
+                    onClick={() => toggleExpand(item.id)}
+                    aria-expanded={isExpanded}
+                    aria-controls={disclosureId}
+                    className="flex items-center gap-1.5 min-w-0 text-left hover:opacity-80 transition-opacity focus:outline-none focus:ring-1 focus:ring-primary/40 rounded px-1 -mx-1"
+                  >
+                    <span
+                      className="material-symbols-rounded text-sm text-text-muted transition-transform duration-200"
+                      style={{ transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)' }}
+                      aria-hidden="true"
+                    >
+                      chevron_right
+                    </span>
+                    {item.emoji ? (
+                      <span className="text-sm flex-shrink-0" aria-hidden="true">
+                        {item.emoji}
+                      </span>
+                    ) : (
+                      <span
+                        className="material-symbols-rounded text-sm text-text-muted flex-shrink-0"
+                        aria-hidden="true"
+                      >
+                        account_balance_wallet
+                      </span>
+                    )}
+                    <span className="text-body-sm font-semibold text-text-primary truncate">
+                      {item.label}
+                    </span>
+                  </button>
+
+                  <span
+                    className={`text-[10px] font-bold uppercase tracking-wider flex-shrink-0 ${
+                      statusColors[item.status] || 'text-text-muted'
+                    }`}
+                  >
+                    {statusLabels[item.status] || item.status}
+                  </span>
+                </div>
+
+                {/* Allocated pocket row content */}
+                {hasAllocation ? (
+                  <>
+                    <ProgressBar
+                      value={progressValue}
+                      variant={progressVariantMap[item.status] || 'neutral'}
+                      height="sm"
+                    />
+
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="text-text-muted">Pengeluaran</span>
+                      <span className="font-display font-semibold text-text-secondary tabular-nums">
+                        {item.expense > 0 ? formatRupiah(item.expense) : 'Rp0'}
+                        <span className="text-text-muted font-normal">
+                          {' '}/ {formatRupiah(item.allocation)}
+                        </span>
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="text-text-muted">
+                        {formatUsagePercent(item.usagePercent)} terpakai
+                      </span>
+                      <span
+                        className={`font-display font-bold tabular-nums ${
+                          item.remaining >= 0 ? 'text-aman' : 'text-bahaya'
+                        }`}
+                      >
+                        {item.remaining >= 0
+                          ? `Sisa ${formatRupiah(item.remaining)}`
+                          : `Melebihi anggaran ${formatRupiah(Math.abs(item.remaining))}`}
+                      </span>
+                    </div>
+                  </>
+                ) : (
+                  /* Zero-allocation pocket row content */
+                  <div className="flex flex-col gap-1 text-[11px]">
+                    <div className="flex items-center justify-between">
+                      <span className="text-text-muted">Pengeluaran</span>
+                      <span className="font-display font-semibold text-text-secondary tabular-nums">
+                        {item.expense > 0 ? formatRupiah(item.expense) : 'Rp0'}
+                      </span>
+                    </div>
+                    <span className="text-text-muted italic text-[10px]">
+                      Belum memiliki alokasi periode.
+                    </span>
+                  </div>
+                )}
+
+                {/* Expanded Disclosure Details */}
+                {isExpanded && (
+                  <div
+                    id={disclosureId}
+                    className="mt-2 pt-2 border-t border-border/20 flex flex-col gap-1.5 bg-surface-container-low/50 p-2.5 rounded-lg text-[11px]"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-text-muted">Transfer masuk</span>
+                      <span className="font-display font-medium text-text-secondary tabular-nums">
+                        {item.transferIn > 0 ? `+${formatRupiah(item.transferIn)}` : 'Rp0'}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-text-muted">Transfer keluar</span>
+                      <span className="font-display font-medium text-text-secondary tabular-nums">
+                        {item.transferOut > 0 ? `-${formatRupiah(item.transferOut)}` : 'Rp0'}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-text-muted">Transfer bersih</span>
+                      <span
+                        className={`font-display font-medium tabular-nums ${
+                          item.netTransfer > 0
+                            ? 'text-aman'
+                            : item.netTransfer < 0
+                            ? 'text-bahaya'
+                            : 'text-text-muted'
+                        }`}
+                      >
+                        {item.netTransfer > 0
+                          ? `+${formatRupiah(item.netTransfer)}`
+                          : item.netTransfer < 0
+                          ? `-${formatRupiah(Math.abs(item.netTransfer))}`
+                          : 'Rp0'}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-text-muted">Saldo saat ini</span>
+                      <span
+                        className={`font-display font-medium tabular-nums ${
+                          isCurrentPeriod && item.currentBalance !== null
+                            ? item.currentBalance < 0
+                              ? 'text-bahaya'
+                              : 'text-text-secondary'
+                            : 'text-text-muted'
+                        }`}
+                      >
+                        {isCurrentPeriod && item.currentBalance !== null
+                          ? item.currentBalance < 0
+                            ? `-${formatRupiah(Math.abs(item.currentBalance))}`
+                            : formatRupiah(item.currentBalance)
+                          : 'Tidak tersedia'}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-text-muted">Jumlah transaksi pengeluaran</span>
+                      <span className="font-semibold text-text-primary tabular-nums">
+                        {item.expenseTransactionCount}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-text-muted">Jumlah transaksi transfer terdampak</span>
+                      <span className="font-semibold text-text-primary tabular-nums">
+                        {item.transferTransactionCount}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </Card>
+  );
+}
