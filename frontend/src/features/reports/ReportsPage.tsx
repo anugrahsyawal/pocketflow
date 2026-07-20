@@ -13,8 +13,14 @@ import {
   calculateReportTotals,
   calculateExpenseBreakdownByCategory,
   calculateExpenseBreakdownByPocket,
+  calculateDailyCashFlow,
+  prepareCategoryChartData,
+  prepareTopPocketSpending,
 } from '@/lib/reportCalculations';
 import { generateCsvString, downloadCsv } from '@/lib/reportCsv';
+import { CashFlowTimelineChart } from '@/features/reports/components/CashFlowTimelineChart';
+import { CategoryDistributionChart } from '@/features/reports/components/CategoryDistributionChart';
+import { TopPocketSpendingChart } from '@/features/reports/components/TopPocketSpendingChart';
 
 export function ReportsPage() {
   const navigate = useNavigate();
@@ -91,11 +97,22 @@ export function ReportsPage() {
     return calculateExpenseBreakdownByPocket(expenseTransactions, pockets, totals.totalExpense);
   }, [expenseTransactions, pockets, totals.totalExpense]);
 
-  const formatPercent = (pct: number): string => {
-    if (pct <= 0) return '0%';
-    if (pct < 1) return '<1%';
-    return `${Math.round(pct)}%`;
-  };
+  // Derived chart data
+  const dailyPoints = useMemo(() => {
+    return calculateDailyCashFlow(
+      activePeriodTransactions,
+      selectedPeriod.startDate,
+      selectedPeriod.endDate
+    );
+  }, [activePeriodTransactions, selectedPeriod]);
+
+  const categoryChartData = useMemo(() => {
+    return prepareCategoryChartData(categoryBreakdown);
+  }, [categoryBreakdown]);
+
+  const topPocketSpendingData = useMemo(() => {
+    return prepareTopPocketSpending(pocketBreakdown);
+  }, [pocketBreakdown]);
 
   const handlePrevPeriod = () => {
     setPeriodOffset((prev) => prev - 1);
@@ -220,7 +237,12 @@ export function ReportsPage() {
         </Card>
       </div>
 
-      {/* 5. Current-period Budget Summary or Historical Allocation Notice */}
+      {/* 5. Arus Kas Periode timeline */}
+      {hasSelectedPeriodTransactions && (
+        <CashFlowTimelineChart points={dailyPoints} />
+      )}
+
+      {/* 6. Current-period Budget Summary or Historical Allocation Notice */}
       {isCurrentPeriod ? (
         <Card variant="flat" className="flex flex-col gap-3 p-4 border border-border/30 bg-surface shadow-sm">
           <div className="flex items-center justify-between">
@@ -281,93 +303,17 @@ export function ReportsPage() {
         </Card>
       )}
 
-      {/* 6. Compact Category Breakdown Foundation */}
-      {hasSelectedPeriodTransactions && totals.totalExpense > 0 && categoryBreakdown.length > 0 && (
-        <div className="flex flex-col gap-3">
-          <span className="text-label-caps text-text-secondary font-bold uppercase tracking-wider px-1">
-            Distribusi Pengeluaran Kategori
-          </span>
-          <Card variant="flat" className="p-4 bg-surface border border-border/30 shadow-sm flex flex-col gap-1">
-            {categoryBreakdown.map((item) => (
-              <div key={item.id} className="flex items-center justify-between py-2.5 border-b border-border/20 last:border-b-0 gap-3 min-w-0">
-                <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                  {item.emoji ? (
-                    <span className="text-lg flex-shrink-0" aria-hidden="true">{item.emoji}</span>
-                  ) : (
-                    <span
-                      className="material-symbols-rounded text-lg text-text-muted flex-shrink-0"
-                      aria-hidden="true"
-                    >
-                      receipt_long
-                    </span>
-                  )}
-                  <div className="flex flex-col min-w-0">
-                    <span className="text-body-sm font-semibold text-text-primary truncate">
-                      {item.label}
-                    </span>
-                    <span className="text-[10px] text-text-muted mt-0.5">
-                      {item.transactionCount} transaksi
-                    </span>
-                  </div>
-                </div>
-                <div className="flex flex-col items-end flex-shrink-0">
-                  <span className="font-display text-body-sm font-bold text-text-primary tabular-nums">
-                    -{formatRupiah(item.amount)}
-                  </span>
-                  <span className="text-[10px] font-semibold text-text-secondary mt-0.5">
-                    {formatPercent(item.percentage)}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </Card>
-        </div>
+      {/* 7. Distribusi Kategori Donut */}
+      {hasSelectedPeriodTransactions && (
+        <CategoryDistributionChart items={categoryChartData} totalExpense={totals.totalExpense} />
       )}
 
-      {/* 7. Compact Pocket Breakdown Foundation */}
-      {hasSelectedPeriodTransactions && totals.totalExpense > 0 && pocketBreakdown.length > 0 && (
-        <div className="flex flex-col gap-3">
-          <span className="text-label-caps text-text-secondary font-bold uppercase tracking-wider px-1">
-            Distribusi Pengeluaran Pocket
-          </span>
-          <Card variant="flat" className="p-4 bg-surface border border-border/30 shadow-sm flex flex-col gap-1">
-            {pocketBreakdown.map((item) => (
-              <div key={item.id} className="flex items-center justify-between py-2.5 border-b border-border/20 last:border-b-0 gap-3 min-w-0">
-                <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                  {item.emoji ? (
-                    <span className="text-lg flex-shrink-0" aria-hidden="true">{item.emoji}</span>
-                  ) : (
-                    <span
-                      className="material-symbols-rounded text-lg text-text-muted flex-shrink-0"
-                      aria-hidden="true"
-                    >
-                      account_balance_wallet
-                    </span>
-                  )}
-                  <div className="flex flex-col min-w-0">
-                    <span className="text-body-sm font-semibold text-text-primary truncate">
-                      {item.label}
-                    </span>
-                    <span className="text-[10px] text-text-muted mt-0.5">
-                      {item.transactionCount} transaksi
-                    </span>
-                  </div>
-                </div>
-                <div className="flex flex-col items-end flex-shrink-0">
-                  <span className="font-display text-body-sm font-bold text-text-primary tabular-nums">
-                    -{formatRupiah(item.amount)}
-                  </span>
-                  <span className="text-[10px] font-semibold text-text-secondary mt-0.5">
-                    {formatPercent(item.percentage)}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </Card>
-        </div>
+      {/* 8. Pocket Pengeluaran Terbesar Bars */}
+      {hasSelectedPeriodTransactions && (
+        <TopPocketSpendingChart items={topPocketSpendingData} totalExpense={totals.totalExpense} />
       )}
 
-      {/* 8. Compact Transaction Activity Summary */}
+      {/* 9. Compact Transaction Activity Summary */}
       {hasSelectedPeriodTransactions && (
         <Card variant="flat" className="p-4 bg-surface border border-border/30 shadow-sm flex flex-col gap-3">
           <span className="text-label-caps text-text-secondary font-bold uppercase tracking-wider">
@@ -400,7 +346,7 @@ export function ReportsPage() {
         </Card>
       )}
 
-      {/* 9. One Unified Empty-period Action when applicable */}
+      {/* 10. Unified Page-level Empty Action when the entire selected period has no transactions */}
       {!hasSelectedPeriodTransactions && (
         <Card variant="flat" className="py-8 px-4 text-center flex flex-col items-center gap-3 border border-border/20 bg-surface shadow-sm">
           {isCurrentPeriod ? (
