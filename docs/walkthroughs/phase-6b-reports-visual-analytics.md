@@ -11,10 +11,10 @@ These charts are designed to help users quickly assess where their money is goin
 Phase 6C will follow to add Budget vs Actual Pocket and Weekly Usage.
 
 ## 2. Google Stitch References Used
-The following references in `docs/design/google-stitch/iteration-3/reports/` were reviewed:
+The following references in `docs/design/google-stitch/iteration-3/` were reviewed:
 - `README.md` and `REPORTS_IMPLEMENTATION_SPEC.md`
-- Screenshots: `reports-current-populated.png`, `reports-current-empty.png`, `reports-historical-populated.png`
-- HTML files: `raw-export/reports-current-populated.html`, `raw-export/reports-current-empty.html`, `raw-export/reports-historical-populated.html`
+- Screenshots: `screenshots/laporan_keuangan_canonical_current-screen.png`, `screenshots/laporan_keuangan_canonical_empty-screen.png`, `screenshots/laporan_keuangan_canonical_historical-screen.png`
+- HTML files: `raw-export/laporan_keuangan_canonical_current-code.html`, `raw-export/laporan_keuangan_canonical_empty-code.html`, `raw-export/laporan_keuangan_canonical_historical-code.html`
 
 **Adopted visual elements**:
 - Visual hierarchy, padding, and spacing of dashboard cards.
@@ -67,11 +67,11 @@ The following references in `docs/design/google-stitch/iteration-3/reports/` wer
 - **Income-only Period**: Plotted timeline shows the income line, while Category and Pocket sections display empty placeholders.
 
 ## 9. Files Created or Modified
-- **Modified**: [reportCalculations.ts](file:///d:/Repository/pocketflow/frontend/src/lib/reportCalculations.ts) — added helper calculations for timeline, categories, and pockets.
-- **Modified**: [ReportsPage.tsx](file:///d:/Repository/pocketflow/frontend/src/features/reports/ReportsPage.tsx) — integrated visual analytics charts.
-- **Created**: [CashFlowTimelineChart.tsx](file:///d:/Repository/pocketflow/frontend/src/features/reports/components/CashFlowTimelineChart.tsx) — SVG timeline chart component.
-- **Created**: [CategoryDistributionChart.tsx](file:///d:/Repository/pocketflow/frontend/src/features/reports/components/CategoryDistributionChart.tsx) — SVG donut chart component.
-- **Created**: [TopPocketSpendingChart.tsx](file:///d:/Repository/pocketflow/frontend/src/features/reports/components/TopPocketSpendingChart.tsx) — horizontal bar chart component.
+- **Modified**: [`reportCalculations.ts`](../../frontend/src/lib/reportCalculations.ts) - added helper calculations for timeline, categories, and pockets.
+- **Modified**: [`ReportsPage.tsx`](../../frontend/src/features/reports/ReportsPage.tsx) - integrated visual analytics charts.
+- **Created**: [`CashFlowTimelineChart.tsx`](../../frontend/src/features/reports/components/CashFlowTimelineChart.tsx) - SVG timeline chart component.
+- **Created**: [`CategoryDistributionChart.tsx`](../../frontend/src/features/reports/components/CategoryDistributionChart.tsx) - SVG donut chart component.
+- **Created**: [`TopPocketSpendingChart.tsx`](../../frontend/src/features/reports/components/TopPocketSpendingChart.tsx) - horizontal bar chart component.
 
 ## 10. Build Verification
 Compilation succeeded with zero warnings or errors using TypeScript and Vite:

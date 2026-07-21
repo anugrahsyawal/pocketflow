@@ -1,5 +1,10 @@
 # Decision Log — PocketFlow
 
+> **Superseded as active authority (2026-07-21).** All 18 original decision
+> meanings are preserved in [`decisions/DECISION_LOG.md`](decisions/DECISION_LOG.md),
+> together with later accepted decisions. Retained temporarily for Product
+> Owner diff review; do not record new decisions here.
+
 This document records important product, UX, architecture, and delivery decisions.
 
 ## DL-001 — Product Direction

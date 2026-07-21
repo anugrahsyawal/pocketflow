@@ -1,5 +1,10 @@
 # Sprint 1 Backlog — PocketFlow
 
+> **Superseded as active backlog authority (2026-07-21).** Retained temporarily
+> as a historical Sprint 1 planning artifact. Use
+> [`product/PRODUCT_BACKLOG.md`](product/PRODUCT_BACKLOG.md), which includes a
+> legacy-ID mapping. Do not update delivery status in this file.
+
 Version: 0.1  
 Status: Approved for frontend implementation planning
 

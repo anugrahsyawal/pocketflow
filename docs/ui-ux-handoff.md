@@ -1,8 +1,14 @@
 # UI/UX Handoff — PocketFlow
 
 Version: 0.1  
-Status: Approved for frontend handoff  
+Status: Supporting Iteration 2 handoff
 Source: Google Stitch Iteration 2 + DESIGN.md
+
+> The Iteration 2 direction remains supporting evidence for non-Reports screens.
+> Section 14 Reports guidance is superseded by the canonical
+> [`design/google-stitch/iteration-3/REPORTS_IMPLEMENTATION_SPEC.md`](design/google-stitch/iteration-3/REPORTS_IMPLEMENTATION_SPEC.md).
+> Canonical product requirements and recorded Product Owner decisions take
+> precedence over examples in this handoff.
 
 ## 1. Purpose
 

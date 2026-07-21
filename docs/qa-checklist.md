@@ -1,5 +1,11 @@
 # QA Checklist — PocketFlow Sprint 1
 
+> **Superseded as the active acceptance checklist (2026-07-21).** Retained
+> temporarily for Product Owner diff review. Use
+> [`quality/ACCEPTANCE_CHECKLIST.md`](quality/ACCEPTANCE_CHECKLIST.md). Existing
+> unchecked boxes below are historical planning items, not current failure
+> claims.
+
 ## Build
 
 - [ ] `npm install` succeeds.

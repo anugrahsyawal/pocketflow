@@ -1,34 +1,28 @@
-\# Google Stitch Iteration 2
+# Google Stitch Iteration 2
 
+Status: Supporting visual reference
+Scope: Sprint 1 screens, primarily non-Reports UI
 
+## Classification
 
-This folder contains Google Stitch design references for PocketFlow Sprint 1.
+- `screenshots/` contains supporting visual references.
+- `raw-export/` contains raw Stitch output for visual inspection only.
+- `DESIGN.md` records Iteration 2 design guidance.
+- The Iteration 2 `laporan_keuangan` assets are superseded for Reports by
+  [Iteration 3](../iteration-3/README.md).
 
+These artifacts are not product requirements and are not production-ready
+React components. Do not copy raw HTML, CDN dependencies, remote images/fonts,
+hardcoded financial values, generated navigation, or unsupported tokens into
+the frontend.
 
+Use the existing PocketFlow AppShell, BottomNav, components, routes, stores,
+and design tokens. The canonical requirements and Product Owner decisions
+remain authoritative when a visual example conflicts with product behavior.
 
-These files are design references only.
+## Available pairs
 
-
-
-Do not use raw Stitch HTML as production frontend code.
-
-The production frontend must be rebuilt using reusable React + TypeScript components.
-
-
-
-Approved visual direction:
-
-\- mobile-first
-
-\- playful but practical
-
-\- warm cream background
-
-\- primary blue CTA
-
-\- rounded pocket cards
-
-\- Indonesian UI copy
-
-\- pocket-first financial tracking
-
+Iteration 2 contains 16 screenshot/HTML pairs for login, setup, Home, pockets,
+transactions, settings, the Sprint 2 JSON placeholder, and the older Reports
+concept. File basenames match between `screenshots/*.png` and
+`raw-export/*.html`.

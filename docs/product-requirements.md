@@ -1,5 +1,11 @@
 # Product Requirements — PocketFlow
 
+> **Superseded as active authority (2026-07-21).** Retained temporarily for
+> Product Owner diff review and historical context. Use
+> [`product/PRODUCT_REQUIREMENTS.md`](product/PRODUCT_REQUIREMENTS.md). Do not
+> implement from this file where it conflicts with the canonical requirements
+> or decision log.
+
 Version: 0.4  
 Status: Approved for Sprint 1 frontend planning  
 Owner: Product Owner  

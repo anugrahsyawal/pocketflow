@@ -1,104 +1,49 @@
-\# PocketFlow Reports — Google Stitch Iteration 3
+# PocketFlow Reports - Google Stitch Iteration 3
 
+Status: Approved Reports visual reference
+Owner: Product Owner
+Scope: Canonical Reports layout and its current, historical, and empty states
 
+## Primary authority within this folder
 
-\## Status
+1. [Reports implementation specification](REPORTS_IMPLEMENTATION_SPEC.md)
+2. Current PocketFlow product requirements and recorded decisions
+3. Existing PocketFlow design system and application shell
+4. Stitch screenshots
+5. Raw Stitch HTML
 
+Product requirements and Product Owner decisions remain authoritative across
+the repository. This order only classifies implementation material within the
+Reports design set.
 
+## Reference files
 
-Visual reference for Reports implementation.
+Current populated:
 
+- `screenshots/laporan_keuangan_canonical_current-screen.png`
+- `raw-export/laporan_keuangan_canonical_current-code.html`
 
+Historical populated:
 
-These files are not production-ready React components and must not be copied
+- `screenshots/laporan_keuangan_canonical_historical-screen.png`
+- `raw-export/laporan_keuangan_canonical_historical-code.html`
 
-directly into frontend/src.
+Empty:
 
+- `screenshots/laporan_keuangan_canonical_empty-screen.png`
+- `raw-export/laporan_keuangan_canonical_empty-code.html`
 
+All three states share one canonical React layout. Screenshots support visual
+comparison; HTML exports are raw-only references.
 
-\## Primary visual reference
+## Do not copy from Stitch
 
-
-
-Use:
-
-
-
-\- screenshots/reports-current-populated.png
-
-\- raw-export/reports-current-populated.html
-
-
-
-as the main visual direction.
-
-
-
-\## Supporting states
-
-
-
-\- reports-current-empty.\*
-
-\- reports-historical-populated.\*
-
-
-
-These are state references only. Current, historical, and empty reports must
-
-share one canonical React layout.
-
-
-
-\## Source-of-truth priority
-
-
-
-When requirements conflict, follow this priority:
-
-
-
-1\. REPORTS\_IMPLEMENTATION\_SPEC.md
-
-2\. Existing PocketFlow application behavior and design system
-
-3\. Google Stitch screenshots
-
-4\. Google Stitch raw HTML
-
-
-
-\## Do not copy from Stitch
-
-
-
-Do not copy:
-
-
-
-\- external CDN dependencies;
-
-\- remote fonts or images;
-
-\- Stitch avatar/header;
-
-\- visibility button;
-
-\- generated BottomNav;
-
-\- English navigation labels;
-
-\- hardcoded financial values;
-
-\- static chart percentages;
-
-\- global scrollbar hiding;
-
-\- unsupported Tailwind tokens.
-
-
+- external CDN dependencies, remote fonts, images, or avatars;
+- generated top header, visibility control, or BottomNav;
+- English navigation labels;
+- hardcoded amounts, dates, percentages, or chart values;
+- global scrollbar hiding or unsupported Tailwind tokens.
 
 Use the existing PocketFlow AppShell, BottomNav, components, routes, stores,
-
-and design tokens.
-
+financial rules, and design tokens. Minimize external runtime font/icon
+dependencies so the future offline PWA is not coupled to network availability.

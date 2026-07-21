@@ -2,7 +2,23 @@
 
 ## 1. Executive Summary
 
-Phase 6D delivers deterministic, rule-based financial insights (Story 8.6) and an informational Sinking Fund recommendation (Story 8.5) to PocketFlow Reports. All calculations are pure, deterministic, and transaction-driven without AI calls, automatic fund movement, or backend requirements. The implementation adheres strictly to the 14-section canonical Reports layout.
+Phase 6D delivers deterministic, rule-based financial insights (Story 8.6) and an informational Sinking Fund recommendation (Story 8.5) to PocketFlow Reports. All calculations are pure, deterministic, and transaction-driven without AI calls, automatic fund movement, or backend requirements. The implementation follows the canonical Reports sequence.
+
+**Final status:** Done. The Product Owner manually verified and accepted Phase
+6D on 2026-07-21 after the two runtime hotfixes below. Accepted commit
+`9297f37` is pushed to `origin/main`. Detailed browser/version evidence was not
+captured.
+
+| Dimension | Final record |
+|---|---|
+| Delivery | Implemented |
+| Runtime verification | Passed by Product Owner |
+| Manual verification | Passed by Product Owner |
+| Product Owner acceptance | Accepted |
+| Phase status | Done |
+| Commit | `9297f37` |
+| Performer / date | Product Owner / 2026-07-21 |
+| Browser/version | Not captured |
 
 ---
 
@@ -218,11 +234,11 @@ dist/assets/index-Cv5_t6KL.js   375.85 kB │ gzip: 96.57 kB
 
 | Check | Expected | Status |
 |-------|----------|--------|
-| 1. /reports loads | No white page, no ReferenceError | PENDING — user verify |
-| 2. Weekly rows render | Four rows with date labels visible | PENDING — user verify |
-| 3. Date label format | e.g. "26 Jun – 2 Jul", "3 Jul – 9 Jul" | PENDING — user verify |
-| 4. Phase 6D cards | Insight Periode & Rekomendasi Sinking Fund visible | PENDING — user verify |
-| 5. Console errors | No ReferenceError or runtime errors | PENDING — user verify |
+| 1. /reports loads | No white page, no ReferenceError | PASSED - PO, 2026-07-21 |
+| 2. Weekly rows render | Four rows with date labels visible | PASSED - PO, 2026-07-21 |
+| 3. Date label format | e.g. "26 Jun - 2 Jul", "3 Jul - 9 Jul" | PASSED - PO, 2026-07-21 |
+| 4. Phase 6D cards | Insight Periode & Rekomendasi Sinking Fund visible | PASSED - PO, 2026-07-21 |
+| 5. Console errors | No ReferenceError or runtime errors | PASSED - PO, 2026-07-21 |
 
 ---
 
@@ -284,8 +300,8 @@ dist/assets/index-BHwUgfRQ.js   375.79 kB │ gzip: 96.55 kB
 
 | Check | Expected | Status |
 |-------|----------|--------|
-| 1. /reports loads | No white page | PENDING — user verify |
-| 2. Phase 6B/6C sections | Timeline, donut, bars, weekly rows render | PENDING — user verify |
-| 3. Phase 6D cards | Insight Periode & Rekomendasi Sinking Fund render | PENDING — user verify |
-| 4. Insight messages | formatRupiah amounts display correctly (e.g. Rp150.000) | PENDING — user verify |
-| 5. Console errors | No dateLabel, formatRupiah, or other ReferenceErrors | PENDING — user verify |
+| 1. /reports loads | No white page | PASSED - PO, 2026-07-21 |
+| 2. Phase 6B/6C sections | Timeline, donut, bars, weekly rows render | PASSED - PO, 2026-07-21 |
+| 3. Phase 6D cards | Insight Periode & Rekomendasi Sinking Fund render | PASSED - PO, 2026-07-21 |
+| 4. Insight messages | formatRupiah amounts display correctly (e.g. Rp150.000) | PASSED - PO, 2026-07-21 |
+| 5. Console errors | No dateLabel, formatRupiah, or other ReferenceErrors | PASSED - PO, 2026-07-21 |
