@@ -18,13 +18,18 @@ import {
   prepareTopPocketSpending,
   calculatePocketBudgetActuals,
   calculateWeeklyBudgetUsage,
+  calculateRuleBasedInsights,
+  calculateSinkingFundRecommendation,
 } from '@/lib/reportCalculations';
 import { generateCsvString, downloadCsv } from '@/lib/reportCsv';
+import { useReportPreferencesStore } from '@/features/reports/useReportPreferencesStore';
 import { CashFlowTimelineChart } from '@/features/reports/components/CashFlowTimelineChart';
 import { CategoryDistributionChart } from '@/features/reports/components/CategoryDistributionChart';
 import { TopPocketSpendingChart } from '@/features/reports/components/TopPocketSpendingChart';
 import { BudgetVsActualPocketChart } from '@/features/reports/components/BudgetVsActualPocketChart';
 import { WeeklyBudgetUsageChart } from '@/features/reports/components/WeeklyBudgetUsageChart';
+import { RuleBasedInsightsCard } from '@/features/reports/components/RuleBasedInsightsCard';
+import { SinkingFundRecommendationCard } from '@/features/reports/components/SinkingFundRecommendationCard';
 
 export function ReportsPage() {
   const navigate = useNavigate();
@@ -141,6 +146,53 @@ export function ReportsPage() {
       totalMonthlyAllocation
     );
   }, [activePeriodTransactions, selectedPeriod, totalMonthlyAllocation]);
+
+  // Phase 6D: Rule-Based Insights data
+  const ruleBasedInsights = useMemo(() => {
+    return calculateRuleBasedInsights({
+      transactions: activePeriodTransactions,
+      totals,
+      budgetActualItems: budgetActualData,
+      weeklyUsageItems: weeklyUsageData,
+      categoryBreakdown,
+      pocketBreakdown,
+      pockets,
+      categories,
+      isCurrentPeriod,
+    });
+  }, [
+    activePeriodTransactions,
+    totals,
+    budgetActualData,
+    weeklyUsageData,
+    categoryBreakdown,
+    pocketBreakdown,
+    pockets,
+    categories,
+    isCurrentPeriod,
+  ]);
+
+  // Phase 6D: Sinking Fund Recommendation data
+  const excludedPocketIds = useReportPreferencesStore(
+    (state) => state.sinkingFundExcludedPocketIds
+  );
+
+  const sinkingFundRecommendation = useMemo(() => {
+    return calculateSinkingFundRecommendation({
+      pockets,
+      allActiveTransactions,
+      excludedPocketIds,
+      periodEndDate: selectedPeriod.endDate,
+      isCurrentPeriod,
+      getPocketEffectiveBalanceFn: getPocketEffectiveBalance,
+    });
+  }, [
+    pockets,
+    allActiveTransactions,
+    excludedPocketIds,
+    selectedPeriod.endDate,
+    isCurrentPeriod,
+  ]);
 
   const handlePrevPeriod = () => {
     setPeriodOffset((prev) => prev - 1);
@@ -378,7 +430,19 @@ export function ReportsPage() {
         </Card>
       )}
 
-      {/* 11. Compact Transaction Activity Summary */}
+      {/* 11. Rule-Based Insights */}
+      <RuleBasedInsightsCard
+        insights={ruleBasedInsights}
+        hasExpenseData={expenseTransactions.length > 0}
+      />
+
+      {/* 12. Sinking Fund Recommendation */}
+      <SinkingFundRecommendationCard
+        recommendation={sinkingFundRecommendation}
+        isCurrentPeriod={isCurrentPeriod}
+      />
+
+      {/* 13. Compact Transaction Activity Summary */}
       {hasSelectedPeriodTransactions && (
         <Card variant="flat" className="p-4 bg-surface border border-border/30 shadow-sm flex flex-col gap-3">
           <span className="text-label-caps text-text-secondary font-bold uppercase tracking-wider">
@@ -411,7 +475,7 @@ export function ReportsPage() {
         </Card>
       )}
 
-      {/* 12. Unified Page-level Empty Action when the entire selected period has no transactions */}
+      {/* 14. Unified Page-level Empty Action when the entire selected period has no transactions */}
       {!hasSelectedPeriodTransactions && (
         <Card variant="flat" className="py-8 px-4 text-center flex flex-col items-center gap-3 border border-border/20 bg-surface shadow-sm">
           {isCurrentPeriod ? (

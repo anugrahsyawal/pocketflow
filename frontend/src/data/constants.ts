@@ -47,4 +47,5 @@ export const STORAGE_KEYS = {
   CATEGORIES: 'pocketflow_categories',
   TRANSACTIONS: 'pocketflow_transactions',
   SETTINGS: 'pocketflow_settings',
+  REPORT_PREFERENCES: 'pocketflow_report_preferences',
 } as const;

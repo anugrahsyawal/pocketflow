@@ -1,8 +1,9 @@
-import { Transaction } from '@/types/transaction';
-import { Category } from '@/types/category';
-import { Pocket } from '@/types/pocket';
+import type { Transaction } from '@/types/transaction';
+import type { Category } from '@/types/category';
+import type { Pocket } from '@/types/pocket';
 import { STATUS_THRESHOLDS } from '@/data/constants';
 import { isValidLocalDateString } from '@/lib/budgetPeriod';
+import { formatRupiah } from '@/lib/currency';
 
 export interface ReportTotals {
   totalExpense: number;
@@ -658,3 +659,406 @@ export function calculateWeeklyBudgetUsage(
 
   return items;
 }
+
+// ─── Phase 6D: Rule-Based Insights ─────────────────────────────────────
+
+export type ReportInsightSeverity = 'positive' | 'info' | 'warning' | 'critical';
+
+export interface ReportInsight {
+  id: string;
+  severity: ReportInsightSeverity;
+  title: string;
+  message: string;
+
+  driverPocketId?: string;
+  driverPocketLabel?: string;
+
+  driverCategoryId?: string;
+  driverCategoryLabel?: string;
+
+  amount?: number;
+  percentage?: number;
+}
+
+export function calculateRuleBasedInsights(params: {
+  transactions: Transaction[];
+  totals: ReportTotals;
+  budgetActualItems: PocketBudgetActualItem[];
+  weeklyUsageItems: WeeklyBudgetUsageItem[];
+  categoryBreakdown: ReportBreakdownItem[];
+  pocketBreakdown: ReportBreakdownItem[];
+  pockets: Pocket[];
+  categories: Category[];
+  isCurrentPeriod: boolean;
+}): ReportInsight[] {
+  const {
+    transactions,
+    totals,
+    budgetActualItems,
+    weeklyUsageItems,
+    categoryBreakdown,
+    pockets,
+    categories,
+    isCurrentPeriod,
+  } = params;
+
+  const categoryMap = new Map<string, Category>();
+  for (const c of categories) {
+    categoryMap.set(c.id, c);
+  }
+
+  const pocketMap = new Map<string, Pocket>();
+  for (const p of pockets) {
+    pocketMap.set(p.id, p);
+  }
+
+  const insights: ReportInsight[] = [];
+  const periodLabel = isCurrentPeriod ? 'periode ini' : 'periode terpilih';
+
+  // Rule 1: Critical Overbudget Pocket (Current Period Only)
+  if (isCurrentPeriod) {
+    const overbudgetItems = budgetActualItems.filter(
+      (item) => item.status === 'overbudget' && item.allocation > 0
+    );
+
+    if (overbudgetItems.length > 0) {
+      // Pick highest usageRatio
+      const topOverbudget = [...overbudgetItems].sort(
+        (a, b) => b.usageRatio - a.usageRatio || b.expense - a.expense
+      )[0];
+
+      if (topOverbudget) {
+        // Find top expense category for this pocket
+        const pocketExpenses = transactions.filter(
+          (t) => !t.isArchived && t.type === 'expense' && t.pocketId === topOverbudget.id
+        );
+
+        const catTotals = new Map<string, number>();
+        for (const t of pocketExpenses) {
+          const catId = t.categoryId || 'none';
+          catTotals.set(catId, (catTotals.get(catId) || 0) + t.amount);
+        }
+
+        let topCatId = 'none';
+        let topCatAmount = 0;
+        catTotals.forEach((amt, catId) => {
+          if (amt > topCatAmount) {
+            topCatAmount = amt;
+            topCatId = catId;
+          }
+        });
+
+        const topCat = topCatId !== 'none' ? categoryMap.get(topCatId) : undefined;
+        const driverCategoryLabel = topCat ? topCat.name : 'Tanpa kategori';
+
+        const usagePctStr = formatUsagePercent(topOverbudget.usagePercent);
+        const catDetailStr =
+          topCatAmount > 0
+            ? `. Pengeluaran terbesar berasal dari kategori ${driverCategoryLabel} sebesar ${formatRupiah(topCatAmount)}.`
+            : '.';
+
+        insights.push({
+          id: `overbudget-pocket-${topOverbudget.id}`,
+          severity: 'critical',
+          title: `${topOverbudget.label} melewati anggaran`,
+          message: `Pocket ${topOverbudget.label} telah memakai ${usagePctStr} alokasi${catDetailStr}`,
+          driverPocketId: topOverbudget.id,
+          driverPocketLabel: topOverbudget.label,
+          driverCategoryId: topCatId !== 'none' ? topCatId : undefined,
+          driverCategoryLabel: topCatAmount > 0 ? driverCategoryLabel : undefined,
+          amount: topOverbudget.expense,
+          percentage: topOverbudget.usagePercent,
+        });
+      }
+    }
+  }
+
+  // Rule 2: Current-Week Warning Insight (Current Period Only)
+  if (isCurrentPeriod) {
+    const runningWeek = weeklyUsageItems.find(
+      (w) => w.temporalState === 'berjalan'
+    );
+
+    if (
+      runningWeek &&
+      (runningWeek.status === 'waspada' ||
+        runningWeek.status === 'bahaya' ||
+        runningWeek.status === 'overbudget')
+    ) {
+      // Find top expense pocket/category in this week's date range
+      const weekExpenses = transactions.filter(
+        (t) =>
+          !t.isArchived &&
+          t.type === 'expense' &&
+          isValidLocalDateString(t.date) &&
+          t.date >= runningWeek.startDate &&
+          t.date <= runningWeek.endDate
+      );
+
+      const pTotals = new Map<string, number>();
+      const cTotals = new Map<string, number>();
+      for (const t of weekExpenses) {
+        if (t.pocketId) {
+          pTotals.set(t.pocketId, (pTotals.get(t.pocketId) || 0) + t.amount);
+        }
+        const catId = t.categoryId || 'none';
+        cTotals.set(catId, (cTotals.get(catId) || 0) + t.amount);
+      }
+
+      let topPId = '';
+      let topPAmt = 0;
+      pTotals.forEach((amt, pId) => {
+        if (amt > topPAmt) {
+          topPAmt = amt;
+          topPId = pId;
+        }
+      });
+
+      let topCId = 'none';
+      let topCAmt = 0;
+      cTotals.forEach((amt, cId) => {
+        if (amt > topCAmt) {
+          topCAmt = amt;
+          topCId = cId;
+        }
+      });
+
+      const driverPocket = topPId ? pocketMap.get(topPId) : undefined;
+      const driverPocketLabel = driverPocket ? driverPocket.name : 'Pocket harian';
+
+      const driverCat = topCId !== 'none' ? categoryMap.get(topCId) : undefined;
+      const driverCatLabel = driverCat ? driverCat.name : 'Tanpa kategori';
+
+      const weekPctStr = formatUsagePercent(runningWeek.usagePercent);
+      const driverDetailStr =
+        topCAmt > 0
+          ? ` ${driverPocketLabel} menjadi pocket pengeluaran terbesar, terutama kategori ${driverCatLabel} sebesar ${formatRupiah(topCAmt)}.`
+          : '';
+
+      insights.push({
+        id: `running-week-warning-${runningWeek.weekNumber}`,
+        severity: runningWeek.status === 'overbudget' ? 'critical' : 'warning',
+        title: `Pemakaian ${runningWeek.label} perlu diperhatikan`,
+        message: `Pemakaian minggu ini mencapai ${weekPctStr}.${driverDetailStr}`,
+        driverPocketId: topPId || undefined,
+        driverPocketLabel,
+        driverCategoryId: topCId !== 'none' ? topCId : undefined,
+        driverCategoryLabel: topCAmt > 0 ? driverCatLabel : undefined,
+        amount: runningWeek.expense,
+        percentage: runningWeek.usagePercent,
+      });
+    }
+  }
+
+  // Rule 3: Category Concentration (Current & Historical)
+  if (totals.totalExpense > 0 && categoryBreakdown.length > 0) {
+    const topCatItem = categoryBreakdown[0];
+    if (topCatItem && topCatItem.percentage >= 40) {
+      const pctRounded = Math.round(topCatItem.percentage);
+      insights.push({
+        id: `category-concentration-${topCatItem.id}`,
+        severity: 'info',
+        title: `Pengeluaran terkonsentrasi di ${topCatItem.label}`,
+        message: `Kategori ${topCatItem.label} menyumbang ${pctRounded}% dari pengeluaran ${periodLabel}, sebesar ${formatRupiah(topCatItem.amount)}.`,
+        driverCategoryId: topCatItem.id !== 'none' ? topCatItem.id : undefined,
+        driverCategoryLabel: topCatItem.label,
+        amount: topCatItem.amount,
+        percentage: topCatItem.percentage,
+      });
+    }
+  }
+
+  // Rule 4: Net Cash Flow Surplus / Deficit (Current & Historical)
+  if (insights.length < 3) {
+    if (totals.netCashFlow < 0) {
+      const absNet = Math.abs(totals.netCashFlow);
+      insights.push({
+        id: 'net-cash-flow-deficit',
+        severity: 'warning',
+        title: 'Pengeluaran lebih besar dari pemasukan',
+        message: `Defisit ${periodLabel} sebesar ${formatRupiah(absNet)}.`,
+        amount: absNet,
+      });
+    } else if (totals.netCashFlow > 0) {
+      insights.push({
+        id: 'net-cash-flow-surplus',
+        severity: 'positive',
+        title: `Arus kas ${periodLabel} positif`,
+        message: `Pemasukan lebih besar dari pengeluaran sebesar ${formatRupiah(totals.netCashFlow)}.`,
+        amount: totals.netCashFlow,
+      });
+    }
+  }
+
+  // Deterministic sorting & limiting to max 3 items
+  const severityWeight: Record<ReportInsightSeverity, number> = {
+    critical: 4,
+    warning: 3,
+    info: 2,
+    positive: 1,
+  };
+
+  insights.sort((a, b) => {
+    const weightDiff = severityWeight[b.severity] - severityWeight[a.severity];
+    if (weightDiff !== 0) return weightDiff;
+    const pctDiff = (b.percentage ?? 0) - (a.percentage ?? 0);
+    if (pctDiff !== 0) return pctDiff;
+    const amtDiff = (b.amount ?? 0) - (a.amount ?? 0);
+    if (amtDiff !== 0) return amtDiff;
+    return a.title.localeCompare(b.title);
+  });
+
+  return insights.slice(0, 3);
+}
+
+// ─── Phase 6D: Sinking Fund Recommendation ─────────────────────────────
+
+export const SINKING_FUND_RECOMMENDATION_WINDOW_DAYS = 5;
+
+export interface SinkingFundPocketCandidate {
+  pocketId: string;
+  label: string;
+  emoji?: string;
+  currentBalance: number;
+  eligibleAmount: number;
+  isExcluded: boolean;
+}
+
+export type SinkingFundStatus =
+  | 'not-near-period-end'
+  | 'available'
+  | 'no-eligible-pockets'
+  | 'no-positive-balance'
+  | 'historical-unavailable';
+
+export interface SinkingFundRecommendation {
+  status: SinkingFundStatus;
+  daysRemaining: number | null;
+  suggestedAmount: number;
+  candidates: SinkingFundPocketCandidate[];
+}
+
+export function calculateSinkingFundRecommendation(params: {
+  pockets: Pocket[];
+  allActiveTransactions: Transaction[];
+  excludedPocketIds: string[];
+  periodEndDate: string;
+  today?: Date;
+  isCurrentPeriod: boolean;
+  getPocketEffectiveBalanceFn: (pocket: Pocket, transactions: Transaction[]) => number;
+}): SinkingFundRecommendation {
+  const {
+    pockets,
+    allActiveTransactions,
+    excludedPocketIds,
+    periodEndDate,
+    today = new Date(),
+    isCurrentPeriod,
+    getPocketEffectiveBalanceFn,
+  } = params;
+
+  if (!isCurrentPeriod) {
+    return {
+      status: 'historical-unavailable',
+      daysRemaining: null,
+      suggestedAmount: 0,
+      candidates: [],
+    };
+  }
+
+  if (!isValidLocalDateString(periodEndDate)) {
+    return {
+      status: 'historical-unavailable',
+      daysRemaining: null,
+      suggestedAmount: 0,
+      candidates: [],
+    };
+  }
+
+  // Calculate local days remaining until periodEndDate
+  const parseLocalDate = (dateStr: string): Date => {
+    const parts = dateStr.split('-').map(Number);
+    return new Date(parts[0] ?? 2026, (parts[1] ?? 1) - 1, parts[2] ?? 1);
+  };
+
+  const endDate = parseLocalDate(periodEndDate);
+  const todayReset = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const diffTime = endDate.getTime() - todayReset.getTime();
+  const daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  // Find candidate spendable pockets
+  const spendablePockets = pockets.filter(
+    (p) => p.isSpendable && p.isActive && !p.isArchived
+  );
+
+  const candidates: SinkingFundPocketCandidate[] = spendablePockets.map((p) => {
+    const bal = getPocketEffectiveBalanceFn(p, allActiveTransactions);
+    const safeBal = Number.isFinite(bal) ? (Object.is(bal, -0) ? 0 : bal) : 0;
+    const isExcluded = excludedPocketIds.includes(p.id);
+    const eligibleAmount = safeBal > 0 ? safeBal : 0;
+
+    return {
+      pocketId: p.id,
+      label: p.name,
+      emoji: p.emoji,
+      currentBalance: safeBal,
+      eligibleAmount,
+      isExcluded,
+    };
+  });
+
+  candidates.sort((a, b) => b.eligibleAmount - a.eligibleAmount || a.label.localeCompare(b.label));
+
+  if (daysRemaining > SINKING_FUND_RECOMMENDATION_WINDOW_DAYS) {
+    return {
+      status: 'not-near-period-end',
+      daysRemaining,
+      suggestedAmount: 0,
+      candidates,
+    };
+  }
+
+  if (spendablePockets.length === 0) {
+    return {
+      status: 'no-eligible-pockets',
+      daysRemaining,
+      suggestedAmount: 0,
+      candidates: [],
+    };
+  }
+
+  const includedPositiveCandidates = candidates.filter(
+    (c) => !c.isExcluded && c.eligibleAmount > 0
+  );
+
+  const suggestedAmount = includedPositiveCandidates.reduce(
+    (sum, c) => sum + c.eligibleAmount,
+    0
+  );
+
+  if (candidates.length === 0) {
+    return {
+      status: 'no-eligible-pockets',
+      daysRemaining,
+      suggestedAmount: 0,
+      candidates,
+    };
+  }
+
+  if (suggestedAmount === 0 && candidates.every((c) => c.eligibleAmount === 0)) {
+    return {
+      status: 'no-positive-balance',
+      daysRemaining,
+      suggestedAmount: 0,
+      candidates,
+    };
+  }
+
+  return {
+    status: 'available',
+    daysRemaining,
+    suggestedAmount,
+    candidates,
+  };
+}
+
