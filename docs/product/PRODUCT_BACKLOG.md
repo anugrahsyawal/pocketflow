@@ -115,9 +115,9 @@ this documentation audit did not rerun the feature.
 
 | ID | Story | Priority | Overall | Delivery / verification / acceptance | Acceptance and evidence |
 |---|---|---|---|---|---|
-| 7.1 | Financial snapshot | Must Have | Partially Done | Implemented in part / Legacy Evidence Incomplete / Accepted with limitation | Current total, spendable balance, period totals, budget progress, and recent transactions exist. Safe-daily amount and global privacy hide/show remain missing. Commits `21da5f6`, `61c6a7f`. |
-| 7.2 | Pocket alert cards | Must Have | Not Started | Not Started / Not Verified / Not Reviewed | Home must identify important pockets with Aman/Waspada/Bahaya/Overbudget and actionable copy. |
-| 7.3 | Transportation and NFC summary | Should Have | Not Started | Not Started / Not Verified / Not Reviewed | Home should show separate Transportation/NFC balances and their combined available amount. |
+| 7.1 | Financial snapshot & Stitch Iteration 5 | Must Have | Implemented | Implemented / Verified / Ready for Review | Total balance, spendable balance, dynamic safe per day, Home privacy toggle, budget progress, and 3 latest transactions aligned with Stitch Iteration 5. Current worktree; [walkthrough](../walkthroughs/home-dashboard-stitch-iteration-5.md). |
+| 7.2 | Pocket alert cards ("Butuh perhatian") | Must Have | Implemented | Implemented / Verified / Ready for Review | Horizontal carousel showing max 2 Waspada/Bahaya/Overbudget pockets with direct CTA and positive empty state. Current worktree; [walkthrough](../walkthroughs/home-dashboard-stitch-iteration-5.md). |
+| 7.3 | Ringkasan Pocket horizontal carousel | Should Have | Implemented | Implemented / Verified / Ready for Review | Horizontal carousel combining Transportation+NFC, Food+Cash, and all other active non-archived pockets. Current worktree; [walkthrough](../walkthroughs/home-dashboard-stitch-iteration-5.md). |
 
 ## Epic 8 — Reports and insights
 

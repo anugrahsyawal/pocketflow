@@ -17,8 +17,7 @@ inventory.
 | 4.1-4.5 | Expense, income, transfer, edit, archive/delete | `PR-005`-`PR-008`, `DEC-022` | Transaction features; `52cd67a`-`4b086c2` | Legacy evidence incomplete; accepted | Done |
 | 4.6 | Search and filters | `PR-005` | Grouped history exists; full search/pocket/category/period filters absent | Gap confirmed by source audit | Partially Done |
 | 4.7 | Multi-entry expense | `PR-005` | Multi-entry frontend flow | Legacy evidence incomplete; accepted | Done |
-| 7.1 | Home financial snapshot | `PR-009`; Iteration 2 handoff | Home feature; `21da5f6`, `61c6a7f` | Accepted with safe-daily/privacy limitations | Partially Done |
-| 7.2-7.3 | Pocket alerts and Transportation/NFC summary | `PR-009` | Not implemented as approved | Not verified/reviewed | Not Started |
+| 7.1-7.3 | Home Dashboard Iteration 5 (Hero, Ringkasan Carousel, Butuh Perhatian, Privacy) | `PR-009`, Stitch Iteration 5 | `HomePage.tsx`, `balanceCalculations.ts` | [home-dashboard-stitch-iteration-5.md](../walkthroughs/home-dashboard-stitch-iteration-5.md) | Implemented / Ready for Review |
 | 8.1 | Period report 26-25 | `PR-010`, `PR-011`; Reports spec | `ReportsPage`, report helpers; `cc39670` | Reports accepted 2026-07-21 | Done |
 | 8.2 | Budget vs Actual per pocket | `PR-011`, `PR-013`; Reports spec | `BudgetVsActualPocketChart`; `cfb1b53` | [Phase 6C](../walkthroughs/phase-6c-budget-vs-actual-and-weekly-usage.md); historical limitation accepted | Partially Done |
 | 8.3 | Category and pocket spending analytics | `PR-011`; Reports spec | visual analytics components; `5b478e9` | [Phase 6B](../walkthroughs/phase-6b-reports-visual-analytics.md) | Done |
