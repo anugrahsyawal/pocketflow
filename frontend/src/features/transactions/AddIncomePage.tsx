@@ -8,7 +8,7 @@ import { useTransactionStore } from '@/features/transactions/useTransactionStore
 import { formatRupiah } from '@/lib/currency';
 import { getPocketEffectiveBalance } from '@/lib/balanceCalculations';
 import { PocketPickerField } from '@/features/transactions/components/PocketPickerField';
-import { INCOME_SOURCE_LABELS } from '@/data/constants';
+import { INCOME_SOURCE_LABELS, INCOME_SOURCE_EMOJIS } from '@/data/constants';
 import type { Pocket } from '@/types/pocket';
 import type { IncomeSource } from '@/types/transaction';
 
@@ -237,20 +237,22 @@ export function AddIncomePage() {
           <label className="text-label-caps text-text-secondary font-bold px-1 tracking-wider">
             Sumber Pemasukan
           </label>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex w-full flex-wrap gap-2">
             {INCOME_SOURCES.map((src) => {
               const isSelected = src === incomeSource;
+              const emoji = INCOME_SOURCE_EMOJIS[src] || '📝';
               return (
                 <button
                   key={src}
                   type="button"
                   onClick={() => { setIncomeSource(src); setErrors([]); }}
-                  className={`px-4 py-2 rounded-pill text-sm font-semibold border transition-all ${
+                  className={`inline-flex flex-[1_1_auto] min-w-fit max-w-full items-center justify-center gap-2 whitespace-nowrap rounded-full border px-3 py-2 text-body-sm font-semibold transition-colors ${
                     isSelected
-                      ? 'border-aman bg-aman-soft/40 text-aman'
-                      : 'border-border/40 bg-surface-container text-text-secondary hover:border-aman/30'
+                      ? 'border-aman bg-aman-soft text-aman ring-1 ring-aman/10'
+                      : 'border-border bg-background text-text-secondary hover:border-aman/40'
                   }`}
                 >
+                  <span className="text-sm">{emoji}</span>
                   {INCOME_SOURCE_LABELS[src]}
                 </button>
               );

@@ -1,7 +1,7 @@
 import type { Transaction } from '@/types/transaction';
 import type { Category } from '@/types/category';
 import type { Pocket } from '@/types/pocket';
-import { STATUS_THRESHOLDS } from '@/data/constants';
+import { STATUS_THRESHOLDS, TRANSFER_TYPE_LABELS } from '@/data/constants';
 import { isValidLocalDateString } from '@/lib/budgetPeriod';
 import { formatRupiah } from '@/lib/currency';
 
@@ -335,6 +335,21 @@ export type PocketBudgetStatus =
   | 'overbudget'
   | 'tanpa-alokasi';
 
+export interface PocketTransferBreakdownItem {
+  type: string;
+  label: string;
+  inAmount: number;
+  outAmount: number;
+  count: number;
+}
+
+export interface PocketAttributedBudgetUsage {
+  pocketId: string;
+  label: string;
+  emoji?: string;
+  amount: number;
+}
+
 export interface PocketBudgetActualItem {
   id: string;
   label: string;
@@ -350,6 +365,10 @@ export interface PocketBudgetActualItem {
   transferOut: number;
   netTransfer: number;
 
+  reallocationIn: number;
+  reallocationOut: number;
+  revisedAllocation: number;
+
   currentBalance: number | null;
 
   remaining: number;
@@ -359,6 +378,12 @@ export interface PocketBudgetActualItem {
 
   expenseTransactionCount: number;
   transferTransactionCount: number;
+  reallocationTransactionCount: number;
+
+  transferBreakdown: PocketTransferBreakdownItem[];
+  paymentExpensesAmount: number;
+  paymentExpensesCount: number;
+  attributedBudgetsList: PocketAttributedBudgetUsage[];
 }
 
 export function derivePocketBudgetStatus(
@@ -406,8 +431,10 @@ export function calculatePocketBudgetActuals(
 
   for (const t of activePeriodTransactions) {
     if (t.isArchived) continue;
-    if (t.type === 'expense' && t.pocketId) {
-      pocketIdSet.add(t.pocketId);
+    if (t.type === 'expense') {
+      const targetBudgetPocketId = t.budgetPocketId ?? t.pocketId;
+      if (targetBudgetPocketId) pocketIdSet.add(targetBudgetPocketId);
+      if (t.pocketId) pocketIdSet.add(t.pocketId);
     }
     if (t.type === 'transfer') {
       if (t.fromPocketId) pocketIdSet.add(t.fromPocketId);
@@ -415,31 +442,95 @@ export function calculatePocketBudgetActuals(
     }
   }
 
+  // Maps per pocket
   const expenseMap = new Map<string, { amount: number; count: number }>();
+  const paymentExpenseMap = new Map<string, { amount: number; count: number }>();
+  const paymentAttributedBudgetsMap = new Map<string, Map<string, number>>();
+
   const transferInMap = new Map<string, number>();
   const transferOutMap = new Map<string, number>();
   const transferTxCountMap = new Map<string, Set<string>>();
 
+  const reallocationInMap = new Map<string, number>();
+  const reallocationOutMap = new Map<string, number>();
+  const reallocationTxCountMap = new Map<string, Set<string>>();
+
+  // Detailed transfer breakdowns: pocketId -> transferType -> { inAmount, outAmount, count }
+  const transferTypeBreakdownMap = new Map<string, Map<string, { inAmount: number; outAmount: number; count: number }>>();
+
   for (const t of activePeriodTransactions) {
     if (t.isArchived) continue;
 
-    if (t.type === 'expense' && t.pocketId) {
-      const cur = expenseMap.get(t.pocketId) || { amount: 0, count: 0 };
-      expenseMap.set(t.pocketId, { amount: cur.amount + t.amount, count: cur.count + 1 });
+    if (t.type === 'expense') {
+      const targetBudgetPocketId = t.budgetPocketId ?? t.pocketId;
+
+      // Attribute expense to budget owner pocket
+      if (targetBudgetPocketId) {
+        const cur = expenseMap.get(targetBudgetPocketId) || { amount: 0, count: 0 };
+        expenseMap.set(targetBudgetPocketId, { amount: cur.amount + t.amount, count: cur.count + 1 });
+      }
+
+      // Track payment pocket stats & attributed target budget pockets
+      if (t.pocketId) {
+        const curPay = paymentExpenseMap.get(t.pocketId) || { amount: 0, count: 0 };
+        paymentExpenseMap.set(t.pocketId, { amount: curPay.amount + t.amount, count: curPay.count + 1 });
+
+        if (targetBudgetPocketId && targetBudgetPocketId !== t.pocketId) {
+          let attrMap = paymentAttributedBudgetsMap.get(t.pocketId);
+          if (!attrMap) {
+            attrMap = new Map<string, number>();
+            paymentAttributedBudgetsMap.set(t.pocketId, attrMap);
+          }
+          attrMap.set(targetBudgetPocketId, (attrMap.get(targetBudgetPocketId) || 0) + t.amount);
+        }
+      }
     }
 
     if (t.type === 'transfer') {
-      if (t.fromPocketId) {
-        transferOutMap.set(t.fromPocketId, (transferOutMap.get(t.fromPocketId) || 0) + t.amount);
-        const set = transferTxCountMap.get(t.fromPocketId) || new Set<string>();
-        set.add(t.id);
-        transferTxCountMap.set(t.fromPocketId, set);
-      }
-      if (t.toPocketId) {
-        transferInMap.set(t.toPocketId, (transferInMap.get(t.toPocketId) || 0) + t.amount);
-        const set = transferTxCountMap.get(t.toPocketId) || new Set<string>();
-        set.add(t.id);
-        transferTxCountMap.set(t.toPocketId, set);
+      const tType = t.transferType || 'normal';
+
+      if (tType === 'budget-reallocation') {
+        if (t.fromPocketId) {
+          reallocationOutMap.set(t.fromPocketId, (reallocationOutMap.get(t.fromPocketId) || 0) + t.amount);
+          const set = reallocationTxCountMap.get(t.fromPocketId) || new Set<string>();
+          set.add(t.id);
+          reallocationTxCountMap.set(t.fromPocketId, set);
+        }
+        if (t.toPocketId) {
+          reallocationInMap.set(t.toPocketId, (reallocationInMap.get(t.toPocketId) || 0) + t.amount);
+          const set = reallocationTxCountMap.get(t.toPocketId) || new Set<string>();
+          set.add(t.id);
+          reallocationTxCountMap.set(t.toPocketId, set);
+        }
+      } else {
+        if (t.fromPocketId) {
+          transferOutMap.set(t.fromPocketId, (transferOutMap.get(t.fromPocketId) || 0) + t.amount);
+          const set = transferTxCountMap.get(t.fromPocketId) || new Set<string>();
+          set.add(t.id);
+          transferTxCountMap.set(t.fromPocketId, set);
+
+          let pBreakdown = transferTypeBreakdownMap.get(t.fromPocketId);
+          if (!pBreakdown) {
+            pBreakdown = new Map();
+            transferTypeBreakdownMap.set(t.fromPocketId, pBreakdown);
+          }
+          const curT = pBreakdown.get(tType) || { inAmount: 0, outAmount: 0, count: 0 };
+          pBreakdown.set(tType, { ...curT, outAmount: curT.outAmount + t.amount, count: curT.count + 1 });
+        }
+        if (t.toPocketId) {
+          transferInMap.set(t.toPocketId, (transferInMap.get(t.toPocketId) || 0) + t.amount);
+          const set = transferTxCountMap.get(t.toPocketId) || new Set<string>();
+          set.add(t.id);
+          transferTxCountMap.set(t.toPocketId, set);
+
+          let pBreakdown = transferTypeBreakdownMap.get(t.toPocketId);
+          if (!pBreakdown) {
+            pBreakdown = new Map();
+            transferTypeBreakdownMap.set(t.toPocketId, pBreakdown);
+          }
+          const curT = pBreakdown.get(tType) || { inAmount: 0, outAmount: 0, count: 0 };
+          pBreakdown.set(tType, { ...curT, inAmount: curT.inAmount + t.amount, count: curT.count + 1 });
+        }
       }
     }
   }
@@ -461,11 +552,34 @@ export function calculatePocketBudgetActuals(
     const expense = sanitizeNumber(expenseData.amount);
     const expenseTransactionCount = expenseData.count;
 
+    const paymentExp = paymentExpenseMap.get(pocketId) || { amount: 0, count: 0 };
+    const paymentExpensesAmount = sanitizeNumber(paymentExp.amount);
+    const paymentExpensesCount = paymentExp.count;
+
+    const attrBudgetsMap = paymentAttributedBudgetsMap.get(pocketId);
+    const attributedBudgetsList: PocketAttributedBudgetUsage[] = [];
+    if (attrBudgetsMap) {
+      for (const [targetPId, amt] of attrBudgetsMap.entries()) {
+        const targetP = pocketMap.get(targetPId);
+        attributedBudgetsList.push({
+          pocketId: targetPId,
+          label: targetP ? targetP.name : 'Pocket tidak tersedia',
+          emoji: targetP?.emoji,
+          amount: sanitizeNumber(amt),
+        });
+      }
+    }
+
     const transferIn = sanitizeNumber(transferInMap.get(pocketId) || 0);
     const transferOut = sanitizeNumber(transferOutMap.get(pocketId) || 0);
     const netTransfer = sanitizeNumber(transferIn - transferOut);
-
     const transferTransactionCount = transferTxCountMap.get(pocketId)?.size ?? 0;
+
+    const reallocationIn = sanitizeNumber(reallocationInMap.get(pocketId) || 0);
+    const reallocationOut = sanitizeNumber(reallocationOutMap.get(pocketId) || 0);
+    const reallocationTransactionCount = reallocationTxCountMap.get(pocketId)?.size ?? 0;
+
+    const revisedAllocation = sanitizeNumber(allocation + reallocationIn - reallocationOut);
 
     let currentBalance: number | null = null;
     if (pocket) {
@@ -473,10 +587,25 @@ export function calculatePocketBudgetActuals(
       currentBalance = Number.isFinite(rawBal) ? sanitizeNumber(rawBal) : null;
     }
 
-    const remaining = sanitizeNumber(allocation - expense);
-    const usageRatio = allocation > 0 ? expense / allocation : 0;
+    const remaining = sanitizeNumber(revisedAllocation - expense);
+    const usageRatio = revisedAllocation > 0 ? expense / revisedAllocation : 0;
     const usagePercent = usageRatio * 100;
-    const status = derivePocketBudgetStatus(expense, allocation);
+    const status = derivePocketBudgetStatus(expense, revisedAllocation);
+
+    // Build transferBreakdown array for disclosure
+    const transferBreakdown: PocketTransferBreakdownItem[] = [];
+    const pBreakdownMap = transferTypeBreakdownMap.get(pocketId);
+    if (pBreakdownMap) {
+      for (const [tType, bData] of pBreakdownMap.entries()) {
+        transferBreakdown.push({
+          type: tType,
+          label: TRANSFER_TYPE_LABELS[tType] || 'Transfer',
+          inAmount: sanitizeNumber(bData.inAmount),
+          outAmount: sanitizeNumber(bData.outAmount),
+          count: bData.count,
+        });
+      }
+    }
 
     items.push({
       id: pocketId,
@@ -489,6 +618,9 @@ export function calculatePocketBudgetActuals(
       transferIn,
       transferOut,
       netTransfer,
+      reallocationIn,
+      reallocationOut,
+      revisedAllocation,
       currentBalance,
       remaining,
       usageRatio,
@@ -496,12 +628,17 @@ export function calculatePocketBudgetActuals(
       status,
       expenseTransactionCount,
       transferTransactionCount,
+      reallocationTransactionCount,
+      transferBreakdown,
+      paymentExpensesAmount,
+      paymentExpensesCount,
+      attributedBudgetsList,
     });
   }
 
   items.sort((a, b) => {
-    const aAllocated = a.allocation > 0 ? 1 : 0;
-    const bAllocated = b.allocation > 0 ? 1 : 0;
+    const aAllocated = a.revisedAllocation > 0 || a.allocation > 0 ? 1 : 0;
+    const bAllocated = b.revisedAllocation > 0 || b.allocation > 0 ? 1 : 0;
     if (bAllocated !== aAllocated) return bAllocated - aAllocated;
     if (b.usageRatio !== a.usageRatio) return b.usageRatio - a.usageRatio;
     if (b.expense !== a.expense) return b.expense - a.expense;

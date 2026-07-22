@@ -186,6 +186,32 @@ Permanent delete remains a separate destructive action requiring clear
 confirmation. Backend tombstones, propagation, audit metadata, conflicts, and
 retention must be designed before backend implementation.
 
+### DEC-023 - Budget Reallocation Transfer (Pindah Alokasi Budget)
+
+Date: 2026-07-22
+Status: Accepted
+
+Decision: `Pindah Alokasi Budget` (`budget-reallocation`) is a neutral transfer
+type (`type === 'transfer'`) that moves effective balance and active-period
+monthly budget allocation between Pockets simultaneously. It is not an expense
+or income, and does not alter the total overall budget allocation across all
+Pockets.
+
+### DEC-024 - Pocket Budget Owner Configuration for Payment Pockets (Cash & NFC)
+
+Date: 2026-07-22
+Status: Accepted
+
+Decision: Cash and the NFC Transportation Card are standard Pockets/Wallets
+equal to other Pockets. Their budget owner is configured directly on their
+Pocket Detail page (`budgetOwnerPocketId`). Default owners: Cash → Food &
+Groceries (`food-groceries`), NFC Card → Transportation (`transportation`).
+New expenses paid from Cash/NFC record the configured budget owner
+attribution into `t.budgetPocketId` at creation time. Updating the owner
+mapping on Pocket Detail does not retroactively alter stored attribution of
+historical transactions. Editing an existing transaction preserves its stored
+`budgetPocketId` unless the user explicitly changes the payment pocket.
+
 ## Pending decisions
 
 The following are deliberately unresolved and must not be guessed:

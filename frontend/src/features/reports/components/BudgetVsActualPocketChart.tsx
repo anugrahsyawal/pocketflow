@@ -62,12 +62,13 @@ export function BudgetVsActualPocketChart({
       ) : (
         <div className="flex flex-col gap-4">
           {items.map((item) => {
-            const hasAllocation = item.allocation > 0;
+            const hasAllocation = item.revisedAllocation > 0 || item.allocation > 0;
             const progressValue = hasAllocation
               ? Math.min(1, Math.max(0, item.usageRatio))
               : 0;
             const isExpanded = !!expandedPockets[item.id];
             const disclosureId = `pocket-disclosure-${item.id}`;
+            const hasReallocation = item.reallocationIn > 0 || item.reallocationOut > 0;
 
             return (
               <div
@@ -130,7 +131,12 @@ export function BudgetVsActualPocketChart({
                       <span className="font-display font-semibold text-text-secondary tabular-nums">
                         {item.expense > 0 ? formatRupiah(item.expense) : 'Rp0'}
                         <span className="text-text-muted font-normal">
-                          {' '}/ {formatRupiah(item.allocation)}
+                          {' '}/ {formatRupiah(item.revisedAllocation)}
+                          {hasReallocation && (
+                            <span className="text-[10px] text-primary font-medium ml-1">
+                              (revisi)
+                            </span>
+                          )}
                         </span>
                       </span>
                     </div>
@@ -172,39 +178,126 @@ export function BudgetVsActualPocketChart({
                     className="mt-2 pt-2 border-t border-border/20 flex flex-col gap-1.5 bg-surface-container-low/50 p-2.5 rounded-lg text-[11px]"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-text-muted">Transfer masuk</span>
+                      <span className="text-text-muted">Alokasi awal</span>
                       <span className="font-display font-medium text-text-secondary tabular-nums">
-                        {item.transferIn > 0 ? `+${formatRupiah(item.transferIn)}` : 'Rp0'}
+                        {item.allocation > 0 ? formatRupiah(item.allocation) : 'Rp0'}
+                      </span>
+                    </div>
+
+                    {item.reallocationIn > 0 && (
+                      <div className="flex items-center justify-between text-aman">
+                        <span>Pindah alokasi masuk</span>
+                        <span className="font-display font-medium tabular-nums">
+                          +{formatRupiah(item.reallocationIn)}
+                        </span>
+                      </div>
+                    )}
+
+                    {item.reallocationOut > 0 && (
+                      <div className="flex items-center justify-between text-bahaya">
+                        <span>Pindah alokasi keluar</span>
+                        <span className="font-display font-medium tabular-nums">
+                          -{formatRupiah(item.reallocationOut)}
+                        </span>
+                      </div>
+                    )}
+
+                    {hasReallocation && (
+                      <div className="flex items-center justify-between font-semibold border-t border-border/10 pt-1">
+                        <span className="text-text-primary">Alokasi revisi</span>
+                        <span className="font-display text-primary tabular-nums">
+                          {formatRupiah(item.revisedAllocation)}
+                        </span>
+                      </div>
+                    )}
+
+                    <div className="flex items-center justify-between border-t border-border/10 pt-1">
+                      <span className="text-text-muted">Pengeluaran aktual</span>
+                      <span className="font-display font-medium text-bahaya tabular-nums">
+                        {item.expense > 0 ? formatRupiah(item.expense) : 'Rp0'}
                       </span>
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <span className="text-text-muted">Transfer keluar</span>
-                      <span className="font-display font-medium text-text-secondary tabular-nums">
-                        {item.transferOut > 0 ? `-${formatRupiah(item.transferOut)}` : 'Rp0'}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <span className="text-text-muted">Transfer bersih</span>
+                      <span className="text-text-muted">Sisa budget</span>
                       <span
-                        className={`font-display font-medium tabular-nums ${
-                          item.netTransfer > 0
-                            ? 'text-aman'
-                            : item.netTransfer < 0
-                            ? 'text-bahaya'
-                            : 'text-text-muted'
+                        className={`font-display font-semibold tabular-nums ${
+                          item.remaining >= 0 ? 'text-aman' : 'text-bahaya'
                         }`}
                       >
-                        {item.netTransfer > 0
-                          ? `+${formatRupiah(item.netTransfer)}`
-                          : item.netTransfer < 0
-                          ? `-${formatRupiah(Math.abs(item.netTransfer))}`
-                          : 'Rp0'}
+                        {item.remaining >= 0
+                          ? formatRupiah(item.remaining)
+                          : `-${formatRupiah(Math.abs(item.remaining))}`}
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between">
+                    {/* Attributed Payment Disclosure */}
+                    {item.attributedBudgetsList.length > 0 && (
+                      <div className="mt-1 pt-1.5 border-t border-border/20 flex flex-col gap-1 text-[10px]">
+                        <span className="font-bold text-text-secondary uppercase tracking-wider">
+                          Pembayaran Melalui Pocket Ini
+                        </span>
+                        {item.attributedBudgetsList.map((attr) => (
+                          <div key={attr.pocketId} className="flex items-center justify-between text-text-muted">
+                            <span>
+                              Dicatat ke budget: <strong className="text-text-primary">{attr.emoji ? `${attr.emoji} ` : ''}{attr.label}</strong>
+                            </span>
+                            <span className="font-display font-semibold text-text-secondary tabular-nums">
+                              {formatRupiah(attr.amount)}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Specific Transfer Breakdown Lines */}
+                    {item.transferBreakdown.length > 0 ? (
+                      <div className="mt-1 pt-1 border-t border-border/10 flex flex-col gap-1">
+                        {item.transferBreakdown.map((tb) => (
+                          <div key={tb.type} className="flex flex-col gap-0.5">
+                            {tb.inAmount > 0 && (
+                              <div className="flex items-center justify-between text-text-muted">
+                                <span>{tb.label} masuk</span>
+                                <span className="font-display font-medium tabular-nums">
+                                  +{formatRupiah(tb.inAmount)}
+                                </span>
+                              </div>
+                            )}
+                            {tb.outAmount > 0 && (
+                              <div className="flex items-center justify-between text-text-muted">
+                                <span>{tb.label} keluar</span>
+                                <span className="font-display font-medium tabular-nums">
+                                  -{formatRupiah(tb.outAmount)}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      item.transferIn > 0 || item.transferOut > 0 ? (
+                        <div className="mt-1 pt-1 border-t border-border/10 flex flex-col gap-1">
+                          {item.transferIn > 0 && (
+                            <div className="flex items-center justify-between text-text-muted">
+                              <span>Transfer masuk</span>
+                              <span className="font-display font-medium tabular-nums">
+                                +{formatRupiah(item.transferIn)}
+                              </span>
+                            </div>
+                          )}
+                          {item.transferOut > 0 && (
+                            <div className="flex items-center justify-between text-text-muted">
+                              <span>Transfer keluar</span>
+                              <span className="font-display font-medium tabular-nums">
+                                -{formatRupiah(item.transferOut)}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      ) : null
+                    )}
+
+                    <div className="flex items-center justify-between pt-1 border-t border-border/10">
                       <span className="text-text-muted">Saldo saat ini</span>
                       <span
                         className={`font-display font-medium tabular-nums ${
@@ -223,17 +316,10 @@ export function BudgetVsActualPocketChart({
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between">
-                      <span className="text-text-muted">Jumlah transaksi pengeluaran</span>
+                    <div className="flex items-center justify-between text-[10px] text-text-muted pt-1">
+                      <span>Transaksi pengeluaran / transfer</span>
                       <span className="font-semibold text-text-primary tabular-nums">
-                        {item.expenseTransactionCount}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <span className="text-text-muted">Jumlah transaksi transfer terdampak</span>
-                      <span className="font-semibold text-text-primary tabular-nums">
-                        {item.transferTransactionCount}
+                        {item.expenseTransactionCount} pengeluaran, {item.reallocationTransactionCount} pindah alokasi, {item.transferTransactionCount} transfer
                       </span>
                     </div>
                   </div>

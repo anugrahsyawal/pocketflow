@@ -212,7 +212,7 @@ export function ReportsPage() {
   return (
     <div className="flex flex-col gap-6 px-safe py-6 min-h-screen bg-background pb-24">
       {/* 1. Header: Title and Export CSV */}
-      <div className="flex justify-between items-end">
+      <div className="flex justify-between items-center">
         <h1 className="font-display text-headline-lg-mobile text-text-primary">
           Laporan
         </h1>
@@ -220,30 +220,30 @@ export function ReportsPage() {
           type="button"
           onClick={handleExportCsv}
           disabled={!hasSelectedPeriodTransactions}
-          className="bg-primary-soft text-primary px-4 py-2 rounded-full flex items-center gap-1.5 hover:opacity-80 transition-opacity disabled:bg-surface-container disabled:text-text-muted disabled:opacity-100 disabled:cursor-not-allowed text-xs font-bold uppercase tracking-wider"
+          className="px-2.5 py-1 rounded-full flex items-center gap-1 bg-primary-soft text-primary hover:opacity-80 transition-opacity disabled:bg-surface-container disabled:text-text-muted disabled:opacity-100 disabled:cursor-not-allowed text-[11px] font-bold tracking-wide"
           title={!hasSelectedPeriodTransactions ? 'Tidak ada transaksi untuk diekspor' : 'Ekspor transaksi periode ini ke CSV'}
           aria-label="Ekspor CSV"
         >
-          <span className="material-symbols-rounded text-lg" aria-hidden="true">download</span>
+          <span className="material-symbols-rounded text-base" aria-hidden="true">download</span>
           <span>Export CSV</span>
         </button>
       </div>
 
       {/* 2. Period Selector */}
-      <div className="flex items-center gap-2 bg-surface p-1 rounded-full w-max shadow-sm border border-border/50">
+      <div className="w-full flex items-center justify-between bg-surface p-1 rounded-full shadow-sm border border-border/50">
         <button
           type="button"
           onClick={handlePrevPeriod}
-          className="text-text-secondary hover:text-primary p-1.5 flex items-center justify-center rounded-full hover:bg-black/5"
+          className="text-text-secondary hover:text-primary p-1.5 flex items-center justify-center rounded-full hover:bg-black/5 flex-shrink-0"
           aria-label="Periode sebelumnya"
         >
           <span className="material-symbols-rounded text-[20px]" aria-hidden="true">chevron_left</span>
         </button>
-        <div className="flex flex-col items-center px-4">
-          <span className="text-[10px] font-bold text-primary uppercase tracking-wider">
+        <div className="flex-1 flex flex-col items-center text-center px-2 min-w-0">
+          <span className="text-[10px] font-bold text-primary uppercase tracking-wider truncate max-w-full">
             {isCurrentPeriod ? 'Periode berjalan' : 'Periode historis'}
           </span>
-          <span className="text-body-sm font-semibold text-text-secondary text-xs">
+          <span className="text-body-sm font-semibold text-text-secondary text-xs truncate max-w-full">
             {selectedPeriod.label}
           </span>
         </div>
@@ -251,7 +251,7 @@ export function ReportsPage() {
           type="button"
           onClick={handleNextPeriod}
           disabled={isCurrentPeriod}
-          className="text-text-secondary hover:text-primary p-1.5 flex items-center justify-center rounded-full hover:bg-black/5 disabled:opacity-30 disabled:cursor-not-allowed"
+          className="text-text-secondary hover:text-primary p-1.5 flex items-center justify-center rounded-full hover:bg-black/5 disabled:opacity-30 disabled:cursor-not-allowed flex-shrink-0"
           aria-label="Periode berikutnya"
         >
           <span className="material-symbols-rounded text-[20px]" aria-hidden="true">chevron_right</span>
@@ -324,48 +324,69 @@ export function ReportsPage() {
 
       {/* 6. Current-period Budget Summary or Historical Allocation Notice */}
       {isCurrentPeriod ? (
-        <Card variant="flat" className="flex flex-col gap-3 p-4 border border-border/30 bg-surface shadow-sm">
+        <Card variant="flat" className="flex flex-col gap-3.5 p-4 border border-border/30 bg-surface shadow-sm">
+          {/* Header */}
           <div className="flex items-center justify-between">
             <span className="text-label-caps text-text-secondary font-bold uppercase tracking-wider">
               Anggaran Periode
             </span>
-            <span className={`text-[11px] font-bold ${
-              budgetStatus.status === 'aman'
-                ? 'text-aman'
-                : budgetStatus.status === 'waspada'
-                ? 'text-waspada'
-                : 'text-bahaya'
-            }`}>
-              {budgetUsageLabel} terpakai
-            </span>
           </div>
 
+          {/* Main 2-column metrics */}
+          <div className="flex items-end justify-between gap-3 pt-0.5">
+            <div className="flex flex-col gap-0.5 min-w-0">
+              <span className="text-[11px] text-text-secondary font-medium">
+                Total Terpakai
+              </span>
+              <span className="font-display text-headline-sm font-bold text-text-primary truncate">
+                {formatRupiah(totals.totalExpense)}
+              </span>
+            </div>
+            <div className="flex flex-col items-end gap-0.5 text-right min-w-0">
+              <span className="text-[11px] text-text-secondary font-medium">
+                Dari Total Anggaran
+              </span>
+              <span className="font-display text-headline-sm font-bold text-text-primary truncate">
+                {formatRupiah(totalMonthlyAllocation)}
+              </span>
+            </div>
+          </div>
+
+          {/* Progress Bar */}
           <ProgressBar
             value={budgetUsageRatioClamped}
-            variant={budgetStatus.status === 'overbudget' ? 'bahaya' : budgetStatus.status}
+            variant={
+              budgetStatus.status === 'aman'
+                ? 'neutral'
+                : budgetStatus.status === 'overbudget'
+                ? 'bahaya'
+                : budgetStatus.status
+            }
             height="md"
           />
 
-          <div className="flex items-center justify-between text-[11px] mt-1">
-            <span className="text-text-muted">Sisa anggaran</span>
-            <span className={`font-display font-bold ${
-              remainingAllocation >= 0 ? 'text-aman' : 'text-bahaya'
-            }`}>
-              {remainingAllocation < 0 ? `-${formatRupiah(Math.abs(remainingAllocation))}` : formatRupiah(remainingAllocation)}
+          {/* Compact Footer */}
+          <div className="flex items-center justify-between text-xs pt-0.5">
+            <span
+              className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                budgetStatus.status === 'overbudget' || budgetStatus.status === 'bahaya'
+                  ? 'bg-bahaya-soft text-bahaya'
+                  : budgetStatus.status === 'waspada'
+                  ? 'bg-waspada-soft text-waspada'
+                  : 'bg-primary-soft text-primary'
+              }`}
+            >
+              {budgetUsageLabel} Terpakai
             </span>
-          </div>
 
-          <div className="flex items-center justify-between text-[11px]">
-            <span className="text-text-muted">Pengeluaran</span>
-            <span className="font-display font-semibold text-text-secondary">
-              {formatRupiah(totals.totalExpense)}
-            </span>
-          </div>
-
-          <div className="flex items-center justify-between text-[11px]">
-            <span className="text-text-muted">Total alokasi</span>
-            <span className="font-display font-semibold text-text-secondary">
-              {formatRupiah(totalMonthlyAllocation)}
+            <span
+              className={`font-display text-xs font-bold ${
+                remainingAllocation >= 0 ? 'text-aman' : 'text-bahaya'
+              }`}
+            >
+              {remainingAllocation >= 0
+                ? `Sisa ${formatRupiah(remainingAllocation)}`
+                : `Melebihi ${formatRupiah(Math.abs(remainingAllocation))}`}
             </span>
           </div>
         </Card>

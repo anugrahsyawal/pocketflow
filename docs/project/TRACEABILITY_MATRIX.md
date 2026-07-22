@@ -25,12 +25,15 @@ inventory.
 | 8.4 | Aggregate Weekly Usage | `PR-012`, `PR-013`, `DEC-019` | `WeeklyBudgetUsageChart`; `cfb1b53` | [Phase 6C](../walkthroughs/phase-6c-budget-vs-actual-and-weekly-usage.md) | Done |
 | 8.5 | Informational Sinking recommendation | `PR-014`, `DEC-020` | `SinkingFundRecommendationCard`; `9297f37` | [Phase 6D](../walkthroughs/phase-6d-rule-based-insights-and-sinking-fund.md); historical limitation accepted | Partially Done |
 | 8.6 | Deterministic rule insights | `PR-011` | `RuleBasedInsightsCard`; `9297f37` | PO manual verification/acceptance 2026-07-21 | Done |
+| 4.3a | Budget Reallocation Transfer | `DEC-023` | `AddTransferPage.tsx`, `balanceCalculations.ts`, `reportCalculations.ts` | [budget-reallocation-transfer.md](../walkthroughs/budget-reallocation-transfer.md) | Implemented / Ready for Review |
+| 4.8 | Payment Pocket Budget Attribution & Config | `DEC-024` | `PocketDetailPage.tsx`, `usePocketStore.ts`, `balanceCalculations.ts`, `AddExpensePage.tsx`, `TransactionEditPage.tsx` | [payment-pocket-budget-attribution.md](../walkthroughs/payment-pocket-budget-attribution.md), [pocket-cash-nfc-budget-owner-config.md](../walkthroughs/pocket-cash-nfc-budget-owner-config.md) | Implemented / Ready for Review |
+| 4.1/4.3/8.1/8.2 | UI Refinements (Selector Pills, Reports Period/Card/Export) | `DL-013`, `DL-015` | `AddIncomePage.tsx`, `AddTransferPage.tsx`, `ReportsPage.tsx` | [income-transfer-selector-ui-refinement.md](../walkthroughs/income-transfer-selector-ui-refinement.md), [reports-full-width-period-selector.md](../walkthroughs/reports-full-width-period-selector.md), [reports-anggaran-periode-card-stitch-alignment.md](../walkthroughs/reports-anggaran-periode-card-stitch-alignment.md), [reports-export-csv-button-refinement.md](../walkthroughs/reports-export-csv-button-refinement.md) | Implemented / Ready for Review |
 | 9.1 | Local/offline input | `PR-017` | Zustand/localStorage persistence | Local persistence exists; offline app shell unverified/absent | Partially Done |
 | 9.2-9.3 | Remote sync/status | `PR-021` | No backend or sync queue | Contracts TBD | Deferred |
 | 10.1 | Selected-period CSV | `PR-015` | `frontend/src/lib/reportCsv.ts`; `cc39670` | Reports accepted 2026-07-21 | Done |
 | 10.2-10.4 | JSON/server backup and restore | `PR-022` | No implementation | Refinement Needed; not Phase 6E blocker | Refinement Needed |
-| 11.1 | Mobile-first UI | `PR-001` | AppShell and feature screens | Full cross-page 375/390/430 verification pending Phase 6E | In Progress |
-| 11.2-11.3 | Installable/offline PWA | `PR-017` | Manifest exists; icons/service worker missing | Installability not verified | Partially Done / Not Started |
+| 11.1 | Mobile-first UI | `PR-001` | AppShell and feature screens | Cross-page 375/390/430 manual verification passed | Implemented / Ready for Review |
+| 11.2-11.3 | Installable/offline PWA | `PR-017` | Manifest & icons exist in `frontend/public/`; service worker absent | Manifest & icons verified; installability & offline shell pending | Partially Done |
 | 12.1 | Production authentication | `PR-018` | Mock frontend auth only | Provider/session/backend enforcement TBD | Refinement Needed |
 | 13.1-13.2 | Goals | `PR-016`, `DL-009` | No implementation | MVP direction accepted; details TBD | Refinement Needed |
 | SUP-1 | Settings capability hub | Product direction | Placeholder/supporting UI | Incomplete | Refinement Needed |

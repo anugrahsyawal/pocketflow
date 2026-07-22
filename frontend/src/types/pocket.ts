@@ -15,6 +15,7 @@ export interface TemplatePocket {
   initialBalance: number;
   isSpendable: boolean;
   isArchived: boolean;
+  budgetOwnerPocketId?: string;
 }
 
 export interface Pocket extends TemplatePocket {

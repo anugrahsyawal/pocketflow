@@ -174,11 +174,11 @@ export function TransactionDetailPage() {
     typeIcon = 'add_circle';
     typeIconColor = 'text-aman';
   } else if (transaction.type === 'transfer') {
-    title = 'Detail Transfer';
+    title = transaction.transferType === 'budget-reallocation' ? 'Detail Pindah Alokasi' : 'Detail Transfer';
     heroAmount = formatRupiah(transaction.amount);
     amountColor = 'text-text-primary';
-    typeLabel = 'Transfer';
-    typeIcon = 'swap_horiz';
+    typeLabel = transaction.transferType ? (TRANSFER_TYPE_LABELS[transaction.transferType] || 'Transfer') : 'Transfer';
+    typeIcon = transaction.transferType === 'budget-reallocation' ? 'published_with_changes' : 'swap_horiz';
     typeIconColor = 'text-primary';
   }
 
@@ -223,11 +223,22 @@ export function TransactionDetailPage() {
                 </span>
               </div>
               <div className="flex justify-between items-center py-1 border-t border-border/40">
-                <span className="text-body-sm text-text-secondary">Dari Pocket</span>
+                <span className="text-body-sm text-text-secondary">Pocket Pembayaran</span>
                 <span className="font-display text-body-sm font-bold text-text-primary">
                   {pocket ? `${pocket.emoji} ${pocket.name}` : 'Pocket tidak tersedia'}
                 </span>
               </div>
+              {transaction.budgetPocketId && transaction.budgetPocketId !== transaction.pocketId && (
+                <div className="flex justify-between items-center py-1 border-t border-border/40">
+                  <span className="text-body-sm text-text-secondary">Diambil dari Budget</span>
+                  <span className="font-display text-body-sm font-bold text-primary">
+                    {(() => {
+                      const budgetP = getPocketById(transaction.budgetPocketId);
+                      return budgetP ? `${budgetP.emoji} ${budgetP.name}` : 'Pocket tidak tersedia';
+                    })()}
+                  </span>
+                </div>
+              )}
             </>
           )}
 
@@ -257,17 +268,22 @@ export function TransactionDetailPage() {
                 </span>
               </div>
               <div className="flex justify-between items-center py-1 border-t border-border/40">
-                <span className="text-body-sm text-text-secondary">Dari Pocket</span>
+                <span className="text-body-sm text-text-secondary">Dari Pocket (Sumber)</span>
                 <span className="font-display text-body-sm font-bold text-text-primary">
                   {fromPocket ? `${fromPocket.emoji} ${fromPocket.name}` : 'Pocket tidak tersedia'}
                 </span>
               </div>
               <div className="flex justify-between items-center py-1 border-t border-border/40">
-                <span className="text-body-sm text-text-secondary">Ke Pocket</span>
+                <span className="text-body-sm text-text-secondary">Ke Pocket (Tujuan)</span>
                 <span className="font-display text-body-sm font-bold text-text-primary">
                   {toPocket ? `${toPocket.emoji} ${toPocket.name}` : 'Pocket tidak tersedia'}
                 </span>
               </div>
+              {transaction.transferType === 'budget-reallocation' && (
+                <div className="mt-1 p-2.5 bg-primary-soft/30 rounded-lg border border-primary/20 text-xs text-text-secondary">
+                  Saldo dan alokasi budget periode aktif dipindahkan. Transaksi ini bukan pengeluaran.
+                </div>
+              )}
             </>
           )}
 

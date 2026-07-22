@@ -6,9 +6,14 @@ import { Button } from '@/components/ui/Button';
 import { usePocketStore } from '@/features/pockets/usePocketStore';
 import { useTransactionStore } from '@/features/transactions/useTransactionStore';
 import { formatRupiah } from '@/lib/currency';
-import { getPocketEffectiveBalance } from '@/lib/balanceCalculations';
+import {
+  getPocketEffectiveBalance,
+  getPocketUsedAmount,
+  getPocketReallocationsInPeriod,
+} from '@/lib/balanceCalculations';
+import { getBudgetPeriod, isValidLocalDateString } from '@/lib/budgetPeriod';
 import { PocketPickerField } from '@/features/transactions/components/PocketPickerField';
-import { TRANSFER_TYPE_LABELS } from '@/data/constants';
+import { TRANSFER_TYPE_LABELS, TRANSFER_TYPE_EMOJIS } from '@/data/constants';
 import type { TransferType } from '@/types/transaction';
 
 const TRANSFER_TYPES = Object.keys(TRANSFER_TYPE_LABELS) as TransferType[];
@@ -36,7 +41,7 @@ export function AddTransferPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
-  
+
   const queryFromPocketId = searchParams.get('fromPocketId') || '';
   const queryToPocketId = searchParams.get('toPocketId') || '';
 
@@ -52,14 +57,13 @@ export function AddTransferPage() {
 
   // Form state
   const [amountStr, setAmountStr] = useState('');
-  
+
   const [fromPocketId, setFromPocketId] = useState(() => {
     const match = activePockets.find((p) => p.id === queryFromPocketId);
     return match ? match.id : '';
   });
 
   const [toPocketId, setToPocketId] = useState(() => {
-    // Cannot be the same as fromPocketId
     const resolvedFrom = activePockets.find((p) => p.id === queryFromPocketId)?.id || '';
     const match = activePockets.find((p) => p.id === queryToPocketId);
     if (match && match.id !== resolvedFrom) {
@@ -101,11 +105,43 @@ export function AddTransferPage() {
     return isNaN(val) ? 0 : val;
   }, [amountStr]);
 
+  // Active budget period calculations for budget-reallocation validation & preview
+  const activePeriod = useMemo(() => {
+    if (isValidLocalDateString(date)) {
+      const parts = date.split('-').map(Number);
+      const d = new Date(parts[0] ?? 2026, (parts[1] ?? 1) - 1, parts[2] ?? 1);
+      return getBudgetPeriod(d);
+    }
+    return getBudgetPeriod();
+  }, [date]);
+
+  const fromPocketExpenseInActivePeriod = useMemo(() => {
+    if (!fromPocketId) return 0;
+    return getPocketUsedAmount(fromPocketId, transactions, activePeriod.startDate, activePeriod.endDate);
+  }, [fromPocketId, transactions, activePeriod]);
+
+  const fromPocketRealloc = useMemo(() => {
+    if (!fromPocketId) return { reallocationIn: 0, reallocationOut: 0, netReallocation: 0 };
+    return getPocketReallocationsInPeriod(fromPocketId, transactions, activePeriod.startDate, activePeriod.endDate);
+  }, [fromPocketId, transactions, activePeriod]);
+
+  const fromPocketBaseAlloc = fromPocket?.monthlyAllocation ?? 0;
+  const fromPocketCurrentRevisedAlloc = fromPocketBaseAlloc + fromPocketRealloc.netReallocation;
+  const fromPocketProjectedRevisedAlloc = fromPocketCurrentRevisedAlloc - parsedAmount;
+
+  const toPocketRealloc = useMemo(() => {
+    if (!toPocketId) return { reallocationIn: 0, reallocationOut: 0, netReallocation: 0 };
+    return getPocketReallocationsInPeriod(toPocketId, transactions, activePeriod.startDate, activePeriod.endDate);
+  }, [toPocketId, transactions, activePeriod]);
+
+  const toPocketBaseAlloc = toPocket?.monthlyAllocation ?? 0;
+  const toPocketCurrentRevisedAlloc = toPocketBaseAlloc + toPocketRealloc.netReallocation;
+  const toPocketProjectedRevisedAlloc = toPocketCurrentRevisedAlloc + parsedAmount;
+
   // Handlers
   const handleFromPocketChange = useCallback((pocketId: string) => {
     setFromPocketId(pocketId);
     setErrors([]);
-    // If destination is now the same as source, clear destination
     if (toPocketId === pocketId) {
       setToPocketId('');
     }
@@ -167,6 +203,15 @@ export function AddTransferPage() {
       validationErrors.push('Jenis transfer tidak valid.');
     }
 
+    // Budget validation for budget-reallocation
+    if (transferType === 'budget-reallocation' && fromPocket) {
+      if (fromPocketProjectedRevisedAlloc < fromPocketExpenseInActivePeriod) {
+        validationErrors.push(
+          `Alokasi revisi ${fromPocket.name} (${formatRupiah(fromPocketProjectedRevisedAlloc)}) tidak boleh lebih kecil dari total pengeluaran yang sudah tercatat (${formatRupiah(fromPocketExpenseInActivePeriod)}) pada periode aktif.`
+        );
+      }
+    }
+
     if (validationErrors.length > 0) {
       setErrors(validationErrors);
       return;
@@ -192,7 +237,22 @@ export function AddTransferPage() {
       setErrors(result.errors);
       setIsSubmitting(false);
     }
-  }, [isSubmitting, parsedAmount, fromPocketId, toPocketId, fromPocket, fromPocketBalance, date, time, transferType, note, addTransaction, navigate]);
+  }, [
+    isSubmitting,
+    parsedAmount,
+    fromPocketId,
+    toPocketId,
+    fromPocket,
+    fromPocketBalance,
+    date,
+    time,
+    transferType,
+    fromPocketProjectedRevisedAlloc,
+    fromPocketExpenseInActivePeriod,
+    note,
+    addTransaction,
+    navigate,
+  ]);
 
   // Empty state check: needs at least 2 active pockets
   if (activePockets.length < 2) {
@@ -293,25 +353,27 @@ export function AddTransferPage() {
           excludedPocketIds={fromPocketId ? [fromPocketId] : []}
         />
 
-        {/* Transfer Type Chips */}
+        {/* Transfer Type Selector */}
         <div className="flex flex-col gap-2">
           <label className="text-label-caps text-text-secondary font-bold px-1 tracking-wider">
             Jenis Transfer
           </label>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex w-full flex-wrap gap-2">
             {TRANSFER_TYPES.map((type) => {
               const isSelected = type === transferType;
+              const emoji = TRANSFER_TYPE_EMOJIS[type] || '↔️';
               return (
                 <button
                   key={type}
                   type="button"
                   onClick={() => { setTransferType(type); setErrors([]); }}
-                  className={`px-4 py-2 rounded-pill text-sm font-semibold border transition-all ${
+                  className={`inline-flex flex-[1_1_auto] min-w-fit max-w-full items-center justify-center gap-2 whitespace-nowrap rounded-full border px-3 py-2 text-body-sm font-semibold transition-colors ${
                     isSelected
-                      ? 'border-primary bg-primary-soft/40 text-primary'
-                      : 'border-border/40 bg-surface-container text-text-secondary hover:border-primary/30'
+                      ? 'border-primary bg-primary-soft text-primary ring-1 ring-primary/10'
+                      : 'border-border bg-background text-text-secondary hover:border-primary/40'
                   }`}
                 >
+                  <span className="text-sm">{emoji}</span>
                   {TRANSFER_TYPE_LABELS[type]}
                 </button>
               );
@@ -319,45 +381,126 @@ export function AddTransferPage() {
           </div>
         </div>
 
-        {/* Balance Preview Card */}
-        {fromPocket && toPocket && parsedAmount > 0 && (
-          <Card variant="flat" className="flex flex-col gap-3 p-3 border border-border/30">
-            <span className="text-[10px] font-bold text-text-secondary tracking-wider uppercase block">
-              Proyeksi Perubahan Saldo
+        {/* Explanation Card for Budget Reallocation */}
+        {transferType === 'budget-reallocation' && (
+          <Card variant="flat" className="bg-primary-soft/30 border border-primary/20 p-3.5 flex items-start gap-2.5">
+            <span className="material-symbols-rounded text-primary text-lg mt-0.5 flex-shrink-0" aria-hidden="true">
+              info
             </span>
-
-            {/* Source preview */}
-            <div className="flex flex-col gap-1 border-b border-border/30 pb-2">
-              <span className="text-[11px] font-semibold text-text-secondary block">
-                {fromPocket.emoji} {fromPocket.name} (Sumber)
+            <div className="flex flex-col gap-0.5 min-w-0">
+              <span className="text-body-sm font-bold text-text-primary">
+                Pindah Alokasi Budget
               </span>
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-text-muted">Saldo Saat Ini:</span>
-                <span className="font-body font-semibold text-text-primary">{formatRupiah(fromPocketBalance)}</span>
-              </div>
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-text-muted">Saldo Setelah Transfer:</span>
-                <span className={`font-display font-bold ${fromPocketBalance - parsedAmount < 0 ? 'text-bahaya' : 'text-text-primary'}`}>
-                  {formatRupiah(fromPocketBalance - parsedAmount)}
-                </span>
-              </div>
-            </div>
-
-            {/* Destination preview */}
-            <div className="flex flex-col gap-1 pt-1">
-              <span className="text-[11px] font-semibold text-text-secondary block">
-                {toPocket.emoji} {toPocket.name} (Tujuan)
+              <span className="text-xs text-text-secondary leading-relaxed">
+                Saldo dan alokasi budget periode aktif akan dipindahkan. Ini bukan pengeluaran.
               </span>
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-text-muted">Saldo Saat Ini:</span>
-                <span className="font-body font-semibold text-text-primary">{formatRupiah(toPocketBalance)}</span>
-              </div>
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-text-muted">Saldo Setelah Transfer:</span>
-                <span className="font-display font-bold text-aman">{formatRupiah(toPocketBalance + parsedAmount)}</span>
-              </div>
             </div>
           </Card>
+        )}
+
+        {/* Preview Card */}
+        {fromPocket && toPocket && parsedAmount > 0 && (
+          transferType === 'budget-reallocation' ? (
+            <Card variant="flat" className="flex flex-col gap-3 p-3.5 border border-primary/20 bg-primary-soft/20">
+              <div className="flex items-center justify-between border-b border-primary/10 pb-2">
+                <span className="text-[10px] font-bold text-primary tracking-wider uppercase">
+                  Proyeksi Pindah Alokasi Budget
+                </span>
+                <span className="text-[10px] text-text-muted">
+                  {activePeriod.label}
+                </span>
+              </div>
+
+              {/* Source projection */}
+              <div className="flex flex-col gap-1 border-b border-primary/10 pb-2">
+                <span className="text-[11px] font-semibold text-text-primary">
+                  {fromPocket.emoji} {fromPocket.name} (Sumber)
+                </span>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-text-muted">Pengurangan Alokasi:</span>
+                  <span className="font-display font-bold text-bahaya tabular-nums">
+                    -{formatRupiah(parsedAmount)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-text-muted">Alokasi Revisi:</span>
+                  <span className={`font-display font-bold tabular-nums ${fromPocketProjectedRevisedAlloc < fromPocketExpenseInActivePeriod ? 'text-bahaya' : 'text-text-primary'}`}>
+                    {formatRupiah(fromPocketProjectedRevisedAlloc)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-text-muted">Pengeluaran Tercatat:</span>
+                  <span className="font-display font-medium text-text-secondary tabular-nums">
+                    {formatRupiah(fromPocketExpenseInActivePeriod)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Destination projection */}
+              <div className="flex flex-col gap-1 border-b border-primary/10 pb-2">
+                <span className="text-[11px] font-semibold text-text-primary">
+                  {toPocket.emoji} {toPocket.name} (Tujuan)
+                </span>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-text-muted">Penambahan Alokasi:</span>
+                  <span className="font-display font-bold text-aman tabular-nums">
+                    +{formatRupiah(parsedAmount)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-text-muted">Alokasi Revisi:</span>
+                  <span className="font-display font-bold text-aman tabular-nums">
+                    {formatRupiah(toPocketProjectedRevisedAlloc)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Total Overall Budget Statement */}
+              <div className="flex items-center justify-between text-[11px] text-text-muted pt-0.5">
+                <span>Total alokasi seluruh pocket</span>
+                <span className="font-semibold text-text-primary">Tetap (tidak berubah)</span>
+              </div>
+            </Card>
+          ) : (
+            /* Balance Preview Card for regular transfers */
+            <Card variant="flat" className="flex flex-col gap-3 p-3 border border-border/30">
+              <span className="text-[10px] font-bold text-text-secondary tracking-wider uppercase block">
+                Proyeksi Perubahan Saldo
+              </span>
+
+              {/* Source preview */}
+              <div className="flex flex-col gap-1 border-b border-border/30 pb-2">
+                <span className="text-[11px] font-semibold text-text-secondary block">
+                  {fromPocket.emoji} {fromPocket.name} (Sumber)
+                </span>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-text-muted">Saldo Saat Ini:</span>
+                  <span className="font-body font-semibold text-text-primary">{formatRupiah(fromPocketBalance)}</span>
+                </div>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-text-muted">Saldo Setelah Transfer:</span>
+                  <span className={`font-display font-bold ${fromPocketBalance - parsedAmount < 0 ? 'text-bahaya' : 'text-text-primary'}`}>
+                    {formatRupiah(fromPocketBalance - parsedAmount)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Destination preview */}
+              <div className="flex flex-col gap-1 pt-1">
+                <span className="text-[11px] font-semibold text-text-secondary block">
+                  {toPocket.emoji} {toPocket.name} (Tujuan)
+                </span>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-text-muted">Saldo Saat Ini:</span>
+                  <span className="font-body font-semibold text-text-primary">{formatRupiah(toPocketBalance)}</span>
+                </div>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-text-muted">Saldo Setelah Transfer:</span>
+                  <span className="font-display font-bold text-aman">{formatRupiah(toPocketBalance + parsedAmount)}</span>
+                </div>
+              </div>
+            </Card>
+          )
         )}
 
         {/* Date & Time */}
@@ -394,7 +537,7 @@ export function AddTransferPage() {
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            placeholder="Contoh: Top up kartu MRT"
+            placeholder="Contoh: Pemindahan alokasi dari Food ke Personal Care"
             rows={2}
             className="px-3 py-2.5 rounded-card border border-border/40 bg-surface-container text-text-primary text-body-sm font-body resize-none focus:outline-none focus:border-primary transition-colors placeholder:text-text-disabled"
           />

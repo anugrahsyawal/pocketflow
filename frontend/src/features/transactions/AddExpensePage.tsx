@@ -7,7 +7,7 @@ import { usePocketStore } from '@/features/pockets/usePocketStore';
 import { useCategoryStore } from '@/features/categories/useCategoryStore';
 import { useTransactionStore } from '@/features/transactions/useTransactionStore';
 import { formatRupiah } from '@/lib/currency';
-import { getPocketEffectiveBalance } from '@/lib/balanceCalculations';
+import { getPocketEffectiveBalance, getDefaultBudgetPocketId } from '@/lib/balanceCalculations';
 import { PocketPickerField } from '@/features/transactions/components/PocketPickerField';
 import type { Pocket } from '@/types/pocket';
 
@@ -30,6 +30,7 @@ interface ExpenseDraft {
   draftId: string;
   amountStr: string;
   pocketId: string;
+  budgetPocketId: string;
   categoryId: string;
   date: string;
   time: string;
@@ -71,11 +72,17 @@ export function AddExpensePage() {
   // Form drafts state
   const [drafts, setDrafts] = useState<ExpenseDraft[]>(() => {
     const defaultPocket = activePockets.find((p) => p.id === preselectedPocketId) || activePockets[0];
+    const initialPaymentPocketId = defaultPocket ? defaultPocket.id : '';
+    const initialBudgetPocketId = initialPaymentPocketId
+      ? getDefaultBudgetPocketId(initialPaymentPocketId, activePockets)
+      : '';
+
     return [
       {
         draftId: `draft-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         amountStr: '',
-        pocketId: defaultPocket ? defaultPocket.id : '',
+        pocketId: initialPaymentPocketId,
+        budgetPocketId: initialBudgetPocketId,
         categoryId: '',
         date: getLocalDate(),
         time: getLocalTime(),
@@ -159,11 +166,16 @@ export function AddExpensePage() {
     if (drafts.length >= 20) return;
 
     const lastDraft = drafts.find((d) => d.draftId === activeDraftId) || drafts[drafts.length - 1];
+    const defaultPaymentPocketId = lastDraft ? lastDraft.pocketId : (activePockets[0]?.id || '');
+    const defaultBudgetPocketId = defaultPaymentPocketId
+      ? getDefaultBudgetPocketId(defaultPaymentPocketId, activePockets)
+      : '';
 
     const newDraft: ExpenseDraft = {
       draftId: `draft-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       amountStr: '',
-      pocketId: lastDraft ? lastDraft.pocketId : (activePockets[0]?.id || ''),
+      pocketId: defaultPaymentPocketId,
+      budgetPocketId: defaultBudgetPocketId,
       categoryId: '',
       date: lastDraft ? lastDraft.date : getLocalDate(),
       time: lastDraft ? lastDraft.time : getLocalTime(),
@@ -172,7 +184,7 @@ export function AddExpensePage() {
 
     setDrafts((prev) => [...prev, newDraft]);
     setActiveDraftId(newDraft.draftId);
-    
+
     setTimeout(() => {
       const el = document.getElementById(`draft-card-${newDraft.draftId}`);
       if (el) {
@@ -212,8 +224,11 @@ export function AddExpensePage() {
       prev.map((d) => {
         if (d.draftId !== draftId) return d;
         const result = { ...d, ...updates };
+
+        // When payment pocket is updated, set default budget owner pocket
         if (updates.pocketId !== undefined && updates.pocketId !== d.pocketId) {
-          result.categoryId = ''; 
+          result.categoryId = '';
+          result.budgetPocketId = getDefaultBudgetPocketId(updates.pocketId, activePockets);
         }
         return result;
       })
@@ -224,7 +239,7 @@ export function AddExpensePage() {
       delete copy[draftId];
       return copy;
     });
-  }, []);
+  }, [activePockets]);
 
   // Form Submit validation and action
   const handleSubmit = useCallback(() => {
@@ -310,6 +325,7 @@ export function AddExpensePage() {
       type: 'expense' as const,
       amount: parseAmount(d.amountStr),
       pocketId: d.pocketId,
+      budgetPocketId: getDefaultBudgetPocketId(d.pocketId, pockets),
       categoryId: d.categoryId || undefined,
       date: d.date,
       time: d.time,
@@ -375,6 +391,9 @@ export function AddExpensePage() {
             const isFirst = index === 0;
 
             const selectedPocket = pocketMap.get(draft.pocketId);
+            const selectedBudgetPocket = pocketMap.get(draft.budgetPocketId || draft.pocketId);
+            const isAttributedDifferent = draft.budgetPocketId && draft.budgetPocketId !== draft.pocketId;
+
             const pocketCategories = selectedPocket ? getCategoriesByPocketId(selectedPocket.id) : [];
             const parsedAmountValue = parseAmount(draft.amountStr);
             const displayValue = parsedAmountValue > 0 ? formatNumberWithDots(parsedAmountValue) : '';
@@ -541,7 +560,7 @@ export function AddExpensePage() {
                     {/* Balance Preview */}
                     {selectedPocket && parsedAmountValue > 0 && (
                       <Card variant="flat" className="flex items-center justify-between text-[11px] p-2.5 border border-border bg-surface-container/20">
-                        <span className="text-text-secondary">Saldo setelah transaksi:</span>
+                        <span className="text-text-secondary">Saldo {selectedPocket.name} setelah transaksi:</span>
                         <span className={`font-display font-bold ${
                           balanceInfo.projectedAfter < 0 ? 'text-bahaya' : 'text-aman'
                         }`}>
@@ -577,6 +596,11 @@ export function AddExpensePage() {
                           </div>
                           <div className="text-[10px] text-text-secondary flex items-center gap-1 min-w-0 truncate">
                             <span className="truncate">{selectedPocket ? `${selectedPocket.emoji} ${selectedPocket.name}` : 'Pocket tidak tersedia'}</span>
+                            {isAttributedDifferent && selectedBudgetPocket && (
+                              <span className="text-primary font-medium truncate">
+                                (Budget: {selectedBudgetPocket.name})
+                              </span>
+                            )}
                             <span className="text-text-muted">•</span>
                             <span className="truncate">
                               {(() => {

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { AppShell } from '@/components/layout/AppShell';
 import { TopBar } from '@/components/layout/TopBar';
@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { ProgressBar } from '@/components/ui/ProgressBar';
+import { BottomSheet } from '@/components/ui/BottomSheet';
 import { usePocketStore } from '@/features/pockets/usePocketStore';
 import { useCategoryStore } from '@/features/categories/useCategoryStore';
 import { useTransactionStore } from '@/features/transactions/useTransactionStore';
@@ -17,14 +18,20 @@ import {
   getPocketEffectiveBalance,
   getPocketUsedAmount,
   getPocketBudgetStatus,
+  getDefaultBudgetPocketId,
 } from '@/lib/balanceCalculations';
 
 export function PocketDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  
+
+  const pockets = usePocketStore((s) => s.pockets);
   const getPocketById = usePocketStore((s) => s.getPocketById);
+  const updatePocketBudgetOwner = usePocketStore((s) => s.updatePocketBudgetOwner);
+
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
+
   const pocket = useMemo(() => (id ? getPocketById(id) : undefined), [id, getPocketById]);
 
   // If pocket is missing, archived, inactive, show not-found view
@@ -71,6 +78,31 @@ export function PocketDetailPage() {
     return getPocketBudgetStatus(usedAmount, pocket.monthlyAllocation);
   }, [usedAmount, pocket.monthlyAllocation]);
 
+  // Budget Owner Configuration logic for Cash & NFC
+  const isCashOrNfcPocket = useMemo(() => {
+    const idLower = pocket.id.toLowerCase();
+    const nameLower = pocket.name.toLowerCase();
+    return idLower === 'cash' || idLower === 'nfc-card' || nameLower.includes('cash') || nameLower.includes('nfc');
+  }, [pocket]);
+
+  const effectiveBudgetOwnerId = useMemo(() => {
+    return getDefaultBudgetPocketId(pocket.id, pockets);
+  }, [pocket.id, pockets]);
+
+  const configuredOwnerPocket = useMemo(() => {
+    return pockets.find((p) => p.id === effectiveBudgetOwnerId);
+  }, [pockets, effectiveBudgetOwnerId]);
+
+  const isConfiguredOwnerInactive = useMemo(() => {
+    if (!pocket.budgetOwnerPocketId) return false;
+    const target = pockets.find((p) => p.id === pocket.budgetOwnerPocketId);
+    return !target || !target.isActive || target.isArchived;
+  }, [pocket.budgetOwnerPocketId, pockets]);
+
+  const activeSelectablePockets = useMemo(() => {
+    return pockets.filter((p) => p.isActive && !p.isArchived && p.id !== pocket.id);
+  }, [pockets, pocket.id]);
+
   const pocketTransactions = useMemo(() => {
     const filtered = transactions.filter((t) => {
       if (t.isArchived) return false;
@@ -112,7 +144,7 @@ export function PocketDetailPage() {
           <div className="flex items-center justify-center w-16 h-16 rounded-pocket bg-surface-container-high text-4xl shadow-card">
             {pocket.emoji}
           </div>
-          
+
           {/* Name & Group info */}
           <div>
             <h2 className="font-display text-headline-md text-text-primary">
@@ -159,6 +191,47 @@ export function PocketDetailPage() {
                 <span>Terpakai: {formatRupiah(usedAmount)}</span>
                 <span>Limit: {formatRupiah(pocket.monthlyAllocation!)}</span>
               </div>
+            </Card>
+          </div>
+        )}
+
+        {/* Section: Budget Owner Configuration (Only for Cash & NFC) */}
+        {isCashOrNfcPocket && (
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between px-1">
+              <span className="text-label-caps text-text-secondary font-bold">
+                Budget untuk Pengeluaran
+              </span>
+              <button
+                type="button"
+                onClick={() => setIsPickerOpen(true)}
+                className="text-xs font-bold text-primary hover:underline flex items-center gap-1"
+              >
+                <span className="material-symbols-rounded text-sm">edit</span>
+                Ubah
+              </button>
+            </div>
+            <Card variant="flat" className="flex flex-col gap-2 p-3 bg-surface border border-border/30 shadow-card">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex items-center justify-center w-9 h-9 rounded-pocket bg-primary-soft text-xl flex-shrink-0">
+                    {configuredOwnerPocket ? configuredOwnerPocket.emoji : '👛'}
+                  </div>
+                  <div>
+                    <div className="font-display text-body-md font-bold text-text-primary">
+                      {configuredOwnerPocket ? configuredOwnerPocket.name : 'Pocket tidak aktif'}
+                    </div>
+                    <div className="text-[11px] text-text-muted">
+                      {isConfiguredOwnerInactive
+                        ? 'Pocket budget owner tidak aktif. Pengeluaran baru akan dicatat ke pocket ini sendiri.'
+                        : 'Budget owner aktif untuk pengeluaran baru'}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p className="text-[11px] text-text-secondary mt-1 pt-2 border-t border-border/20 leading-relaxed">
+                Pengeluaran dari pocket ini akan mengurangi saldonya, lalu dicatat ke budget yang dipilih.
+              </p>
             </Card>
           </div>
         )}
@@ -292,7 +365,7 @@ export function PocketDetailPage() {
                         } else if (t.type === 'transfer') {
                           const transferLabel = t.transferType ? (TRANSFER_TYPE_LABELS[t.transferType] || 'Transfer') : 'Transfer';
                           title = transferLabel;
-                          
+
                           if (t.fromPocketId === pocket.id) {
                             const toP = t.toPocketId ? getPocketById(t.toPocketId) : undefined;
                             sub = toP ? `Ke ${toP.name}` : 'Ke Pocket tidak tersedia';
@@ -373,6 +446,58 @@ export function PocketDetailPage() {
             Tambah Pengeluaran
           </Button>
         </div>
+
+        {/* Budget Owner Picker Sheet */}
+        <BottomSheet
+          isOpen={isPickerOpen}
+          onClose={() => setIsPickerOpen(false)}
+          title="Pilih Budget Owner"
+        >
+          <div className="flex flex-col gap-3 max-h-[60dvh] overflow-y-auto pb-4">
+            <p className="text-xs text-text-secondary px-1">
+              Pilih pocket pemilik budget yang akan dicatat untuk transaksi pengeluaran dari <strong className="text-text-primary">{pocket.name}</strong>.
+            </p>
+            <div className="flex flex-col gap-2 mt-1">
+              {activeSelectablePockets.map((p) => {
+                const isSelected = p.id === effectiveBudgetOwnerId;
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => {
+                      updatePocketBudgetOwner(pocket.id, p.id);
+                      setIsPickerOpen(false);
+                    }}
+                    className={`flex items-center justify-between p-3 rounded-card border transition-all text-left ${
+                      isSelected
+                        ? 'border-primary bg-primary-soft/30'
+                        : 'border-border/30 bg-surface-container/60 hover:border-primary/20'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center justify-center w-9 h-9 rounded-pocket bg-surface-container-high text-xl flex-shrink-0">
+                        {p.emoji}
+                      </div>
+                      <div>
+                        <div className="font-display text-body-md font-bold text-text-primary">
+                          {p.name}
+                        </div>
+                        <div className="text-[10px] text-text-muted">
+                          {p.monthlyAllocation ? `Budget: ${formatRupiah(p.monthlyAllocation)}` : 'Wallet'}
+                        </div>
+                      </div>
+                    </div>
+                    {isSelected && (
+                      <span className="material-symbols-rounded text-primary text-xl flex-shrink-0">
+                        check_circle
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </BottomSheet>
       </div>
     </AppShell>
   );

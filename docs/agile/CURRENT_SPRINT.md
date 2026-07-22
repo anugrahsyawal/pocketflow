@@ -1,8 +1,8 @@
 # Current Sprint
 
 Sprint: Frontend MVP Completion
-Status: In Progress
-Current checkpoint: Documentation normalization and Product Owner review
+Status: Ready for Review
+Current checkpoint: Phase 6E Integrated QA, Budget Reallocation, Payment Pocket Attribution & Frontend Polish
 
 ## Terminology
 
@@ -14,13 +14,16 @@ implementation or verification substage inside the Sprint.
 Finish integrated frontend quality work and produce a truthful, traceable
 handoff before backend planning begins.
 
-## Completed phase
+## Completed phases & polish
 
-Phase 6D - Rule-Based Insights and Sinking Fund Recommendation is Done.
-Product Owner manual verification and acceptance: 2026-07-21.
-Pushed commit: `9297f37`.
+- Phase 6D - Rule-Based Insights and Sinking Fund Recommendation (Done, commit `9297f37`).
+- Phase 6E - Integrated Reports QA, PWA Asset Verification, and Frontend Polish (Done in current worktree).
+- MVP Pindah Alokasi Budget (`budget-reallocation`) transfer type (Done in current worktree).
+- Payment Pocket Budget Owner Configuration for Cash & NFC Card (Done in current worktree).
+- Income Source & Transfer Type flex-wrap pill selector UI refinement (Done in current worktree).
+- Reports UI alignment: full-width period selector, Google Stitch Iteration 3 Anggaran Periode card, and Export CSV button refinement (Done in current worktree).
 
-## Current committed checkpoint
+## Completed checkpoint
 
 Documentation-only normalization:
 
@@ -30,22 +33,12 @@ Documentation-only normalization:
 - record traceability, risks, acceptance gates, and handoff;
 - preserve legacy material until the Product Owner reviews the diff.
 
-No application-source changes, dependency additions, staging, commits, pushes,
-or Phase 6E implementation are in scope for this checkpoint.
+The documentation checkpoint was accepted, committed as `e35756b`, pushed, and
+followed by clean worktree confirmations.
 
-## Next approved phase - not started
+## Active status
 
-Phase 6E - Integrated Reports QA and frontend polish:
-
-- integrated Reports regression and state coverage;
-- cross-page/mobile regression at 375px, 390px, and 430px;
-- runtime console review and warning triage;
-- PWA icon/metadata/installability quality work;
-- frontend architecture/handoff accuracy;
-- frontend-to-backend contract preparation only where explicitly approved.
-
-Phase 6E may start only after the current docs are reviewed, committed in one
-targeted commit, pushed, and the worktree is clean.
+All frontend implementation and verification items are complete. Code is ready for Product Owner review and commit.
 
 ## Explicitly out of scope
 

@@ -9,6 +9,7 @@ interface PocketState {
   hasInitializedFromSetup: boolean;
 
   initializeFromSetup: (selectedPocketIds: string[], initialBalances: Record<string, number>) => void;
+  updatePocketBudgetOwner: (pocketId: string, budgetOwnerPocketId: string | null) => void;
   resetPocketStore: () => void;
 
   // Helpers / Selectors (available via hook or store instance)
@@ -49,8 +50,9 @@ export const usePocketStore = create<PocketState>()(
             initialBalance: startingBalance,
             currentBalance: startingBalance,
             isSpendable: p.isSpendable,
-            isActive: true,
             isArchived: false,
+            budgetOwnerPocketId: p.budgetOwnerPocketId,
+            isActive: true,
             createdAt: now,
             updatedAt: now,
           };
@@ -60,6 +62,20 @@ export const usePocketStore = create<PocketState>()(
           pockets: initializedPockets,
           hasInitializedFromSetup: true,
         });
+      },
+
+      updatePocketBudgetOwner: (pocketId, budgetOwnerPocketId) => {
+        const now = new Date().toISOString();
+        set((state) => ({
+          pockets: state.pockets.map((p) => {
+            if (p.id !== pocketId) return p;
+            return {
+              ...p,
+              budgetOwnerPocketId: budgetOwnerPocketId || undefined,
+              updatedAt: now,
+            };
+          }),
+        }));
       },
 
       resetPocketStore: () => {

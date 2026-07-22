@@ -20,6 +20,16 @@ export const TRANSFER_TYPE_LABELS: Record<string, string> = {
   'top-up-nfc': 'Top up NFC',
   'reimbursement': 'Reimbursement',
   'saving-allocation': 'Alokasi tabungan',
+  'budget-reallocation': 'Pindah Alokasi Budget',
+};
+
+export const TRANSFER_TYPE_EMOJIS: Record<string, string> = {
+  'normal': '↔️',
+  'tarik-tunai': '💵',
+  'top-up-nfc': '💳',
+  'reimbursement': '🔄',
+  'saving-allocation': '🏦',
+  'budget-reallocation': '🔀',
 };
 
 export const INCOME_SOURCE_LABELS: Record<string, string> = {
@@ -28,6 +38,14 @@ export const INCOME_SOURCE_LABELS: Record<string, string> = {
   'cashback': 'Cashback',
   'reimbursement': 'Reimbursement',
   'other': 'Lainnya',
+};
+
+export const INCOME_SOURCE_EMOJIS: Record<string, string> = {
+  'gaji': '💼',
+  'bonus': '🎁',
+  'cashback': '✨',
+  'reimbursement': '🔄',
+  'other': '📝',
 };
 
 export const QUICK_AMOUNT_CHIPS = [3000, 5000, 10000, 15000, 20000, 25000, 50000];

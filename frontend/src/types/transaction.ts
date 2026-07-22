@@ -1,6 +1,6 @@
 export type TransactionType = 'income' | 'expense' | 'transfer';
 
-export type TransferType = 'normal' | 'tarik-tunai' | 'top-up-nfc' | 'reimbursement' | 'saving-allocation';
+export type TransferType = 'normal' | 'tarik-tunai' | 'top-up-nfc' | 'reimbursement' | 'saving-allocation' | 'budget-reallocation';
 
 export type IncomeSource = 'gaji' | 'bonus' | 'cashback' | 'reimbursement' | 'other';
 
@@ -14,6 +14,7 @@ export interface Transaction {
   categoryId?: string;
   transferType?: TransferType;
   incomeSource?: IncomeSource;
+  budgetPocketId?: string;
   date: string;
   time: string;
   note: string;

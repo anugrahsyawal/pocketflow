@@ -380,7 +380,14 @@ export function TransactionHistoryPage() {
                     if (t.type === 'expense') {
                       const category = t.categoryId ? getCategoryById(t.categoryId) : undefined;
                       rowTitle = category ? `${category.emoji} ${category.name}` : 'Tanpa kategori';
-                      sub = pocket ? pocket.name : 'Pocket tidak tersedia';
+                      const payPocketName = pocket ? pocket.name : 'Pocket tidak tersedia';
+                      if (t.budgetPocketId && t.budgetPocketId !== t.pocketId) {
+                        const budgetP = getPocketById(t.budgetPocketId);
+                        const budgetPocketName = budgetP ? budgetP.name : 'Pocket budget';
+                        sub = `${payPocketName} → Budget: ${budgetPocketName}`;
+                      } else {
+                        sub = payPocketName;
+                      }
                       iconName = 'remove_circle';
                       iconBg = 'bg-bahaya-soft';
                       iconColor = 'text-bahaya';
@@ -401,9 +408,15 @@ export function TransactionHistoryPage() {
                       const fromName = fromPocket ? fromPocket.name : 'Pocket tidak tersedia';
                       const toName = toPocket ? toPocket.name : 'Pocket tidak tersedia';
                       sub = `${fromName} → ${toName}`;
-                      iconName = 'swap_horiz';
-                      iconBg = 'bg-primary-soft';
-                      iconColor = 'text-primary';
+                      if (t.transferType === 'budget-reallocation') {
+                        iconName = 'published_with_changes';
+                        iconBg = 'bg-primary-soft/60 border border-primary/20';
+                        iconColor = 'text-primary font-bold';
+                      } else {
+                        iconName = 'swap_horiz';
+                        iconBg = 'bg-primary-soft';
+                        iconColor = 'text-primary';
+                      }
                       amountText = formatRupiah(t.amount);
                       amountColor = 'text-text-primary';
                     }
