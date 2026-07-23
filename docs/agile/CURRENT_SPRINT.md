@@ -1,8 +1,8 @@
 # Current Sprint
 
 Sprint: Frontend MVP Completion
-Status: Ready for Review
-Current checkpoint: Phase 6E Integrated QA, Budget Reallocation, Payment Pocket Attribution & Frontend Polish
+Status: In Progress
+Current checkpoint: Phase 7B entry preparation -- Backend Foundation
 
 ## Terminology
 
@@ -38,7 +38,9 @@ followed by clean worktree confirmations.
 
 ## Active status
 
-All frontend implementation and verification items are complete. Code is ready for Product Owner review and commit.
+Frontend MVP work is committed through `b3d7f99`. Phase 7A decisions are
+approved. Phase 7B may begin with a bounded backend foundation task for
+Antigravity; production deployment remains a separate approved phase.
 
 ## Explicitly out of scope
 

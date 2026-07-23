@@ -2,7 +2,7 @@
 
 Status: Canonical
 Owner: Product Owner (Kyune)
-Last updated: 2026-07-21
+Last updated: 2026-07-23
 Supersedes as an active authority: `docs/decision-log.md`
 
 Accepted decisions record product or delivery rules that future agents must
@@ -211,6 +211,55 @@ attribution into `t.budgetPocketId` at creation time. Updating the owner
 mapping on Pocket Detail does not retroactively alter stored attribution of
 historical transactions. Editing an existing transaction preserves its stored
 `budgetPocketId` unless the user explicitly changes the payment pocket.
+
+### DEC-025 - Phase 7 backend core direction
+
+Date: 2026-07-22
+Status: Accepted
+
+Decision: PocketFlow backend planning uses TypeScript, Fastify, and PostgreSQL.
+The MVP is one owner account with no public sign-up. The implementation must
+use schema validation, integer Rupiah amounts, PostgreSQL relational
+constraints, UUID entity IDs, and transaction-derived balances. ORM/query-layer
+selection remains pending an approved technical comparison.
+
+### DEC-026 - Production authentication and sync integrity direction
+
+Date: 2026-07-22
+Status: Accepted
+
+Decision: Production authentication starts with owner email/password, Argon2id
+password hashing, and secure HttpOnly cookie sessions; password reset waits for
+an approved email provider. Local-first data may later sync to a
+server-authoritative backend. Mutations require idempotency IDs; edits use
+revisions and must not silently resolve finance conflicts with last-write-wins.
+Archive remains reversible. Permanent delete produces a tombstone until an
+approved retention/purge policy exists.
+
+### DEC-027 - Phase 7B persistence, migration, and conflict choices
+
+Date: 2026-07-23
+Status: Accepted
+
+Decision: Phase 7B uses Drizzle ORM with PostgreSQL. Existing browser
+LocalStorage data moves only through a one-time, user-initiated export/import
+workflow with validation; it is never silently overwritten or discarded.
+Transaction permanent-delete tombstones remain for 30 days before physical
+purge. The initial sync conflict experience is Reload-only: financial edits
+must reload current server state before retrying, with no silent merge or
+Keep-Mine / Use-Server UI.
+
+### DEC-028 - Backup and deployment baseline
+
+Date: 2026-07-23
+Status: Accepted
+
+Decision: Production direction is a managed application platform with managed
+PostgreSQL. Backups are encrypted, run daily, retain 30 days, undergo a
+monthly restore test, and may be initiated only by the owner. Exact deployment
+provider, region, domain/DNS, and operating budget are selected when a
+production deployment phase is approved; they do not block Phase 7B local
+application development.
 
 ## Pending decisions
 
