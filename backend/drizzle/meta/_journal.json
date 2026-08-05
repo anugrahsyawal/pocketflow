@@ -8,6 +8,13 @@
       "when": 1785902725447,
       "tag": "0000_misty_lucky_pierre",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1785903462956,
+      "tag": "0001_slippery_kate_bishop",
+      "breakpoints": true
     }
   ]
 }

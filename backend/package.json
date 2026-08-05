@@ -8,7 +8,9 @@
     "build": "tsc",
     "start": "node --env-file=.env dist/server.js",
     "typecheck": "tsc --noEmit",
-    "db:generate": "node --env-file=.env ./node_modules/drizzle-kit/bin.cjs generate"
+    "db:generate": "node --env-file=.env ./node_modules/drizzle-kit/bin.cjs generate",
+    "db:migrate": "tsx --env-file=.env src/db/migrate.ts",
+    "owner:provision": "tsx --env-file=.env src/cli/provision-owner.ts"
   },
   "dependencies": {
     "@fastify/cookie": "^10.0.1",

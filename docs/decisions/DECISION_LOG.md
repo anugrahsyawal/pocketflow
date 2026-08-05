@@ -261,14 +261,26 @@ provider, region, domain/DNS, and operating budget are selected when a
 production deployment phase is approved; they do not block Phase 7B local
 application development.
 
+### DEC-029 - Owner Provisioning, Session Lifecycle, and CSRF Protection
+
+Date: 2026-08-05
+Status: Accepted
+
+Decision: PocketFlow MVP authentication uses single-owner provisioning via CLI
+(`npm run owner:provision`) reading `OWNER_EMAIL`, `OWNER_DISPLAY_NAME`, and
+`OWNER_PASSWORD`. No public registration endpoint exists. Provisioning succeeds
+only when the `users` table is completely empty. Passwords use Argon2id
+hashing. Session tokens and CSRF tokens are stored strictly as SHA-256 hashes in
+the database. Cookies are `HttpOnly`, `SameSite=Lax`, `Path=/`, `Secure=true` in
+production with a 30-day absolute expiration. Sessions are rotated upon
+successful login (revoking any existing active session). State-changing
+session-authenticated endpoints require and validate the `X-CSRF-Token` header.
+
 ## Pending decisions
 
 The following are deliberately unresolved and must not be guessed:
 
-- production authentication provider and session design;
-- backend framework and database;
 - deployment platform and topology;
-- remote-sync conflict strategy;
 - full JSON backup/restore release priority;
 - backup retention, encryption, storage location, and restore-test frequency;
 - production security and operational architecture.

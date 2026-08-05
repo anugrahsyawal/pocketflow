@@ -28,8 +28,8 @@ service-worker implementation.
 | Backend language and HTTP layer | TypeScript with Fastify. Route request/response schemas are mandatory. |
 | Database | PostgreSQL. |
 | ORM / query layer | Drizzle ORM. |
-| Ownership | One owner account for MVP; no public registration. |
-| Authentication | Email/password login, Argon2id password hashing, secure HttpOnly cookie-based session, CSRF protection, and session rotation. Password reset waits for an approved email provider. |
+| Ownership | One owner account for MVP; single-owner CLI provisioning (`npm run owner:provision`); no public registration endpoint. |
+| Authentication | Email/password login, Argon2id password hashing, secure HttpOnly cookie-based session (30-day absolute expiration), session rotation on login, hashed session & CSRF tokens in database, and `X-CSRF-Token` header protection. Password reset waits for an approved email provider. |
 | Money | Indonesian Rupiah stored as non-negative integer minor-free amounts; never floating point. |
 | Time | Transaction business date is an Indonesia-local `DATE`; business time is a local `TIME`; audit timestamps are UTC. |
 | Balance source | Transactions are the financial source of truth. Cached balances may be introduced only as derived data. |

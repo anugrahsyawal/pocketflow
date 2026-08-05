@@ -25,17 +25,24 @@ export const users = pgTable('users', {
 });
 
 // 2. Auth Sessions
-export const authSessions = pgTable('auth_sessions', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  userId: uuid('user_id')
-    .notNull()
-    .references(() => users.id, { onDelete: 'cascade' }),
-  tokenHash: text('token_hash').notNull(),
-  expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
-  revokedAt: timestamp('revoked_at', { withTimezone: true }),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-  lastUsedAt: timestamp('last_used_at', { withTimezone: true }).notNull().defaultNow(),
-});
+export const authSessions = pgTable(
+  'auth_sessions',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    tokenHash: text('token_hash').notNull(),
+    csrfTokenHash: text('csrf_token_hash').notNull(),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    revokedAt: timestamp('revoked_at', { withTimezone: true }),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    lastUsedAt: timestamp('last_used_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    unique('auth_sessions_token_hash_unique').on(table.tokenHash),
+  ]
+);
 
 // 3. Pockets
 export const pockets = pgTable(
