@@ -6,14 +6,40 @@ Local backend service, owner authentication, and database foundation for PocketF
 
 - **Node.js**: v20.6.0 or higher (required for native `--env-file` environment loading)
 - **npm**: v9.0.0 or higher
-- **PostgreSQL**: v14.0 or higher (for local database instance)
+- **Docker & Docker Compose**: (for running local PostgreSQL container)
 
-## Setup & Local Execution Order
+## Local PostgreSQL Database (Docker Compose)
 
-To set up the backend locally, follow this exact execution sequence:
+A reproducible local PostgreSQL v16 container configuration with `pg_isready` healthcheck is provided in `docker-compose.yml` for development:
 
-1. **Configure Environment (`.env`)**:
-   Copy `.env.example` to `.env` and fill in local database & owner credentials:
+- **Start local PostgreSQL (waits until database is healthy)**:
+  ```bash
+  docker compose up -d --wait
+  ```
+- **Check container status**:
+  ```bash
+  docker compose ps
+  ```
+- **Connect via psql CLI**:
+  ```bash
+  docker compose exec postgres psql -U pocketflow -d pocketflow
+  ```
+- **Stop local PostgreSQL**:
+  ```bash
+  docker compose down
+  ```
+
+## Setup & Local Execution Sequence
+
+Follow this exact sequence for local backend setup:
+
+1. **Start Local Database (waits until healthy)**:
+   ```bash
+   docker compose up -d --wait
+   ```
+
+2. **Configure Environment (`.env`)**:
+   Copy `.env.example` to `.env` and fill in secrets:
 
    ```bash
    cp .env.example .env
@@ -23,7 +49,7 @@ To set up the backend locally, follow this exact execution sequence:
    NODE_ENV=development
    PORT=3000
    HOST=127.0.0.1
-   DATABASE_URL=postgres://USER:PASSWORD@HOST:5432/pocketflow
+   DATABASE_URL=postgres://pocketflow:pocketflow_dev_secret@127.0.0.1:5432/pocketflow
    CORS_ORIGIN=http://localhost:5173
    SESSION_SECRET=your-secure-random-session-secret
 
@@ -38,14 +64,14 @@ To set up the backend locally, follow this exact execution sequence:
    > - `CORS_ORIGIN` must be a valid single HTTP/HTTPS origin (wildcards `*` are strictly prohibited).
    > - `OWNER_PASSWORD` is used ONLY by the single-owner CLI provisioning command (`npm run owner:provision`).
 
-2. **Run Database Migrations (`npm run db:migrate`)**:
+3. **Run Database Migrations (`npm run db:migrate`)**:
    Applies pending SQL schema migrations to PostgreSQL:
 
    ```bash
    npm run db:migrate
    ```
 
-3. **Provision Owner Account (`npm run owner:provision`)**:
+4. **Provision Owner Account (`npm run owner:provision`)**:
    Creates the initial single owner account using `OWNER_EMAIL`, `OWNER_DISPLAY_NAME`, and `OWNER_PASSWORD`:
 
    ```bash
@@ -54,7 +80,7 @@ To set up the backend locally, follow this exact execution sequence:
 
    > **Note**: This CLI command succeeds (exit code 0) ONLY when the `users` table is completely empty. If an owner already exists, it aborts without modifying data and exits with a non-zero exit code (exit 1).
 
-4. **Start Development Server (`npm run dev`)**:
+5. **Start Development Server (`npm run dev`)**:
 
    ```bash
    npm run dev
@@ -92,7 +118,7 @@ To set up the backend locally, follow this exact execution sequence:
 
 ## Phase Scope Boundaries
 
-The following capabilities are **explicitly out of scope** in Phase 7B.2:
+The following capabilities are **explicitly out of scope** in Phase 7B.2.1:
 
 - Public registration & password reset workflows
 - Google / OAuth authentication providers
