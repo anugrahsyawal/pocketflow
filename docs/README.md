@@ -48,6 +48,7 @@ reference only and must not be copied into production.
 - [Phase 7B.1 Backend Service & Database Foundation](walkthroughs/phase-7b1-backend-foundation.md)
 - [Phase 7B.2 Owner Authentication & Secure Session](walkthroughs/phase-7b2-auth-session.md)
 - [Phase 7B.2.1 Local PostgreSQL & Auth Integration Verification](walkthroughs/phase-7b21-local-postgres-auth-integration.md)
+- [Phase 7B.3 Setup & Master Data API Implementation](walkthroughs/phase-7b3-setup-master-data.md)
 
 Walkthroughs record implementation and verification evidence. They cannot add
 requirements or override Product Owner decisions.
@@ -64,7 +65,7 @@ introduced later, but are not required for this documentation bootstrap.
 
 ## Approved API contracts and specifications
 
-- [Setup & Master Data API Contract Specification](architecture/SETUP_MASTER_DATA_API_CONTRACT.md) (Product Owner Accepted 2026-08-13; Endpoint Implementation Awaiting Separate Authorization)
+- [Setup & Master Data API Contract Specification](architecture/SETUP_MASTER_DATA_API_CONTRACT.md) (Product Owner Accepted 2026-08-13; Endpoint Implementation Delivered & PO Accepted in Current Delivery Session)
 
 ## Legacy documents
 

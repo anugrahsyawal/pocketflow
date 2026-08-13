@@ -72,7 +72,7 @@ this documentation audit did not rerun the feature.
 | ID | Story | Priority | Overall | Delivery / verification / acceptance | Acceptance and evidence |
 |---|---|---|---|---|---|
 | 2.1 | View pocket list and detail | Must Have | Done | Implemented / Legacy Evidence Incomplete / Accepted | Active pockets show name, transaction-derived balance, allocation/wallet state, usage, and status; detail shows metrics, categories, and recent activity. Commits `c966343`, `3b66125`, `335bd3b`, `f052ebc`. |
-| 2.2 | Pocket read, update, and archive | Must Have | Contract Approved | Specification Approved / Not Implemented / Accepted (2026-08-13) | Bounded backend read/update/archive contract specification accepted in SETUP_MASTER_DATA_API_CONTRACT.md (GET/PATCH /v1/pockets). POST /v1/pockets is absent from approved route list and pocket endpoint implementation remains Not Started. |
+| 2.2 | Pocket read, update, and archive | Must Have | Done | Delivered / Tech Lead Verified / PO Accepted (current delivery session) | Bounded backend read/update/archive endpoints delivered in commit `6cff955891bc4e09db4a4a08a3a3cf1ecfb17926` and verified in [Phase 7B.3 walkthrough](../walkthroughs/phase-7b3-setup-master-data.md). POST /v1/pockets remains absent from the approved route list. |
 | 2.3 | Monthly allocation per pocket | Must Have | Partially Done | Implemented in template/calculations / Legacy Evidence Incomplete / Accepted with limitation | Allocations drive current-period calculations and zero-allocation wallets remain valid. User editing and historical allocation snapshots are not implemented. |
 
 ## Epic 3 — Category management

@@ -13,7 +13,7 @@ Last updated: 2026-08-13
 | R-007 | Remote sync contracts are undefined. | Partially resolved | Initial sync conflict policy defined as Reload-only (DEC-027) | Full sync queue & deletion propagation deferred to later phase. |
 | R-008 | Backup baseline and retention policy. | Resolved baseline | Data recovery & retention baseline defined | Encrypted daily backup, 30-day retention, monthly restore test accepted (DEC-028). Deployment platform/topology selection pending. |
 | R-009 | Deployment platform and topology is TBD. | Refinement Needed | Security/operations requirements cannot be finalized | Select managed app platform & PostgreSQL when pre-production deployment is approved. |
-| R-010 | Automated backend test/spec runner script is absent. | Open quality gap | Backend integration verification relies on manual steps | Establish `npm run test:integration` runner as prerequisite for Phase 7B.3. |
+| R-010 | Automated backend test/spec runner script is absent. | Resolved in Phase 7B.3 | Automated integration suite established | Executed 106 integration tests via `npm run test:integration` against dedicated test DB `pocketflow_test_7b3`. |
 | R-011 | Documentation normalization was previously uncommitted. | Resolved | Phase 6E entry gate | Committed and pushed as `e35756b`; worktree was clean before Phase 6E began. |
 | R-012 | CLI owner provisioning check-then-insert is not concurrency atomic. | Known backend limitation | Concurrent CLI provisioning invocations could race | Accept limitation for single-owner CLI script; avoid concurrent execution. |
 | R-013 | Session rotation revoke-then-insert is non-atomic. | Known backend limitation | Session revocation and new session creation happen in separate DB steps | Wrap session rotation in explicit DB transaction during future hardening. |
@@ -21,4 +21,4 @@ Last updated: 2026-08-13
 
 ## Current blockers
 
-There is no application code blocker. The base checkpoint `7e6c6b5910e23a31f419362b75ee371956a1b314` was clean before this task began. This documentation set constitutes the Product Owner-accepted docs-only checkpoint dated 2026-08-13 for Phase 7B.2.2 documentation reconciliation and Phase 7B.3 contract gate specification (`SETUP_MASTER_DATA_API_CONTRACT.md`). Phase 7B.3 endpoint implementation remains Not Started and awaits separate explicit authorization.
+There is no application code blocker. Phase 7B.3 Setup & Master Data API implementation is completed, verified, and PO accepted at HEAD `6cff955891bc4e09db4a4a08a3a3cf1ecfb17926` (pushed `origin/main`). Transaction API implementation (`/v1/transactions`) is NOT authorized because a transaction API contract does not yet exist; it requires a separate contract specification and PO authorization before work begins (not a blocker against Phase 7B.3).
