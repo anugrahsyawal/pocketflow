@@ -10,6 +10,7 @@ import {
   timestamp,
   check,
   unique,
+  uniqueIndex,
   AnyPgColumn,
 } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
@@ -20,6 +21,7 @@ export const users = pgTable('users', {
   email: text('email').notNull().unique(),
   displayName: text('display_name').notNull(),
   passwordHash: text('password_hash').notNull(),
+  setupCompletedAt: timestamp('setup_completed_at', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 });
@@ -52,6 +54,7 @@ export const pockets = pgTable(
     userId: uuid('user_id')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
+    templateKey: text('template_key'),
     name: text('name').notNull(),
     emoji: text('emoji').notNull(),
     groupId: text('group_id').notNull(),
@@ -66,6 +69,9 @@ export const pockets = pgTable(
   },
   (table) => [
     check('pockets_opening_balance_gte_zero', sql`${table.openingBalance} >= 0`),
+    uniqueIndex('pockets_owner_template_key_idx')
+      .on(table.userId, table.templateKey)
+      .where(sql`${table.templateKey} IS NOT NULL`),
   ]
 );
 
@@ -177,7 +183,7 @@ export const idempotencyRecords = pgTable(
     requestHash: text('request_hash').notNull(),
     responseReference: text('response_reference'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    expiresAt: timestamp('expires_at', { withTimezone: true }),
   },
   (table) => [
     unique('idempotency_records_user_mutation_unique').on(table.userId, table.clientMutationId),

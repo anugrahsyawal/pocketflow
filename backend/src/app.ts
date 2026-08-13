@@ -5,6 +5,9 @@ import { AppConfig } from './config/env.js';
 import { handleAppError } from './lib/errors.js';
 import { healthRoutes } from './routes/health.js';
 import { authRoutes } from './routes/auth.js';
+import { setupRoutes } from './routes/setup.js';
+import { pocketRoutes } from './routes/pockets.js';
+import { categoryRoutes } from './routes/categories.js';
 
 export async function buildApp(config: AppConfig): Promise<FastifyInstance> {
   const app = Fastify({
@@ -30,6 +33,9 @@ export async function buildApp(config: AppConfig): Promise<FastifyInstance> {
   // Register Routes
   await app.register(healthRoutes);
   await app.register(authRoutes);
+  await app.register(setupRoutes);
+  await app.register(pocketRoutes);
+  await app.register(categoryRoutes);
 
   return app;
 }

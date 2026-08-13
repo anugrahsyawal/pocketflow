@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "db:generate": "node --env-file=.env ./node_modules/drizzle-kit/bin.cjs generate",
     "db:migrate": "tsx --env-file=.env src/db/migrate.ts",
-    "owner:provision": "tsx --env-file=.env src/cli/provision-owner.ts"
+    "owner:provision": "tsx --env-file=.env src/cli/provision-owner.ts",
+    "test:integration": "tsx --test --test-concurrency=1 tests/integration/*.test.ts"
   },
   "dependencies": {
     "@fastify/cookie": "^10.0.1",
