@@ -34,7 +34,7 @@ verification evidence belongs in walkthroughs and the traceability matrix.
 | PR-015 | Selected-period CSV export is part of the current Reports MVP. |
 | PR-016 | Goals are part of the MVP direction; their detailed workflow still requires refinement before implementation. |
 | PR-017 | Local/offline transaction input and an installable PWA are part of the MVP direction. |
-| PR-018 | Real authentication is required before production deployment; provider and implementation remain TBD before backend work. |
+| PR-018 | Backend MVP authentication is implemented with single-owner CLI provisioning (`npm run owner:provision`), Argon2id password hashing, 30-day HttpOnly `sid` cookie sessions, session rotation, SHA-256 token hashing, and `X-CSRF-Token` header validation (DEC-026, DEC-029; Implemented & Tech Lead Verified; PO Acceptance Pending). Production deployment provider and recovery controls remain pending. |
 | PR-019 | Settings supports product preferences such as privacy, app configuration, authentication, backup/sync entry points, and appearance where applicable. |
 | PR-020 | JSON receipt input and recurring-transaction enhancements belong to Sprint 2 or later. |
 | PR-021 | Remote synchronization requires an approved backend queue, idempotency, conflict, retry, and status model. |
@@ -135,27 +135,22 @@ rather than removed in a way that breaks historical references.
 
 ## 7. Authentication, offline, and PWA
 
-- Current mock authentication is development-only.
-- Production authentication provider is TBD before backend implementation.
-- Private financial routes require authentication in production.
+- Current mock authentication is development-only on frontend.
+- Backend MVP authentication is implemented with single-owner CLI provisioning (`npm run owner:provision`), Argon2id password hashing, 30-day HttpOnly `sid` cookie sessions, session rotation on login, SHA-256 token hashing, and `X-CSRF-Token` header validation (DEC-026, DEC-029; Implemented & Tech Lead Verified; PO Acceptance Pending).
+- Private financial routes require valid session authentication on the backend (`/v1/*`).
 - Offline-capable local transaction input is required by the MVP direction.
 - Remote synchronization is a later backend/integration concern.
-- Installable PWA behavior requires valid icons, a service worker/app-shell
-  strategy, and actual installability verification.
-- Runtime dependency on external fonts and icons should be minimized or
-  removed for offline reliability.
+- Installable PWA behavior requires valid icons, a service worker/app-shell strategy, and actual installability verification.
+- Runtime dependency on external fonts and icons should be minimized or removed for offline reliability.
 
 ## 8. Deferred and TBD requirements
 
-The following do not block the documentation bootstrap:
+The following items remain TBD and require pre-production or future phase decision:
 
-- production authentication provider;
-- backend framework and database;
-- synchronization conflict strategy;
-- deployment platform;
-- JSON backup/restore release priority;
-- backup retention, encryption, storage location, and restore-test frequency;
-- production security and operations architecture.
+- production deployment platform, topology, region, and operating budget;
+- full JSON backup/restore release priority and detailed schema;
+- production security and operations infrastructure controls;
+- remote synchronization queue and multi-device deletion propagation;
+- historical snapshot timing and data model.
 
-These items must remain explicit in the backlog, decision-log pending section,
-and Risks and Blockers until resolved.
+*Note: Backend framework (TypeScript/Fastify), database (PostgreSQL + Drizzle ORM), authentication/session architecture (Argon2id + 30-day HttpOnly cookie + CSRF tokens + CLI provisioning), initial sync conflict strategy (Reload-only), and backup policy baseline (daily encrypted, 30 days retention, monthly restore test) were resolved by DEC-025 through DEC-029.*

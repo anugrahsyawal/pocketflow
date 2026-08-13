@@ -1,6 +1,6 @@
 # PocketFlow Documentation Index
 
-Last updated: 2026-07-21
+Last updated: 2026-08-13
 
 This index identifies the single active authority for each documentation role.
 Relative links below are repository-valid and are checked as part of the docs
@@ -45,6 +45,9 @@ reference only and must not be copied into production.
 - [Phase 6B Reports visual analytics](walkthroughs/phase-6b-reports-visual-analytics.md)
 - [Phase 6C Budget vs Actual and Weekly Usage](walkthroughs/phase-6c-budget-vs-actual-and-weekly-usage.md)
 - [Phase 6D insights and Sinking Fund](walkthroughs/phase-6d-rule-based-insights-and-sinking-fund.md)
+- [Phase 7B.1 Backend Service & Database Foundation](walkthroughs/phase-7b1-backend-foundation.md)
+- [Phase 7B.2 Owner Authentication & Secure Session](walkthroughs/phase-7b2-auth-session.md)
+- [Phase 7B.2.1 Local PostgreSQL & Auth Integration Verification](walkthroughs/phase-7b21-local-postgres-auth-integration.md)
 
 Walkthroughs record implementation and verification evidence. They cannot add
 requirements or override Product Owner decisions.
@@ -54,6 +57,14 @@ requirements or override Product Owner decisions.
 Repository Markdown remains the canonical planning/execution system and Git
 commits remain implementation checkpoints. GitHub Issues or Projects may be
 introduced later, but are not required for this documentation bootstrap.
+
+## Approved architecture decision records
+
+- [Backend Architecture Decision Pack](architecture/BACKEND_ARCHITECTURE_DECISION_PACK.md)
+
+## Approved API contracts and specifications
+
+- [Setup & Master Data API Contract Specification](architecture/SETUP_MASTER_DATA_API_CONTRACT.md) (Product Owner Accepted 2026-08-13; Endpoint Implementation Awaiting Separate Authorization)
 
 ## Legacy documents
 
@@ -77,9 +88,3 @@ Proposed disposition after that review:
   from the working tree after confirming their useful content and mappings are
   preserved; Git history remains their archive;
 - retain `ui-ux-handoff.md` as supporting Iteration 2 design evidence.
-
-## Planned, not yet authoritative
-
-Architecture overview, data model, and API contract documents will be created
-only when their scope and decisions are approved. Their absence is intentional;
-empty placeholder architecture documents are not part of this checkpoint.

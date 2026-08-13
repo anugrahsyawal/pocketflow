@@ -65,14 +65,14 @@ this documentation audit did not rerun the feature.
 | 1.1 | Development mock login and frontend guards | Must Have | Done | Implemented / Legacy Evidence Incomplete / Accepted | Valid mock credential logs in, invalid input shows an error, persisted mock session survives refresh, and private frontend routes redirect unauthenticated users. Source: `useAuthStore.ts`, `ProtectedRoute.tsx`; commit `5243596`. Development-only. |
 | 1.2 | Initial setup wizard | Must Have | Partially Done | Implemented / Legacy Evidence Incomplete / Accepted with limitation | Welcome, period, pocket selection, initial balance, review, and Home redirect exist. The approved period is fixed 26–25, but legacy UI/state still permits 1–28. Remediation belongs to Phase 6E or later. Commits `b84176b`–`1993128`. |
 | 1.3 | Default pocket template | Must Have | Partially Done | Implemented / Legacy Evidence Incomplete / Accepted with limitation | Required pockets and Rp5,800,000 allocation exist and can be selected; Cash/NFC initial balances are editable. Pre-save editing of every name/allocation/balance is not implemented. |
-| 1.4 | Production authentication | Must Have before production | Refinement Needed | Not Started / Not Verified / Deferred | Real authentication and backend enforcement are required before deployment. Provider, session, recovery, and implementation remain TBD before backend work. |
+| 1.4 | Production authentication | Must Have before production | Implemented in local backend | Implemented / Verified on local Postgres / Ready for Review | Single-owner CLI provisioning (`npm run owner:provision`), Argon2id password hashing, Fastify session auth routes (`/v1/auth/login`, `/v1/auth/logout`, `/v1/me`, `/v1/auth/csrf`), 30-day HttpOnly cookie sessions, SHA-256 database hashes, and `X-CSRF-Token` protection. Commits `e346d8f`, `7e6c6b5`; [walkthrough](../walkthroughs/phase-7b21-local-postgres-auth-integration.md). |
 
 ## Epic 2 — Pocket and wallet management
 
 | ID | Story | Priority | Overall | Delivery / verification / acceptance | Acceptance and evidence |
 |---|---|---|---|---|---|
 | 2.1 | View pocket list and detail | Must Have | Done | Implemented / Legacy Evidence Incomplete / Accepted | Active pockets show name, transaction-derived balance, allocation/wallet state, usage, and status; detail shows metrics, categories, and recent activity. Commits `c966343`, `3b66125`, `335bd3b`, `f052ebc`. |
-| 2.2 | Create, edit, and archive pocket | Must Have | Not Started | Not Started / Not Verified / Not Reviewed | User can create a pocket, edit its properties, and archive rather than break transaction history. Archived pockets must be excluded from new-entry defaults. No pocket CRUD actions currently exist. |
+| 2.2 | Pocket read, update, and archive | Must Have | Contract Approved | Specification Approved / Not Implemented / Accepted (2026-08-13) | Bounded backend read/update/archive contract specification accepted in SETUP_MASTER_DATA_API_CONTRACT.md (GET/PATCH /v1/pockets). POST /v1/pockets is absent from approved route list and pocket endpoint implementation remains Not Started. |
 | 2.3 | Monthly allocation per pocket | Must Have | Partially Done | Implemented in template/calculations / Legacy Evidence Incomplete / Accepted with limitation | Allocations drive current-period calculations and zero-allocation wallets remain valid. User editing and historical allocation snapshots are not implemented. |
 
 ## Epic 3 — Category management
@@ -145,7 +145,7 @@ this documentation audit did not rerun the feature.
 | 10.1 | Selected-period CSV export | Must Have | Done | Implemented / Verified / Accepted | UTF-8 BOM, formula-injection protection, selected-period filename, resolved labels, and archived exclusion exist. Commit `cc39670`; Reports verification 2026-07-21. |
 | 10.2 | Full JSON backup | MVP priority TBD | Refinement Needed | Not Started / Not Verified / Not Reviewed | Release priority, schema/version, included modules, encryption, and storage remain TBD. Not a Phase 6E blocker. |
 | 10.3 | JSON restore | MVP priority TBD | Refinement Needed | Not Started / Not Verified / Not Reviewed | Preview, compatibility, validation, overwrite/merge behavior, rollback, and confirmation require refinement. |
-| 10.4 | Server database backup | Must Have before production | Refinement Needed | Not Started / Not Verified / Not Reviewed | Platform, retention, encryption, storage, logging, and restore-test frequency are TBD before backend backup implementation. No VM/provider is assumed. |
+| 10.4 | Server database backup | Must Have before production | Baseline Defined | Baseline Accepted (DEC-028) / Implementation Not Started / Verification Not Run | Encrypted daily backups, 30-day retention, monthly restore test, owner-only restore baseline accepted (DEC-028). Exact deployment platform, host storage, and production operations remain pending deployment phase. |
 
 ## Epic 11 — PWA and mobile-first experience
 
@@ -159,7 +159,7 @@ this documentation audit did not rerun the feature.
 
 | ID | Story | Priority | Overall | Delivery / verification / acceptance | Acceptance and evidence |
 |---|---|---|---|---|---|
-| 12.1 | Protect private routes | Must Have | Partially Done | Frontend implemented / Legacy Evidence Incomplete / Accepted with limitation | Mock frontend guards exist. Production session expiry and backend endpoint enforcement wait for production authentication. |
+| 12.1 | Protect private routes | Must Have | Implemented in backend | Frontend implemented; Backend authenticated preHandler verified / Ready for Review | Mock frontend guards protect local routes. Backend `authenticateRequest` and `validateCsrfToken` hooks enforce 30-day session expiry and CSRF protection on versioned `/v1` endpoints. Phase 7B.2.1 walkthrough. |
 | 12.2 | Secure production configuration | Must Have before production | Refinement Needed | Not Started / Not Verified / Not Reviewed | HTTPS, secret management, password/provider security, sensitive logging, headers, and operations controls require backend/deployment decisions. |
 
 ## Epic 13 — Goals

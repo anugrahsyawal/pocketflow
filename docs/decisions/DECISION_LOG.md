@@ -2,7 +2,7 @@
 
 Status: Canonical
 Owner: Product Owner (Kyune)
-Last updated: 2026-07-23
+Last updated: 2026-08-13
 Supersedes as an active authority: `docs/decision-log.md`
 
 Accepted decisions record product or delivery rules that future agents must
@@ -282,5 +282,5 @@ The following are deliberately unresolved and must not be guessed:
 
 - deployment platform and topology;
 - full JSON backup/restore release priority;
-- backup retention, encryption, storage location, and restore-test frequency;
+- deployment-specific backup execution choices (host/provider storage integration, monitoring, credentials/secrets management, and restore runbook evidence);
 - production security and operational architecture.

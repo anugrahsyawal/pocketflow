@@ -1,8 +1,8 @@
 # Current Sprint
 
-Sprint: Frontend MVP Completion
+Sprint: Backend MVP Foundation & Setup API Contract Gate
 Status: In Progress
-Current checkpoint: Phase 7B entry preparation -- Backend Foundation
+Current checkpoint: Phase 7B.2.2 Backend Documentation Reconciliation & Phase 7B.3 Contract Gate
 
 ## Terminology
 
@@ -11,53 +11,37 @@ implementation or verification substage inside the Sprint.
 
 ## Sprint goal
 
-Finish integrated frontend quality work and produce a truthful, traceable
-handoff before backend planning begins.
+Build a secure, verified TypeScript/Fastify/PostgreSQL backend foundation and produce a complete, non-ambiguous API contract specification for setup and master data endpoints.
 
 ## Completed phases & polish
 
-- Phase 6D - Rule-Based Insights and Sinking Fund Recommendation (Done, commit `9297f37`).
-- Phase 6E - Integrated Reports QA, PWA Asset Verification, and Frontend Polish (Done in current worktree).
-- MVP Pindah Alokasi Budget (`budget-reallocation`) transfer type (Done in current worktree).
-- Payment Pocket Budget Owner Configuration for Cash & NFC Card (Done in current worktree).
-- Income Source & Transfer Type flex-wrap pill selector UI refinement (Done in current worktree).
-- Reports UI alignment: full-width period selector, Google Stitch Iteration 3 Anggaran Periode card, and Export CSV button refinement (Done in current worktree).
-
-## Completed checkpoint
-
-Documentation-only normalization:
-
-- establish one canonical active document per authority;
-- reconcile approved decisions, requirements, backlog, and actual source state;
-- correct stale Phase 6D evidence and broken Stitch references;
-- record traceability, risks, acceptance gates, and handoff;
-- preserve legacy material until the Product Owner reviews the diff.
-
-The documentation checkpoint was accepted, committed as `e35756b`, pushed, and
-followed by clean worktree confirmations.
+- Phase 7B.1 — Backend Service & Database Foundation (Done, commit `4ac8790`).
+- Phase 7B.2 — Owner Authentication & Secure Session (Done, commit `e346d8f`).
+- Phase 7B.2.1 — Local PostgreSQL & Auth Integration Verification (Done, commit `7e6c6b5910e23a31f419362b75ee371956a1b314` pushed to `origin/main`).
+- Phase 6E — Integrated Reports QA, PWA Asset Verification, and Frontend Polish (Done, commit `b3d7f99`).
+- Phase 6D — Rule-Based Insights and Sinking Fund Recommendation (Done, commit `9297f37`).
 
 ## Active status
 
-Frontend MVP work is committed through `b3d7f99`. Phase 7A decisions are
-approved. Phase 7B may begin with a bounded backend foundation task for
-Antigravity; production deployment remains a separate approved phase.
+Phase 7B.2.2 Backend Documentation Reconciliation and Phase 7B.3 Setup & Master Data API Contract Gate are **COMPLETED AND ACCEPTED** by Product Owner (Kyune) on 2026-08-13:
 
-## Explicitly out of scope
+- Reconciled canonical documents (README, CURRENT_STATE, CURRENT_SPRINT, PRODUCT_BACKLOG, PRODUCT_REQUIREMENTS, DECISION_LOG, PROGRESS, RISKS_AND_BLOCKERS, HANDOFF, TRACEABILITY_MATRIX, ACCEPTANCE_CHECKLIST, backend/AGENTS.md) with completed Phase 7B.1, 7B.2, and 7B.2.1 backend work;
+- Created `docs/architecture/SETUP_MASTER_DATA_API_CONTRACT.md` as the approved contract specification for setup (`/v1/setup`), pockets (`/v1/pockets`), and categories (`/v1/categories`);
+- This documentation set constitutes the Product Owner-accepted docs-only checkpoint dated 2026-08-13;
+- Endpoint implementation of Phase 7B.3 (`/v1/setup`, `/v1/pockets`, `/v1/categories`) remains Not Started and awaits separate explicit authorization.
 
-- Backend implementation, database, and deployment.
-- Production authentication implementation.
-- Remote synchronization.
-- Historical allocation/balance snapshots.
-- Automatic Sinking Fund transfers.
-- JSON receipt import, backup/restore implementation, Goals implementation,
-  and other unrefined Sprint 2/later capabilities.
+## Explicitly out of scope for current task
+
+- Implementation of `/v1/setup`, `/v1/pockets`, `/v1/categories`, `/v1/transactions`, or `/v1/reports` endpoints.
+- Database migration execution or container state changes.
+- Frontend code modifications.
+- Remote synchronization queue implementation.
+- Production infrastructure and deployment.
+- Unrefined Sprint 2/later capabilities.
 
 ## Sprint success conditions
 
-- Approved scope and acceptance criteria are traceable.
-- TypeScript and production build pass for the implementation checkpoint.
-- Runtime and browser evidence is recorded without overstating what was tested.
-- Main flows have no uncaught browser errors.
-- Mobile layouts are checked at 375px, 390px, and 430px.
-- PWA gaps and warnings are either resolved or explicitly accepted/deferred.
-- Current state, backlog, traceability, walkthrough, and handoff agree.
+- Approved scope and acceptance criteria are traceable across canonical docs.
+- `SETUP_MASTER_DATA_API_CONTRACT.md` covers exact JSON examples, field types, validation errors, fixed 26–25 period rules, setup completion database migration requirement, server template key mapping, idempotency, revision control, cross-owner isolation, unpaginated filter list semantics, derived balance rules, grouped comprehensive integration test inventory, and entry gate.
+- Markdown links and git diff checks pass cleanly.
+- Current state, backlog, traceability, walkthroughs, and handoff agree.

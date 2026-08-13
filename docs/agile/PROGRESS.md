@@ -1,6 +1,6 @@
 # Project Progress
 
-Last updated: 2026-07-21
+Last updated: 2026-08-13
 
 The ledger separates delivery, verification, and Product Owner acceptance.
 Older accepted checkpoints are not downgraded solely because their evidence
@@ -20,14 +20,17 @@ predates the current template.
 | Reports Phase 6C | Implemented | Verified at checkpoint | Accepted | `cfb1b53`; [walkthrough](../walkthroughs/phase-6c-budget-vs-actual-and-weekly-usage.md) |
 | Reports Phase 6D | Implemented | Manually verified by PO on 2026-07-21; browser/version not captured | Accepted | `9297f37`; [walkthrough](../walkthroughs/phase-6d-rule-based-insights-and-sinking-fund.md) |
 | Documentation normalization checkpoint | Implemented | Markdown and Git validation passed | Accepted | `e35756b` |
-| Reports Phase 6E & Frontend Polish | Implemented | Type-check, build, dev-server startup, cross-viewport (375px, 390px, 430px) and end-to-end manual verification passed | Ready for Review | Current worktree; [walkthrough](../walkthroughs/phase-6e-integrated-qa-and-pwa-quality.md) |
-| Pindah Alokasi Budget Transfer | Implemented | Type-check, build, and manual verification passed | Ready for Review | Current worktree; [walkthrough](../walkthroughs/budget-reallocation-transfer.md) |
-| Pocket Budget Owner Configuration | Implemented | Type-check, build, and manual 6-step scenario verification passed | Ready for Review | Current worktree; [walkthrough](../walkthroughs/pocket-cash-nfc-budget-owner-config.md) |
-| Income & Transfer Selector UI Refinement | Implemented | Type-check, build, and flex-wrap pill layout verification passed | Ready for Review | Current worktree; [walkthrough](../walkthroughs/income-transfer-selector-ui-refinement.md) |
-| Reports Full-width Period Selector | Implemented | Type-check, build, and mobile viewport verification passed | Ready for Review | Current worktree; [walkthrough](../walkthroughs/reports-full-width-period-selector.md) |
-| Reports Anggaran Periode Stitch Card | Implemented | Type-check, build, and Stitch visual alignment verification passed | Ready for Review | Current worktree; [walkthrough](../walkthroughs/reports-anggaran-periode-card-stitch-alignment.md) |
-| Reports Export CSV Button Refinement | Implemented | Type-check, build, and visual alignment verification passed | Ready for Review | Current worktree; [walkthrough](../walkthroughs/reports-export-csv-button-refinement.md) |
-| Backend and production integration | Not Started | Not Verified | Not approved for implementation | Stack/contracts/deployment TBD |
+| Reports Phase 6E & Frontend Polish | Implemented | Type-check, build, dev-server startup, cross-viewport (375px, 390px, 430px) and end-to-end manual verification passed | Ready for Review | Commit `b3d7f99`; [walkthrough](../walkthroughs/phase-6e-integrated-qa-and-pwa-quality.md) |
+| Pindah Alokasi Budget Transfer | Implemented | Type-check, build, and manual verification passed | Ready for Review | [walkthrough](../walkthroughs/budget-reallocation-transfer.md) |
+| Pocket Budget Owner Configuration | Implemented | Type-check, build, and manual 6-step scenario verification passed | Ready for Review | [walkthrough](../walkthroughs/pocket-cash-nfc-budget-owner-config.md) |
+| Income & Transfer Selector UI Refinement | Implemented | Type-check, build, and flex-wrap pill layout verification passed | Ready for Review | [walkthrough](../walkthroughs/income-transfer-selector-ui-refinement.md) |
+| Reports Full-width Period Selector | Implemented | Type-check, build, and mobile viewport verification passed | Ready for Review | [walkthrough](../walkthroughs/reports-full-width-period-selector.md) |
+| Reports Anggaran Periode Stitch Card | Implemented | Type-check, build, and Stitch visual alignment verification passed | Ready for Review | [walkthrough](../walkthroughs/reports-anggaran-periode-card-stitch-alignment.md) |
+| Reports Export CSV Button Refinement | Implemented | Type-check, build, and visual alignment verification passed | Ready for Review | [walkthrough](../walkthroughs/reports-export-csv-button-refinement.md) |
+| Phase 7B.1 Backend Service & Database Foundation | Implemented | Verified at checkpoint (`tsc`, `build`, health route) | PO Acceptance Pending | Commit `4ac8790`; [walkthrough](../walkthroughs/phase-7b1-backend-foundation.md) |
+| Phase 7B.2 Owner Authentication & Secure Session | Implemented | Verified at checkpoint (`tsc`, `build`) | PO Acceptance Pending | Commit `e346d8f`; [walkthrough](../walkthroughs/phase-7b2-auth-session.md) |
+| Phase 7B.2.1 Local PostgreSQL & Auth Integration | Implemented | Verified on VM (Docker Postgres, live migrations, CLI owner provisioning, 13-point HTTP auth matrix) on 2026-08-12 | PO Acceptance Pending | Commit `7e6c6b5910e23a31f419362b75ee371956a1b314` (pushed to origin/main); [walkthrough](../walkthroughs/phase-7b21-local-postgres-auth-integration.md) |
+| Phase 7B.2.2 Backend Docs Reconciliation & Phase 7B.3 Contract Gate | Delivered | Tech reviewed & validated (link/format/JSON/UUID checks) | Product Owner Accepted (2026-08-13) | Docs-only checkpoint (2026-08-13); [SETUP_MASTER_DATA_API_CONTRACT.md](../architecture/SETUP_MASTER_DATA_API_CONTRACT.md) |
 
 Detailed story status is maintained in the
 [Product Backlog](../product/PRODUCT_BACKLOG.md), not duplicated here.

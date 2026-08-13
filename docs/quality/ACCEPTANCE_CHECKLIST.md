@@ -1,6 +1,6 @@
 # Acceptance Checklist
 
-Last updated: 2026-07-21
+Last updated: 2026-08-13
 
 ## A. Documentation normalization checkpoint
 
@@ -8,8 +8,7 @@ Last updated: 2026-07-21
 - [x] Phase 6D is recorded as Done and Product Owner-accepted on 2026-07-21.
 - [x] Delivery, verification, and Product Owner acceptance are separated.
 - [x] Fixed 26-25 period and configurable setup-field drift are explicit.
-- [x] Weekly Usage uses aggregate allocation divided by four and 7-7-7-rest
-  buckets; per-pocket analysis remains Budget vs Actual.
+- [x] Weekly Usage uses aggregate allocation divided by four and 7-7-7-rest buckets; per-pocket analysis remains Budget vs Actual.
 - [x] Goals remain in MVP direction; JSON receipt work is Sprint 2 or later.
 - [x] Local/offline input remains MVP direction; remote sync is later work.
 - [x] Legacy documents are marked superseded rather than deleted.
@@ -23,8 +22,7 @@ Last updated: 2026-07-21
 
 - [x] Section A is complete.
 - [x] Phase 6E story boundaries and allowed files are reconfirmed.
-- [x] No backend, production auth, remote sync, or unrelated feature work is
-  included.
+- [x] No backend, production auth, remote sync, or unrelated feature work is included.
 
 ## C. Phase 6E implementation & frontend polish verification
 
@@ -41,11 +39,20 @@ Last updated: 2026-07-21
 - [x] Source and final diff are reviewed.
 - [x] Current state, backlog, progress, traceability, risks, and handoff agree.
 
-## D. Pre-production gates (future)
+## D. Phase 7B Backend Foundation & Auth Integration Gates
+
+- [x] Phase 7B.1 Backend foundation implemented & verified (`4ac8790`); PO Acceptance Pending.
+- [x] Phase 7B.2 Owner authentication & sessions implemented (`e346d8f`); PO Acceptance Pending.
+- [x] Phase 7B.2.1 Local PostgreSQL & Auth matrix verified on VM on 2026-08-12 (`7e6c6b5910e23a31f419362b75ee371956a1b314`); PO Acceptance Pending.
+- [x] Phase 7B.2.2 Backend canonical documentation reconciled (Reconciled and formally accepted by Product Owner on 2026-08-13).
+- [x] Phase 7B.3 Setup & Master Data contract gate specification created (`SETUP_MASTER_DATA_API_CONTRACT.md`) (Approved specification formally accepted by Product Owner on 2026-08-13).
+- [ ] Phase 7B.3 Setup & Master Data API endpoints implementation (Not Started; accepted docs checkpoint and clean working tree are entry prerequisites, and separate explicit authorization remains required).
+
+## E. Pre-production gates (future)
 
 - [ ] Real authentication and backend authorization are approved and verified.
+- [x] Backup policy baseline approved (DEC-028: daily encrypted, 30-day retention, monthly restore test).
+- [ ] Production deployment platform, host storage, and restore verification executed.
 - [ ] Remote sync/idempotency/conflict/delete propagation contracts are approved.
-- [ ] Backup retention, encryption, storage, and restore-test policy are approved.
 - [ ] Deployment platform and security/operations controls are approved.
-- [ ] Historical snapshots are either implemented or retained as an explicit
-  accepted limitation.
+- [ ] Historical snapshots are either implemented or retained as an explicit accepted limitation.
