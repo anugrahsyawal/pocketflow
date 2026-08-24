@@ -30,7 +30,8 @@ Phase 7B.3 Setup & Master Data API Implementation is **DELIVERED, TECH LEAD VERI
 - Delivered Fastify endpoints (`GET /v1/setup`, `PUT /v1/setup`, `GET /v1/pockets`, `GET /v1/pockets/:id`, `PATCH /v1/pockets/:id`, `GET /v1/categories`, `POST /v1/categories`, `PATCH /v1/categories/:id`), database migration `drizzle/0002_real_lyja.sql`, and 106 automated integration test cases (`npm run test:integration`) matching 101 contract test IDs plus 2 drift and 3 health/auth regression checks;
 - Verified typecheck, build, migration idempotency, Docker container health, and development owner-data preservation cleanly;
 - Preserved historical acceptance state: Phase 7B.1, 7B.2, and 7B.2.1 remain PO Acceptance Pending;
-- The next backend implementation phase (`/v1/transactions`) is NOT authorized because a transaction API contract does not yet exist; it requires a separate contract specification, refinement, and explicit Product Owner authorization before work begins (not a blocker against Phase 7B.3 completion).
+- Phase 7B.4 Transaction API Contract Specification ([TRANSACTIONS_API_CONTRACT.md](../architecture/TRANSACTIONS_API_CONTRACT.md)) has been finalized and **ACCEPTED BY PRODUCT OWNER** on 2026-08-24 ([DEC-030](../decisions/DECISION_LOG.md#dec-030---transaction-api-contract-decisions-finalization)). Endpoint implementation (`/v1/transactions*`) remains **NOT AUTHORIZED** pending separate explicit Product Owner authorization before work begins (not a blocker against Phase 7B.3 completion).
+
 
 ## Explicitly out of scope for current task
 

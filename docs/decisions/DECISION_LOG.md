@@ -276,7 +276,27 @@ production with a 30-day absolute expiration. Sessions are rotated upon
 successful login (revoking any existing active session). State-changing
 session-authenticated endpoints require and validate the `X-CSRF-Token` header.
 
+### DEC-030 - Transaction API Contract Decisions Finalization
+
+Date: 2026-08-24
+Status: Accepted
+
+Decision: Following Product Owner audit of the MVP transaction management rules, the canonical Transaction API Contract decisions are accepted as follows:
+
+1. **Multi-Entry Expense Capture Batch Endpoint**: Multi-entry expense capture atomicity is preserved by adding `POST /v1/transactions/batch` to the approved architecture. The batch endpoint validates and executes all entry writes in a single atomic SQL transaction. Batch requests require a top-level `clientMutationId` for the batch operation, plus each item in the `items` array carries its own `clientMutationId`.
+2. **Automated Tombstone Purge & Audit Metadata**: Soft-deleted transaction tombstones (`deletedAt`) are automatically purged after 30 days of retention by a scheduled backend background worker, writing immutable deletion/purge audit metadata. No administrative or public purge API is exposed.
+3. **Negative Balance Rejection**: Expenses and transfer source deductions MUST be rejected with `422 Unprocessable Entity` (`code: "INSUFFICIENT_FUNDS"`) if the resulting derived balance of the payment or source pocket would drop below zero.
+4. **Payment Pocket Category Scoping**: Expense categories MUST belong directly to the selected payment pocket (`category.pocketId === expense.pocketId`). Mismatched or cross-pocket category references return `422 Unprocessable Entity` (`code: "INVALID_REFERENCE"`).
+5. **Budget Reallocation Floor Against Recorded Expenses**: `budget-reallocation` transfers MUST be rejected with `422 Unprocessable Entity` (`code: "INSUFFICIENT_ALLOCATION"`) if the revised allocation for `fromPocketId` in the target period would be less than the total recorded expenses already incurred by `fromPocketId` in that period.
+6. **Filtering, Sorting & Pagination Defaults**: `GET /v1/transactions` query defaults are fixed at `page = 1`, `limit = 50` (max limit 100), default sort order `occurredOn DESC, occurredAtLocalTime DESC, createdAt DESC`, text search `search` max 100 characters against `note`, and `includeArchived` boolean string filter (`"true"` / `"false"`).
+7. **Permanent Delete Body Confirmation**: Permanent delete (`DELETE /v1/transactions/:id`) requires both client UI confirmation and explicit request body parameter `confirmPermanentDelete: true`.
+8. **Foreign Reference Error Uniformity**: Invalid, cross-owner, or archived foreign key references return `422 Unprocessable Entity` (`code: "INVALID_REFERENCE"`) without leaking target entity existence or metadata.
+9. **Target Pocket Allocation Auto-Creation**: Reallocation to a target pocket lacking an allocation record in the target period automatically creates a `pocket_budget_allocations` row (starting at Rp0) before applying the reallocation addition.
+10. **No-Op PATCH Revision Preservation**: A `PATCH /v1/transactions/:id` request supplying identical field values returns `200 OK` with the current entity and leaves stored `revision` unchanged.
+11. **Reallocation Target Period by Date & Auto-Period Creation**: `budget-reallocation` applies to the budget period containing `occurredOn` (26th–25th). If no `budget_periods` row exists for historical or future `occurredOn`, the backend automatically creates the `budget_periods` row within the same SQL transaction.
+
 ## Pending decisions
+
 
 The following are deliberately unresolved and must not be guessed:
 

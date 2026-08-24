@@ -32,6 +32,11 @@ predates the current template.
 | Phase 7B.2.1 Local PostgreSQL & Auth Integration | Implemented | Verified on VM (Docker Postgres, live migrations, CLI owner provisioning, 13-point HTTP auth matrix) on 2026-08-12 | PO Acceptance Pending | Commit `7e6c6b5910e23a31f419362b75ee371956a1b314` (pushed to origin/main); [walkthrough](../walkthroughs/phase-7b21-local-postgres-auth-integration.md) |
 | Phase 7B.2.2 Backend Docs Reconciliation & Phase 7B.3 Contract Gate | Delivered | Tech reviewed & validated (link/format/JSON/UUID checks) | Product Owner Accepted (2026-08-13) | Docs-only checkpoint (2026-08-13); [SETUP_MASTER_DATA_API_CONTRACT.md](../architecture/SETUP_MASTER_DATA_API_CONTRACT.md) |
 | Phase 7B.3 Setup & Master Data API Implementation | Delivered | Tech Lead independently verified (106 integration tests, typecheck/build pass, migration twice pass, Docker healthy) | Product Owner Accepted (current delivery session) | Commit `6cff955891bc4e09db4a4a08a3a3cf1ecfb17926` (pushed to origin/main); [walkthrough](../walkthroughs/phase-7b3-setup-master-data.md) |
+| Phase 7B.4 Transaction API Contract Specification | Delivered | Tech Lead review pending final commit validation | Product Owner Accepted (2026-08-24, DEC-030) | Docs-only contract gate (2026-08-24); [TRANSACTIONS_API_CONTRACT.md](../architecture/TRANSACTIONS_API_CONTRACT.md) |
+
+
+
+
 
 Detailed story status is maintained in the
 [Product Backlog](../product/PRODUCT_BACKLOG.md), not duplicated here.

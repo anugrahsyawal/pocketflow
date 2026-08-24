@@ -27,9 +27,8 @@ Delivered scope includes `/v1/setup`, `/v1/pockets`, and `/v1/categories` endpoi
 
 ## Required sequence before next backend implementation (`/v1/transactions`)
 
-1. Transaction API contract specification and refinement.
-2. Product Owner review and acceptance of transaction API contract.
-3. Verification of clean working tree and explicit, separate authorization from Product Owner to begin `/v1/transactions` endpoint implementation.
+1. Transaction API contract specification ([TRANSACTIONS_API_CONTRACT.md](../architecture/TRANSACTIONS_API_CONTRACT.md)) finalized and accepted by Product Owner (2026-08-24, DEC-030).
+2. Verification of clean working tree and explicit, separate authorization from Product Owner to begin `/v1/transactions` endpoint implementation.
 
 ## Relevant files
 
@@ -40,9 +39,12 @@ Delivered scope includes `/v1/setup`, `/v1/pockets`, and `/v1/categories` endpoi
 - [Decision log](../decisions/DECISION_LOG.md)
 - [Backend Architecture Decision Pack](../architecture/BACKEND_ARCHITECTURE_DECISION_PACK.md)
 - [Setup & Master Data API Contract Specification](../architecture/SETUP_MASTER_DATA_API_CONTRACT.md)
+- [Transaction API Contract Specification](../architecture/TRANSACTIONS_API_CONTRACT.md)
+
 - [Acceptance checklist](../quality/ACCEPTANCE_CHECKLIST.md)
 - [Phase 7B.2.1 evidence](../walkthroughs/phase-7b21-local-postgres-auth-integration.md)
 - [Phase 7B.3 evidence](../walkthroughs/phase-7b3-setup-master-data.md)
+
 
 ## Open pre-production / architecture decisions
 

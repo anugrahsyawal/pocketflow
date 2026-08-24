@@ -138,6 +138,7 @@ PATCH /v1/categories/:id
 
 GET    /v1/transactions
 POST   /v1/transactions
+POST   /v1/transactions/batch
 PATCH  /v1/transactions/:id
 POST   /v1/transactions/:id/archive
 POST   /v1/transactions/:id/restore

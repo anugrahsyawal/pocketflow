@@ -65,7 +65,8 @@ Phase 7A backend architecture decisions (DEC-025 through DEC-028) and Phase 7B a
 
 Phase 7B.1 backend foundation (`4ac8790`), Phase 7B.2 auth/sessions (`e346d8f`), and Phase 7B.2.1 local PostgreSQL integration (`7e6c6b5910e23a31f419362b75ee371956a1b314`) are completed and verified against live PostgreSQL (PO acceptance pending).
 
-Phase 7B.2.2 documentation reconciliation and Phase 7B.3 contract gate (`SETUP_MASTER_DATA_API_CONTRACT.md`) were formally accepted by the Product Owner on 2026-08-13. Phase 7B.3 Setup & Master Data API implementation (`6cff955891bc4e09db4a4a08a3a3cf1ecfb17926`) is delivered, Tech Lead independently verified (106 integration tests passing), and Product Owner accepted in current delivery session. Next backend implementation phase (`/v1/transactions`) is NOT authorized because a transaction API contract does not yet exist; it requires separate contract specification and PO authorization.
+Phase 7B.2.2 documentation reconciliation and Phase 7B.3 contract gate (`SETUP_MASTER_DATA_API_CONTRACT.md`) were formally accepted by the Product Owner on 2026-08-13. Phase 7B.3 Setup & Master Data API implementation (`6cff955891bc4e09db4a4a08a3a3cf1ecfb17926`) is delivered, Tech Lead independently verified (106 integration tests passing), and Product Owner accepted in current delivery session. Phase 7B.4 Transaction API Contract Specification ([TRANSACTIONS_API_CONTRACT.md](../architecture/TRANSACTIONS_API_CONTRACT.md)) has been finalized and formally accepted by the Product Owner on 2026-08-24 ([DEC-030](../decisions/DECISION_LOG.md#dec-030---transaction-api-contract-decisions-finalization)). The next backend implementation phase (`/v1/transactions*`) remains NOT AUTHORIZED pending separate explicit Product Owner authorization before work begins.
+
 
 Production deployment remains a separate future phase; provider, region, domain/DNS, and operating budget are intentionally not selected yet.
 

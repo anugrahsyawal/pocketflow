@@ -66,6 +66,9 @@ introduced later, but are not required for this documentation bootstrap.
 ## Approved API contracts and specifications
 
 - [Setup & Master Data API Contract Specification](architecture/SETUP_MASTER_DATA_API_CONTRACT.md) (Product Owner Accepted 2026-08-13; Endpoint Implementation Delivered & PO Accepted in Current Delivery Session)
+- [Transaction API Contract Specification](architecture/TRANSACTIONS_API_CONTRACT.md) (Product Owner Accepted 2026-08-24, DEC-030; Endpoint Implementation NOT AUTHORIZED Pending Separate PO Authorization)
+
+
 
 ## Legacy documents
 
