@@ -1,34 +1,44 @@
 # Current Handoff
 
-Last updated: 2026-08-13
+Last updated: 2026-09-01
 
-## Last verified application checkpoint
+## Last committed & pushed application checkpoint
 
 - Commit: `6cff955891bc4e09db4a4a08a3a3cf1ecfb17926`
 - Phase: Phase 7B.3 — Setup & Master Data API Implementation
-- Tech Lead (Codex) independent verification: Passed (106 integration tests, typecheck/build pass, migration twice pass, Docker healthy)
 - Push state: pushed to `origin/main`
+- Status: Tech Lead verified, Product Owner accepted
 - Verification evidence: [phase-7b3-setup-master-data.md](../walkthroughs/phase-7b3-setup-master-data.md)
+
+## Active working checkpoint (Phase 7B.4)
+
+- Phase: Phase 7B.4 — Transaction API Implementation
+- Worktree state: Intentionally dirty, unstaged, uncommitted, and unpushed pending closure review
+- Verification: Implemented & Automatically Verified (178 integration tests, typecheck/build pass, git diff --check clean)
+- Product Owner acceptance: PO Acceptance Pending
+- Verification evidence: [phase-7b4-transaction-api.md](../walkthroughs/phase-7b4-transaction-api.md)
 
 ## Current status & handoff
 
-Phase 7B.3 Setup & Master Data API implementation has been delivered, Tech Lead independently verified, and Product Owner accepted in the current delivery session (commit `6cff955891bc4e09db4a4a08a3a3cf1ecfb17926`, pushed `origin/main`).
+Phase 7B.4 Transaction API implementation has been delivered and automatically verified across 178 integration tests executing on the dedicated test database in the local working tree (Product Owner acceptance pending; unstaged/uncommitted).
 
-Delivered scope includes `/v1/setup`, `/v1/pockets`, and `/v1/categories` endpoints, database migration `drizzle/0002_real_lyja.sql`, and 106 automated integration test cases (`npm run test:integration`) executing on dedicated test database `pocketflow_test_7b3`. The next backend implementation phase (`/v1/transactions`) is NOT authorized because a transaction API contract does not yet exist; it requires a separate contract specification, refinement, and Product Owner authorization before work begins (not a blocker against Phase 7B.3 completion).
+Delivered scope includes 7 Fastify endpoints (`GET /v1/transactions`, `POST /v1/transactions`, `POST /v1/transactions/batch`, `PATCH /v1/transactions/:id`, `POST /v1/transactions/:id/archive`, `POST /v1/transactions/:id/restore`, `DELETE /v1/transactions/:id`), Drizzle migration `drizzle/0003_bumpy_chat.sql`, and background 30-day tombstone purge scheduler (`startPurgeScheduler`) with audit logging to `transaction_purge_logs`.
+
+The remaining Phase 7B.4 closure sequence is final Tech Lead source/docs review, documentation validation (`git diff --check` and relative link audits), and one logical targeted commit and push under the standing Product Owner authorization. Product Owner acceptance remains a separately tracked pending status.
+
+Reports backend endpoints (`/v1/reports*`) remain **EXPLICITLY NOT STARTED AND NOT AUTHORIZED** pending separate contract specification and Product Owner authorization.
 
 ## Verification for this checkpoint
 
 - Markdown link and repository path validation: passed
 - `git diff --check`: passed
-- Node JSON-fence parsing & RFC 4122 v4 UUID scan: passed
-- Application build, typecheck, migration, and 106 integration tests: passed
-- Tech Lead (Codex) independent verification: passed
-- Product Owner review and acceptance: Accepted in current delivery session
+- Application build, typecheck, migration, and 178 integration tests: passed
+- Product Owner acceptance: PO Acceptance Pending
 
-## Required sequence before next backend implementation (`/v1/transactions`)
+## Required sequence before next backend implementation (`/v1/reports`)
 
-1. Transaction API contract specification ([TRANSACTIONS_API_CONTRACT.md](../architecture/TRANSACTIONS_API_CONTRACT.md)) finalized and accepted by Product Owner (2026-08-24, DEC-030).
-2. Verification of clean working tree and explicit, separate authorization from Product Owner to begin `/v1/transactions` endpoint implementation.
+1. Reports API contract specification finalized and accepted by Product Owner.
+2. Verification of clean working tree and explicit, separate authorization from Product Owner to begin `/v1/reports` endpoint implementation.
 
 ## Relevant files
 
@@ -40,11 +50,10 @@ Delivered scope includes `/v1/setup`, `/v1/pockets`, and `/v1/categories` endpoi
 - [Backend Architecture Decision Pack](../architecture/BACKEND_ARCHITECTURE_DECISION_PACK.md)
 - [Setup & Master Data API Contract Specification](../architecture/SETUP_MASTER_DATA_API_CONTRACT.md)
 - [Transaction API Contract Specification](../architecture/TRANSACTIONS_API_CONTRACT.md)
-
 - [Acceptance checklist](../quality/ACCEPTANCE_CHECKLIST.md)
 - [Phase 7B.2.1 evidence](../walkthroughs/phase-7b21-local-postgres-auth-integration.md)
 - [Phase 7B.3 evidence](../walkthroughs/phase-7b3-setup-master-data.md)
-
+- [Phase 7B.4 evidence](../walkthroughs/phase-7b4-transaction-api.md)
 
 ## Open pre-production / architecture decisions
 
@@ -56,7 +65,7 @@ Delivered scope includes `/v1/setup`, `/v1/pockets`, and `/v1/categories` endpoi
 
 ## Restrictions
 
-- Do not begin transaction (`/v1/transactions`) backend implementation before a transaction API contract is specified, accepted by PO, and separate explicit implementation authorization is granted.
+- Do not begin Reports (`/v1/reports`) backend implementation before a separate contract is specified, accepted by PO, and separate explicit implementation authorization is granted.
 - Antigravity remains implementer; Codex remains PM, Tech Lead, and reviewer.
 - Do not infer historical values from current allocations or balances.
 - Do not auto-commit, amend, reset, force-push, or broaden scope.

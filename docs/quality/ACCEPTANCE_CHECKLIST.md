@@ -47,8 +47,11 @@ Last updated: 2026-08-13
 - [x] Phase 7B.2.2 Backend canonical documentation reconciled (Reconciled and formally accepted by Product Owner on 2026-08-13).
 - [x] Phase 7B.3 Setup & Master Data contract gate specification created (`SETUP_MASTER_DATA_API_CONTRACT.md`) (Approved specification formally accepted by Product Owner on 2026-08-13).
 - [x] Phase 7B.3 Setup & Master Data API endpoints implementation (Delivered in commit `6cff955891bc4e09db4a4a08a3a3cf1ecfb17926`, Tech Lead independently verified with 106 integration tests, PO accepted in current delivery session, pushed to `origin/main`).
+- [x] Phase 7B.4 Transaction API Contract Specification (`TRANSACTIONS_API_CONTRACT.md`) (Accepted by Product Owner on 2026-08-24, DEC-030).
+- [ ] Phase 7B.4 Transaction API endpoints & 30-day purge implementation (Implemented & Automatically Verified — Product Owner Acceptance Pending; [phase-7b4-transaction-api.md](../walkthroughs/phase-7b4-transaction-api.md)).
 
 ## E. Pre-production gates (future)
+
 
 - [ ] Real authentication and backend authorization are approved and verified.
 - [x] Backup policy baseline approved (DEC-028: daily encrypted, 30-day retention, monthly restore test).

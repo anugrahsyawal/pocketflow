@@ -22,6 +22,13 @@
       "when": 1786619582316,
       "tag": "0002_real_lyja",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1787822378695,
+      "tag": "0003_bumpy_chat",
+      "breakpoints": true
     }
   ]
 }

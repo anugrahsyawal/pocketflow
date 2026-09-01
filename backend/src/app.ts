@@ -3,11 +3,13 @@ import cors from '@fastify/cors';
 import cookie from '@fastify/cookie';
 import { AppConfig } from './config/env.js';
 import { handleAppError } from './lib/errors.js';
+import { startPurgeScheduler, stopPurgeScheduler } from './lib/purge.js';
 import { healthRoutes } from './routes/health.js';
 import { authRoutes } from './routes/auth.js';
 import { setupRoutes } from './routes/setup.js';
 import { pocketRoutes } from './routes/pockets.js';
 import { categoryRoutes } from './routes/categories.js';
+import { transactionRoutes } from './routes/transactions.js';
 
 export async function buildApp(config: AppConfig): Promise<FastifyInstance> {
   const app = Fastify({
@@ -30,12 +32,24 @@ export async function buildApp(config: AppConfig): Promise<FastifyInstance> {
   // Error Handler
   app.setErrorHandler(handleAppError);
 
+  // Background Purge Scheduler Lifecycle (DEC-030.2)
+  startPurgeScheduler({
+    intervalMs: 24 * 60 * 60 * 1000,
+    retentionDays: 30,
+    unref: true,
+  });
+
+  app.addHook('onClose', async () => {
+    stopPurgeScheduler();
+  });
+
   // Register Routes
   await app.register(healthRoutes);
   await app.register(authRoutes);
   await app.register(setupRoutes);
   await app.register(pocketRoutes);
   await app.register(categoryRoutes);
+  await app.register(transactionRoutes);
 
   return app;
 }

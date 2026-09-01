@@ -10,23 +10,27 @@ PocketFlow is a personal finance application with a completed frontend MVP and a
 
 The verified application checkpoint is clean on branch `main` at HEAD `6cff955891bc4e09db4a4a08a3a3cf1ecfb17926` (pushed to `origin/main`). Backend foundation (Phase 7B.1, commit `4ac8790`), owner authentication & session lifecycle (Phase 7B.2, commit `e346d8f`), and local PostgreSQL Docker Compose & auth matrix verification (Phase 7B.2.1, commit `7e6c6b5`) have been implemented and Tech Lead verified on VM (Product Owner acceptance pending for Phase 7B.1/7B.2/7B.2.1).
 
-Phase 7B.3 Setup & Master Data API implementation (commit `6cff955891bc4e09db4a4a08a3a3cf1ecfb17926`) has been delivered, Tech Lead independently verified, and Product Owner accepted in current delivery session. Delivered scope includes setup initialization (`GET /v1/setup`, `PUT /v1/setup`), pockets (`GET /v1/pockets`, `GET /v1/pockets/:id`, `PATCH /v1/pockets/:id`), categories (`GET /v1/categories`, `POST /v1/categories`, `PATCH /v1/categories/:id`), Drizzle migration `drizzle/0002_real_lyja.sql`, and 106 automated integration test cases (101 contract IDs + 2 drift + 3 health/auth regressions) executing on dedicated test database `pocketflow_test_7b3`. Typecheck, build, migration twice pass, Docker container health, and development owner-data preservation were verified cleanly. The next backend implementation phase (`/v1/transactions`) is NOT authorized because a transaction API contract does not yet exist; it requires a separate API contract specification, refinement, and explicit Product Owner authorization before work begins (not a blocker against Phase 7B.3 completion).
+Phase 7B.3 Setup & Master Data API implementation (commit `6cff955891bc4e09db4a4a08a3a3cf1ecfb17926`) has been delivered, Tech Lead independently verified, and Product Owner accepted. Delivered scope includes setup initialization (`GET /v1/setup`, `PUT /v1/setup`), pockets (`GET /v1/pockets`, `GET /v1/pockets/:id`, `PATCH /v1/pockets/:id`), categories (`GET /v1/categories`, `POST /v1/categories`, `PATCH /v1/categories/:id`), Drizzle migration `drizzle/0002_real_lyja.sql`, and 106 automated integration test cases executing on dedicated test database `pocketflow_test_7b3`.
+
+Phase 7B.4 Transaction API implementation has been delivered and verified against the test suite (178 passing integration tests across 15 suites, `tsc --noEmit`, `npm run build`, and clean `git diff --check`). Delivered scope includes 7 Fastify endpoints (`GET /v1/transactions`, `POST /v1/transactions`, `POST /v1/transactions/batch`, `PATCH /v1/transactions/:id`, `POST /v1/transactions/:id/archive`, `POST /v1/transactions/:id/restore`, `DELETE /v1/transactions/:id`), Drizzle migration `drizzle/0003_bumpy_chat.sql`, and background 30-day tombstone purge scheduler with audit logging (Implemented & Automated Verification Passed; PO Acceptance Pending). The Reports backend (`/v1/reports`) remains explicitly not started and not authorized pending separate contract specification and Product Owner authorization.
 
 Recent implemented features:
-1. Phase 7B.3 Setup & Master Data API Implementation (`6cff955891bc4e09db4a4a08a3a3cf1ecfb17926`): Fastify endpoints for setup, pockets, and categories, migration `drizzle/0002_real_lyja.sql`, and 106 automated integration tests (`npm run test:integration`). (Delivered, Tech Lead verified, PO Accepted in current delivery session).
-2. Phase 7B.2.1 Local PostgreSQL & Auth Integration Verification (`7e6c6b5910e23a31f419362b75ee371956a1b314`): 127.0.0.1:5432 loopback binding, live Drizzle migrations, 32 schema constraints audit, single-owner CLI provisioning (`npm run owner:provision`), and 13-point HTTP/Auth security verification matrix. (Implemented & Tech Lead verified 2026-08-12; PO Acceptance Pending).
-3. Phase 7B.2 Owner Auth & Sessions (`e346d8f`): Fastify auth routes (`/v1/auth/csrf`, `/v1/auth/login`, `/v1/auth/logout`, `/v1/me`), Argon2id password hashing, 30-day HttpOnly cookie sessions, session rotation, hashed database tokens, and `X-CSRF-Token` header protection. (Implemented & Verified; PO Acceptance Pending).
-4. Phase 7B.1 Backend Service Foundation (`4ac8790`): Fastify server, Drizzle ORM schema for 8 entities, environment fast-fail validation, CORS restriction, and `/health` route. (Implemented & Verified; PO Acceptance Pending).
-5. Frontend `Pindah Alokasi Budget` (`budget-reallocation`) transfer type.
-6. Payment Pocket budget owner configuration on Cash & NFC Card detail pages.
-7. Reports UI enhancements: full-width period selector, Google Stitch Iteration 3 "Anggaran Periode" card, and compact Export CSV utility button.
-8. Home Dashboard completion aligned to Google Stitch Iteration 5.
+1. Phase 7B.4 Transaction API Implementation: Fastify endpoints for transactions (`GET /v1/transactions`, `POST /v1/transactions`, `POST /v1/transactions/batch`, `PATCH /v1/transactions/:id`, `POST /v1/transactions/:id/archive`, `POST /v1/transactions/:id/restore`, `DELETE /v1/transactions/:id`), migration `drizzle/0003_bumpy_chat.sql`, background 30-day tombstone purge scheduler with audit logging, and 178 automated integration tests (`npm run test:integration`) (Implemented & Automated Verification Passed; PO Acceptance Pending).
+2. Phase 7B.3 Setup & Master Data API Implementation (`6cff955891bc4e09db4a4a08a3a3cf1ecfb17926`): Fastify endpoints for setup, pockets, and categories, migration `drizzle/0002_real_lyja.sql`, and 106 automated integration tests (`npm run test:integration`). (Delivered, Tech Lead verified, PO Accepted).
+3. Phase 7B.2.1 Local PostgreSQL & Auth Integration Verification (`7e6c6b5910e23a31f419362b75ee371956a1b314`): 127.0.0.1:5432 loopback binding, live Drizzle migrations, 32 schema constraints audit, single-owner CLI provisioning (`npm run owner:provision`), and 13-point HTTP/Auth security verification matrix. (Implemented & Tech Lead verified 2026-08-12; PO Acceptance Pending).
+4. Phase 7B.2 Owner Auth & Sessions (`e346d8f`): Fastify auth routes (`/v1/auth/csrf`, `/v1/auth/login`, `/v1/auth/logout`, `/v1/me`), Argon2id password hashing, 30-day HttpOnly cookie sessions, session rotation, hashed database tokens, and `X-CSRF-Token` header protection. (Implemented & Verified; PO Acceptance Pending).
+5. Phase 7B.1 Backend Service Foundation (`4ac8790`): Fastify server, Drizzle ORM schema for 8 entities, environment fast-fail validation, CORS restriction, and `/health` route. (Implemented & Verified; PO Acceptance Pending).
+6. Frontend `Pindah Alokasi Budget` (`budget-reallocation`) transfer type.
+7. Payment Pocket budget owner configuration on Cash & NFC Card detail pages.
+8. Reports UI enhancements: full-width period selector, Google Stitch Iteration 3 "Anggaran Periode" card, and compact Export CSV utility button.
+9. Home Dashboard completion aligned to Google Stitch Iteration 5.
 
 Local `frontend/node_modules/`, `frontend/dist/`, `backend/node_modules/`, and `backend/dist/` exist as ignored generated/dependency output. They are not tracked and must not be read as project source.
 
-## Implemented and verified (Phase 7B.3 PO Accepted; Phase 7B.1/7B.2/7B.2.1 PO Acceptance Pending)
+## Implemented and verified (Phase 7B.3 PO Accepted; Phase 7B.1/7B.2/7B.2.1/7B.4 PO Acceptance Pending)
 
-- Setup & Master Data API endpoints (`GET /v1/setup`, `PUT /v1/setup`, `GET /v1/pockets`, `GET /v1/pockets/:id`, `PATCH /v1/pockets/:id`, `GET /v1/categories`, `POST /v1/categories`, `PATCH /v1/categories/:id`), schema migration `drizzle/0002_real_lyja.sql`, and 106 automated integration tests (`npm run test:integration`) (Delivered, Tech Lead verified, PO Accepted in current delivery session; commit `6cff955891bc4e09db4a4a08a3a3cf1ecfb17926`).
+- Transaction API endpoints (`GET /v1/transactions`, `POST /v1/transactions`, `POST /v1/transactions/batch`, `PATCH /v1/transactions/:id`, `POST /v1/transactions/:id/archive`, `POST /v1/transactions/:id/restore`, `DELETE /v1/transactions/:id`), schema migration `drizzle/0003_bumpy_chat.sql`, background 30-day tombstone purge worker, and 178 automated integration tests (`npm run test:integration`) (Implemented & Automated Verification Passed; PO Acceptance Pending).
+- Setup & Master Data API endpoints (`GET /v1/setup`, `PUT /v1/setup`, `GET /v1/pockets`, `GET /v1/pockets/:id`, `PATCH /v1/pockets/:id`, `GET /v1/categories`, `POST /v1/categories`, `PATCH /v1/categories/:id`), schema migration `drizzle/0002_real_lyja.sql`, and 106 automated integration tests (`npm run test:integration`) (Delivered, Tech Lead verified, PO Accepted; commit `6cff955891bc4e09db4a4a08a3a3cf1ecfb17926`).
 - Local TypeScript + Fastify backend with Drizzle ORM and PostgreSQL 16 schema definitions (Implemented & Tech Lead Verified; PO Acceptance Pending).
 - Single-owner CLI provisioning (`npm run owner:provision`) with Argon2id password hashing and single-owner database constraint (Implemented & Verified; PO Acceptance Pending).
 - Versioned authentication routes (`/v1/auth/login`, `/v1/auth/logout`, `/v1/me`, `/v1/auth/csrf`), session rotation, 30-day HttpOnly `sid` cookies, SHA-256 token hashing, and `X-CSRF-Token` protection (Implemented & Verified; PO Acceptance Pending).
@@ -53,7 +57,7 @@ Accepted legacy checkpoints remain accepted. Verification limitations from Phase
 
 ## Not implemented
 
-- Backend domain endpoints for transactions (`/v1/transactions`) and reports (`/v1/reports`). Setup & master data endpoints (`/v1/setup`, `/v1/pockets`, `/v1/categories`) were delivered in Phase 7B.3.
+- Backend domain endpoints for reports (`/v1/reports`) remain not implemented and not authorized pending separate contract specification and PO authorization. (Setup & master data endpoints were delivered in Phase 7B.3; transaction endpoints were delivered in Phase 7B.4).
 - Remote synchronization and conflict/deletion propagation queue.
 - Production deployment infrastructure, host platform, domain/DNS, and automated backup service.
 - Goals.
@@ -65,8 +69,7 @@ Phase 7A backend architecture decisions (DEC-025 through DEC-028) and Phase 7B a
 
 Phase 7B.1 backend foundation (`4ac8790`), Phase 7B.2 auth/sessions (`e346d8f`), and Phase 7B.2.1 local PostgreSQL integration (`7e6c6b5910e23a31f419362b75ee371956a1b314`) are completed and verified against live PostgreSQL (PO acceptance pending).
 
-Phase 7B.2.2 documentation reconciliation and Phase 7B.3 contract gate (`SETUP_MASTER_DATA_API_CONTRACT.md`) were formally accepted by the Product Owner on 2026-08-13. Phase 7B.3 Setup & Master Data API implementation (`6cff955891bc4e09db4a4a08a3a3cf1ecfb17926`) is delivered, Tech Lead independently verified (106 integration tests passing), and Product Owner accepted in current delivery session. Phase 7B.4 Transaction API Contract Specification ([TRANSACTIONS_API_CONTRACT.md](../architecture/TRANSACTIONS_API_CONTRACT.md)) has been finalized and formally accepted by the Product Owner on 2026-08-24 ([DEC-030](../decisions/DECISION_LOG.md#dec-030---transaction-api-contract-decisions-finalization)). The next backend implementation phase (`/v1/transactions*`) remains NOT AUTHORIZED pending separate explicit Product Owner authorization before work begins.
-
+Phase 7B.2.2 documentation reconciliation and Phase 7B.3 contract gate (`SETUP_MASTER_DATA_API_CONTRACT.md`) were formally accepted by the Product Owner on 2026-08-13. Phase 7B.3 Setup & Master Data API implementation (`6cff955891bc4e09db4a4a08a3a3cf1ecfb17926`) is delivered, Tech Lead independently verified (106 integration tests passing), and Product Owner accepted. Phase 7B.4 Transaction API Contract Specification ([TRANSACTIONS_API_CONTRACT.md](../architecture/TRANSACTIONS_API_CONTRACT.md)) was formally accepted by the Product Owner on 2026-08-24 ([DEC-030](../decisions/DECISION_LOG.md#dec-030---transaction-api-contract-decisions-finalization)). Phase 7B.4 Transaction API endpoint implementation has been delivered and verified against 178 integration tests (PO acceptance pending). The Reports backend (`/v1/reports*`) remains explicitly not started and not authorized pending separate contract specification and PO authorization.
 
 Production deployment remains a separate future phase; provider, region, domain/DNS, and operating budget are intentionally not selected yet.
 
@@ -89,11 +92,11 @@ Frontend implementation is ready for review; automated checks and recorded manua
 
 ## Current blockers
 
-No application code blocker is recorded. Phase 7B.3 Setup & Master Data API implementation is completed, verified, and PO accepted at HEAD `6cff955891bc4e09db4a4a08a3a3cf1ecfb17926` (pushed `origin/main`). Transaction API implementation (`/v1/transactions`) is NOT authorized because a transaction API contract does not yet exist; it requires a separate contract specification and PO authorization before work begins (not a blocker against Phase 7B.3).
+No application code blocker is recorded. Transaction API endpoints (`/v1/transactions*`) are implemented and verified against 178 automated tests (PO acceptance pending). Reports API implementation (`/v1/reports`) remains not started and not authorized pending separate contract specification and PO authorization.
 
 ## Do not start
 
-- Transaction (`/v1/transactions`) or Reports (`/v1/reports`) backend endpoints before a separate API contract is specified, refined, and explicitly authorized by Product Owner.
+- Reports (`/v1/reports`) backend endpoints before a separate API contract is specified, refined, and explicitly authorized by Product Owner.
 - Production infrastructure or deployment before a separate deployment phase is approved.
 - Historical snapshot implementation.
 - Automatic Sinking Fund transfer.

@@ -11,6 +11,7 @@ import {
   check,
   unique,
   uniqueIndex,
+  index,
   AnyPgColumn,
 } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
@@ -168,6 +169,17 @@ export const transactions = pgTable(
       'transactions_exclusive_topology',
       sql`(${table.type} IN ('expense', 'income') AND ${table.pocketId} IS NOT NULL AND ${table.fromPocketId} IS NULL AND ${table.toPocketId} IS NULL) OR (${table.type} = 'transfer' AND ${table.fromPocketId} IS NOT NULL AND ${table.toPocketId} IS NOT NULL AND ${table.fromPocketId} <> ${table.toPocketId} AND ${table.pocketId} IS NULL)`
     ),
+    index('transactions_owner_date_idx').on(table.userId, table.occurredOn, table.occurredAtLocalTime),
+    index('transactions_owner_pocket_idx')
+      .on(table.userId, table.pocketId)
+      .where(sql`${table.pocketId} IS NOT NULL`),
+    index('transactions_owner_transfer_pockets_idx')
+      .on(table.userId, table.fromPocketId, table.toPocketId)
+      .where(sql`${table.type} = 'transfer'`),
+    index('transactions_owner_category_idx')
+      .on(table.userId, table.categoryId)
+      .where(sql`${table.categoryId} IS NOT NULL`),
+    index('transactions_owner_state_idx').on(table.userId, table.deletedAt, table.archivedAt),
   ]
 );
 
@@ -189,3 +201,15 @@ export const idempotencyRecords = pgTable(
     unique('idempotency_records_user_mutation_unique').on(table.userId, table.clientMutationId),
   ]
 );
+
+// 9. Transaction Purge Logs (DEC-030.2)
+export const transactionPurgeLogs = pgTable('transaction_purge_logs', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  purgedTransactionId: uuid('purged_transaction_id').notNull(),
+  deletedAt: timestamp('deleted_at', { withTimezone: true }).notNull(),
+  purgedAt: timestamp('purged_at', { withTimezone: true }).notNull().defaultNow(),
+  metadata: text('metadata'),
+});
