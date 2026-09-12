@@ -29,7 +29,7 @@ export function TopBar({ title, showBack = false, onBack, rightAction, transpare
       {showBack && (
         <button
           onClick={handleBack}
-          className="flex items-center justify-center w-10 h-10 -ml-1 rounded-full hover:bg-surface-container transition-colors"
+          className="flex shrink-0 items-center justify-center w-11 h-11 -ml-1 rounded-full hover:bg-surface-container transition-colors"
           aria-label="Kembali"
         >
           <span className="material-symbols-rounded">arrow_back</span>

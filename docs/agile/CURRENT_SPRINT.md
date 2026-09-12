@@ -26,6 +26,18 @@ Build a secure, verified TypeScript/Fastify/PostgreSQL backend foundation and de
 
 ## Active status
 
+### PO-requested frontend polish interlude — 2026-09-12
+
+The Product Owner authorized Codex to refine the existing frontend directly
+before continuing hosting work. Scope is presentation and shared interaction
+quality only, with the existing MVP rules and design theme preserved. This
+explicit request supersedes the prior frontend exclusion for this bounded task
+only. Implementation and bounded verification are complete; the Product Owner
+accepted the frontend and authorized commit/push. See
+[frontend quality polish](../walkthroughs/frontend-quality-polish.md).
+
+### Backend checkpoint (unchanged)
+
 Phase 7B.4 Transaction API Implementation is **DELIVERED AND AUTOMATICALLY VERIFIED** (Product Owner Acceptance Pending):
 
 - Delivered 7 Fastify endpoints (`GET /v1/transactions`, `POST /v1/transactions`, `POST /v1/transactions/batch`, `PATCH /v1/transactions/:id`, `POST /v1/transactions/:id/archive`, `POST /v1/transactions/:id/restore`, `DELETE /v1/transactions/:id`), Drizzle database migration `drizzle/0003_bumpy_chat.sql`, background 30-day tombstone purge scheduler (`startPurgeScheduler`) with `transaction_purge_logs` audit logging, and 178 automated integration test cases (`npm run test:integration`);

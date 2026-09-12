@@ -42,6 +42,7 @@ reference only and must not be copied into production.
 
 ## Verification evidence
 
+- [Frontend quality polish — PO accepted](walkthroughs/frontend-quality-polish.md)
 - [Phase 6B Reports visual analytics](walkthroughs/phase-6b-reports-visual-analytics.md)
 - [Phase 6C Budget vs Actual and Weekly Usage](walkthroughs/phase-6c-budget-vs-actual-and-weekly-usage.md)
 - [Phase 6D insights and Sinking Fund](walkthroughs/phase-6d-rule-based-insights-and-sinking-fund.md)

@@ -264,15 +264,16 @@ export function HomePage() {
   }, [transportationPocket, foodPocket, otherPockets, activeTransactions, period.startDate, period.endDate]);
 
   return (
-    <div className="flex flex-col gap-6 px-safe py-6 min-h-screen bg-background pb-28 max-w-[480px] mx-auto">
+    <div className="flex flex-col gap-6 px-safe pt-6 pb-8 bg-background max-w-[480px] mx-auto">
       {/* ── Header ──────────────────────────────────────────────────────── */}
       <header className="flex justify-between items-center">
         <div>
-          <h1 className="font-display text-headline-sm text-text-primary">
+          <h1 className="font-display text-[22px] leading-7 font-extrabold tracking-tight text-text-primary">
             {greeting}, {firstName} 👋
           </h1>
-          <div className="bg-surface-container/80 px-2.5 py-1 rounded-full inline-block mt-1 border border-border/40">
-            <span className="text-[11px] font-bold text-text-secondary">
+          <div className="bg-surface-container/80 px-3 py-1.5 rounded-full inline-flex items-center gap-1.5 mt-2 border border-border/40">
+            <span className="material-symbols-rounded text-sm text-text-secondary" aria-hidden="true">calendar_today</span>
+            <span className="text-xs font-semibold text-text-secondary">
               {period.label}
             </span>
           </div>
@@ -290,9 +291,9 @@ export function HomePage() {
       </header>
 
       {/* ── Hero Balance Card "TOTAL SEMUA POCKET" ──────────────────────── */}
-      <Card variant="flat" className="bg-surface rounded-[28px] p-5 shadow-[0_4px_20px_rgba(0,74,198,0.08)] border border-border/50 flex flex-col gap-4">
+      <Card className="rounded-[28px] p-5 shadow-[0_8px_32px_rgba(0,74,198,0.07)] border border-border/50 flex flex-col gap-4">
         {/* Card Header Row */}
-        <div className="flex justify-between items-start">
+        <div className="flex flex-wrap justify-between items-center gap-2">
           <div>
             <div className="flex items-center gap-2">
               <span className="text-[11px] font-bold text-text-secondary tracking-wider uppercase">
@@ -302,6 +303,7 @@ export function HomePage() {
                 type="button"
                 onClick={() => setIsPrivate(!isPrivate)}
                 aria-label={isPrivate ? 'Tampilkan saldo' : 'Sembunyikan saldo'}
+                aria-pressed={isPrivate}
                 className="text-text-muted hover:text-primary transition-colors p-1 rounded-full cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
               >
                 <span className="material-symbols-rounded text-lg">
@@ -309,17 +311,14 @@ export function HomePage() {
                 </span>
               </button>
             </div>
-            <p className="font-display text-headline-lg font-extrabold text-text-primary mt-1 tracking-tight">
-              {displayAmount(totalBalance)}
-            </p>
           </div>
 
           {/* Status Pill Badge */}
           <div className={`px-3 py-1 rounded-full flex items-center gap-1.5 border text-[11px] font-bold ${
             budgetStatus.status === 'aman'
-              ? 'bg-aman-soft text-aman border-aman/20'
+              ? 'bg-aman-soft text-tertiary border-aman/20'
               : budgetStatus.status === 'waspada'
-              ? 'bg-waspada-soft text-waspada border-waspada/20'
+              ? 'bg-waspada-soft text-accent-dark border-waspada/20'
               : 'bg-bahaya-soft text-bahaya border-bahaya/20'
           }`}>
             <span className={`w-2 h-2 rounded-full ${
@@ -333,6 +332,10 @@ export function HomePage() {
           </div>
         </div>
 
+        <p className="financial-amount font-display text-[clamp(30px,8.8vw,40px)] leading-tight font-extrabold text-text-primary -mt-2 tracking-[-0.04em]">
+          {displayAmount(totalBalance)}
+        </p>
+
         {/* 2-Column Sub-metrics */}
         <div className="grid grid-cols-2 gap-3 bg-surface-container-low/60 p-3.5 rounded-2xl border border-border/30">
           <div className="flex flex-col gap-1">
@@ -340,7 +343,7 @@ export function HomePage() {
               <span className="material-symbols-rounded text-base text-primary">account_balance_wallet</span>
               <span className="text-[12px] font-medium">Sisa spendable</span>
             </div>
-            <p className="font-display text-body-lg font-bold text-text-primary">
+            <p className="financial-amount font-display text-lg font-extrabold text-text-primary">
               {displayAmount(spendableBalance)}
             </p>
           </div>
@@ -350,7 +353,7 @@ export function HomePage() {
               <span className="material-symbols-rounded text-base text-primary">calendar_month</span>
               <span className="text-[12px] font-medium">Aman per hari</span>
             </div>
-            <p className="font-display text-body-lg font-bold text-text-primary">
+            <p className="financial-amount font-display text-lg font-extrabold text-text-primary">
               {displayAmount(safePerDay)}
             </p>
           </div>
@@ -359,11 +362,11 @@ export function HomePage() {
         {/* Budget Progress Block */}
         {totalMonthlyAllocation > 0 && (
           <div className="flex flex-col gap-2 pt-1">
-            <div className="flex justify-between items-center text-[12px]">
-              <span className="text-text-secondary">
+            <div className="grid grid-cols-2 gap-4 text-xs leading-5">
+              <span className="financial-amount text-text-secondary">
                 {displayAmount(periodExpense)} terpakai dari {displayAmount(totalMonthlyAllocation)}
               </span>
-              <span className={`font-display font-bold ${
+              <span className={`financial-amount text-right font-semibold ${
                 remainingAllocation >= 0 ? 'text-text-primary' : 'text-bahaya'
               }`}>
                 Sisa anggaran {displayAmount(remainingAllocation)}
@@ -394,13 +397,13 @@ export function HomePage() {
           </button>
         </div>
 
-        <div className="w-full flex gap-3 overflow-x-auto pb-2 snap-x [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        <div className="pocket-carousel">
           {/* Card 1: Transportation + NFC */}
           {transportationPocket && (
             <button
               type="button"
               onClick={() => navigate('/pockets/transportation')}
-              className="w-[85%] min-w-[280px] max-w-[320px] flex-shrink-0 snap-start flex flex-col justify-between bg-surface rounded-[24px] p-4 border border-border/60 shadow-card hover:border-primary/30 transition-all cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-primary/50 min-h-[160px]"
+              className="pocket-summary-card w-[90%] min-w-0 max-w-[360px] flex-shrink-0 snap-start flex flex-col justify-between bg-surface rounded-[24px] p-4 border border-border/60 shadow-card hover:border-primary/30 transition-all cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-primary/50 min-h-[160px]"
             >
               <div className="flex flex-col gap-2.5 w-full">
                 <h3 className="font-display text-body-lg font-bold text-text-primary flex items-center gap-2">
@@ -428,7 +431,7 @@ export function HomePage() {
               <div className="pt-3 mt-3 border-t border-border/40 flex justify-between items-center w-full">
                 <span className="text-[13px] font-bold text-text-primary">Total tersedia</span>
                 <div className="flex items-center gap-2">
-                  <span className="font-display text-body-md font-bold text-primary">
+                  <span className="font-display text-base font-bold text-primary">
                     {displayAmount(
                       getPocketEffectiveBalance(transportationPocket, activeTransactions) +
                       (nfcPocket ? getPocketEffectiveBalance(nfcPocket, activeTransactions) : 0)
@@ -437,9 +440,9 @@ export function HomePage() {
                   {transStatus && transStatus.status && (
                     <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
                       transStatus.status === 'aman'
-                        ? 'bg-aman-soft text-aman'
+                        ? 'bg-aman-soft text-tertiary'
                         : transStatus.status === 'waspada'
-                        ? 'bg-waspada-soft text-waspada'
+                        ? 'bg-waspada-soft text-accent-dark'
                         : 'bg-bahaya-soft text-bahaya'
                     }`}>
                       {transStatus.status === 'overbudget' ? 'Bahaya' : transStatus.status.charAt(0).toUpperCase() + transStatus.status.slice(1)}
@@ -455,7 +458,7 @@ export function HomePage() {
             <button
               type="button"
               onClick={() => navigate('/pockets/food-groceries')}
-              className="w-[85%] min-w-[280px] max-w-[320px] flex-shrink-0 snap-start flex flex-col justify-between bg-surface rounded-[24px] p-4 border border-border/60 shadow-card hover:border-primary/30 transition-all cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-primary/50 min-h-[160px]"
+              className="pocket-summary-card w-[90%] min-w-0 max-w-[360px] flex-shrink-0 snap-start flex flex-col justify-between bg-surface rounded-[24px] p-4 border border-border/60 shadow-card hover:border-primary/30 transition-all cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-primary/50 min-h-[160px]"
             >
               <div className="flex flex-col gap-2.5 w-full">
                 <h3 className="font-display text-body-lg font-bold text-text-primary flex items-center gap-2">
@@ -483,7 +486,7 @@ export function HomePage() {
               <div className="pt-3 mt-3 border-t border-border/40 flex justify-between items-center w-full">
                 <span className="text-[13px] font-bold text-text-primary">Total tersedia</span>
                 <div className="flex items-center gap-2">
-                  <span className="font-display text-body-md font-bold text-primary">
+                  <span className="font-display text-base font-bold text-primary">
                     {displayAmount(
                       getPocketEffectiveBalance(foodPocket, activeTransactions) +
                       (cashPocket ? getPocketEffectiveBalance(cashPocket, activeTransactions) : 0)
@@ -492,9 +495,9 @@ export function HomePage() {
                   {foodStatus && foodStatus.status && (
                     <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
                       foodStatus.status === 'aman'
-                        ? 'bg-aman-soft text-aman'
+                        ? 'bg-aman-soft text-tertiary'
                         : foodStatus.status === 'waspada'
-                        ? 'bg-waspada-soft text-waspada'
+                        ? 'bg-waspada-soft text-accent-dark'
                         : 'bg-bahaya-soft text-bahaya'
                     }`}>
                       {foodStatus.status === 'overbudget' ? 'Bahaya' : foodStatus.status.charAt(0).toUpperCase() + foodStatus.status.slice(1)}
@@ -514,7 +517,7 @@ export function HomePage() {
                 key={p.id}
                 type="button"
                 onClick={() => navigate(`/pockets/${p.id}`)}
-                className="w-[85%] min-w-[280px] max-w-[320px] flex-shrink-0 snap-start flex flex-col justify-between bg-surface rounded-[24px] p-4 border border-border/60 shadow-card hover:border-primary/30 transition-all cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-primary/50 min-h-[160px]"
+                className="pocket-summary-card w-[90%] min-w-0 max-w-[360px] flex-shrink-0 snap-start flex flex-col justify-between bg-surface rounded-[24px] p-4 border border-border/60 shadow-card hover:border-primary/30 transition-all cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-primary/50 min-h-[160px]"
               >
                 <div className="flex flex-col gap-2.5 w-full">
                   <h3 className="font-display text-body-lg font-bold text-text-primary flex items-center gap-2">
@@ -549,15 +552,15 @@ export function HomePage() {
                 <div className="pt-3 mt-3 border-t border-border/40 flex justify-between items-center w-full">
                   <span className="text-[13px] font-bold text-text-primary">Total tersedia</span>
                   <div className="flex items-center gap-2">
-                    <span className="font-display text-body-md font-bold text-primary">
+                    <span className="font-display text-base font-bold text-primary">
                       {displayAmount(bal)}
                     </span>
                     {pStat.status && (
                       <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
                         pStat.status === 'aman'
-                          ? 'bg-aman-soft text-aman'
+                          ? 'bg-aman-soft text-tertiary'
                           : pStat.status === 'waspada'
-                          ? 'bg-waspada-soft text-waspada'
+                          ? 'bg-waspada-soft text-accent-dark'
                           : 'bg-bahaya-soft text-bahaya'
                       }`}>
                         {pStat.status === 'overbudget' ? 'Bahaya' : pStat.status.charAt(0).toUpperCase() + pStat.status.slice(1)}
@@ -585,7 +588,7 @@ export function HomePage() {
             </p>
           </Card>
         ) : (
-          <div className="w-full flex gap-3 overflow-x-auto pb-2 snap-x [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <div className="pocket-carousel">
             {attentionPockets.map(({ pocket, status, message }) => {
               const isWaspada = status === 'waspada';
               return (
@@ -602,7 +605,7 @@ export function HomePage() {
                   <div className="flex justify-between items-start gap-2 mb-3 w-full">
                     <div className="flex flex-col gap-1 min-w-0">
                       <span className={`text-[12px] font-bold uppercase truncate ${
-                        isWaspada ? 'text-waspada' : 'text-bahaya'
+                        isWaspada ? 'text-accent-dark' : 'text-bahaya'
                       }`}>
                         {pocket.emoji} {pocket.name}
                       </span>
@@ -613,7 +616,7 @@ export function HomePage() {
 
                     <span className={`px-2.5 py-0.5 rounded-full font-bold text-[10px] uppercase shadow-xs flex-shrink-0 ${
                       isWaspada
-                        ? 'bg-waspada text-white'
+                        ? 'bg-waspada-soft text-accent-dark'
                         : 'bg-bahaya text-white'
                     }`}>
                       {status === 'overbudget' ? 'BAHAYA' : status.toUpperCase()}
@@ -621,7 +624,7 @@ export function HomePage() {
                   </div>
 
                   <div className={`flex items-center justify-between pt-2 border-t w-full ${
-                    isWaspada ? 'border-waspada/20 text-waspada' : 'border-bahaya/20 text-bahaya'
+                    isWaspada ? 'border-waspada/20 text-accent-dark' : 'border-bahaya/20 text-bahaya'
                   }`}>
                     <span className="font-bold text-[10px] uppercase tracking-wider">Lihat Detail</span>
                     <span className="material-symbols-rounded text-base">chevron_right</span>
@@ -651,10 +654,10 @@ export function HomePage() {
         </div>
 
         {recentTransactions.length === 0 ? (
-          <Card variant="flat" className="py-6 px-4 text-center flex flex-col items-center gap-3 bg-surface rounded-[24px] border border-border/50">
-            <span className="text-2xl" role="img" aria-label="No transactions">📝</span>
+          <Card className="py-6 px-4 text-center flex flex-col items-center gap-3 rounded-[24px] border border-border/50">
+            <span className="text-2xl" role="img" aria-label="Belum ada transaksi">📝</span>
             <div>
-              <h3 className="font-display text-body-md font-bold text-text-primary">
+              <h3 className="font-display text-base font-bold text-text-primary">
                 Belum ada transaksi.
               </h3>
               <p className="text-[11px] text-text-secondary mt-1 max-w-[200px] mx-auto">
@@ -673,7 +676,7 @@ export function HomePage() {
             </div>
           </Card>
         ) : (
-          <Card variant="flat" className="bg-surface rounded-[24px] border border-border/50 p-4 flex flex-col gap-3 shadow-[0_4px_20px_rgba(0,74,198,0.06)]">
+          <Card className="rounded-[24px] border border-border/50 p-4 flex flex-col divide-y divide-border/50 shadow-[0_4px_20px_rgba(0,74,198,0.06)]">
             {recentTransactions.map((t) => {
               const pocket = t.pocketId ? getPocketById(t.pocketId) : undefined;
               const fromPocket = t.fromPocketId ? getPocketById(t.fromPocketId) : undefined;
@@ -724,7 +727,7 @@ export function HomePage() {
                   key={t.id}
                   type="button"
                   onClick={() => navigate(`/transactions/${t.id}`, { state: { from: '/' } })}
-                  className="w-full flex items-center justify-between gap-3 text-left py-1 hover:opacity-80 active:scale-[0.99] transition-all focus:outline-none cursor-pointer min-h-[44px]"
+                  className="w-full flex items-center justify-between gap-3 text-left py-3 first:pt-0 last:pb-0 hover:opacity-80 active:scale-[0.99] transition-all rounded-lg cursor-pointer min-h-[44px]"
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-xl ${iconBg}`}>
@@ -738,7 +741,7 @@ export function HomePage() {
                     </div>
 
                     <div className="min-w-0">
-                      <div className="font-display text-body-md font-bold text-text-primary truncate">
+                      <div className="font-display text-base font-bold text-text-primary truncate">
                         {rowTitle}
                       </div>
                       <div className="text-[11px] text-text-secondary truncate">
@@ -748,7 +751,7 @@ export function HomePage() {
                   </div>
 
                   <div className="text-right flex-shrink-0 whitespace-nowrap">
-                    <span className={`font-display text-body-md font-bold ${amountColor}`}>
+                    <span className={`font-display text-base font-bold ${amountColor}`}>
                       {displayRawString(amountText)}
                     </span>
                   </div>

@@ -49,7 +49,7 @@ export function PocketListPage() {
           <span className="text-[10px] font-bold text-primary tracking-wider uppercase block">
             Total Semua Pocket
           </span>
-          <span className="font-display text-amount-md text-primary mt-1 block">
+          <span className="financial-amount font-display text-[clamp(16px,4.6vw,20px)] font-extrabold text-primary mt-2 block">
             {formatRupiah(totalBalance)}
           </span>
         </Card>
@@ -58,7 +58,7 @@ export function PocketListPage() {
           <span className="text-[10px] font-bold text-accent-dark tracking-wider uppercase block">
             Sisa Spendable
           </span>
-          <span className="font-display text-amount-md text-accent-dark mt-1 block">
+          <span className="financial-amount font-display text-[clamp(16px,4.6vw,20px)] font-extrabold text-accent-dark mt-2 block">
             {formatRupiah(spendableBalance)}
           </span>
         </Card>

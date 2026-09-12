@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import type { Pocket } from '@/types/pocket';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -17,7 +17,6 @@ interface PocketCardProps {
 }
 
 export function PocketCard({ pocket }: PocketCardProps) {
-  const navigate = useNavigate();
   const transactions = useTransactionStore((s) => s.transactions);
 
   const hasAllocation = pocket.monthlyAllocation !== null;
@@ -29,18 +28,14 @@ export function PocketCard({ pocket }: PocketCardProps) {
     pocket.monthlyAllocation
   );
 
-  const handleClick = () => {
-    navigate(`/pockets/${pocket.id}`);
-  };
-
   return (
-    <div onClick={handleClick} className="cursor-pointer active:scale-[0.99] transition-transform">
-      <Card variant="flat" className="flex flex-col gap-3 border border-border/40 hover:border-primary/20 hover:shadow-card transition-shadow">
+    <Link to={`/pockets/${pocket.id}`} className="block rounded-card active:scale-[0.99] transition-transform">
+      <Card className="flex flex-col gap-3 border border-border/60 hover:border-primary/30 hover:shadow-card-hover transition-all">
         {/* Main Row */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0 flex-1 basis-[160px]">
             {/* Emoji Container */}
-            <div className="flex items-center justify-center w-11 h-11 rounded-pocket bg-surface-container-high text-2xl">
+            <div className="flex shrink-0 items-center justify-center w-11 h-11 rounded-2xl bg-surface-container-low text-2xl">
               {pocket.emoji}
             </div>
             
@@ -49,19 +44,19 @@ export function PocketCard({ pocket }: PocketCardProps) {
               <h4 className="font-display text-body-lg font-bold text-text-primary">
                 {pocket.name}
               </h4>
-              <p className="text-[11px] text-text-muted">
+              <p className="text-xs text-text-secondary mt-0.5">
                 {hasAllocation ? 'Anggaran Bulanan' : 'Saldo Wallet'}
               </p>
             </div>
           </div>
 
           {/* Balance */}
-          <div className="text-right">
+          <div className="text-right ml-auto financial-amount">
             <span className="font-body text-body-lg font-bold text-text-primary block">
               {formatRupiah(effectiveBalance)}
             </span>
             {hasAllocation && (
-              <span className="text-[11px] text-text-muted">
+              <span className="text-xs text-text-secondary">
                 Limit: {formatRupiah(pocket.monthlyAllocation!)}
               </span>
             )}
@@ -81,6 +76,6 @@ export function PocketCard({ pocket }: PocketCardProps) {
           </div>
         ) : null}
       </Card>
-    </div>
+    </Link>
   );
 }

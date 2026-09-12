@@ -22,15 +22,15 @@ export function BottomNav({ onAddClick }: BottomNavProps) {
   };
 
   return (
-    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-app bg-surface shadow-nav border-t border-border z-50">
-      <div className="flex items-center justify-around h-16 px-2 pb-safe">
+    <nav aria-label="Navigasi utama" className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-app bg-surface/95 backdrop-blur-xl shadow-nav border-t border-border/60 z-50 pb-safe rounded-t-[24px]">
+      <div className="flex items-center justify-around h-[72px] px-2">
         {navItems.map((item) => {
           if (item.path === '__add__') {
             return (
               <button
                 key="add"
                 onClick={onAddClick}
-                className="flex items-center justify-center w-14 h-14 -mt-5 rounded-full bg-primary shadow-elevated text-on-primary active:scale-95 transition-transform"
+                className="flex items-center justify-center w-14 h-14 -mt-6 rounded-full bg-primary shadow-[0_6px_18px_rgba(0,74,198,0.24)] ring-[5px] ring-background text-on-primary hover:bg-primary-container active:scale-95 transition-all"
                 aria-label="Tambah transaksi"
               >
                 <span className="material-symbols-rounded text-3xl">add</span>
@@ -47,11 +47,12 @@ export function BottomNav({ onAddClick }: BottomNavProps) {
                 active ? 'text-primary' : 'text-text-secondary hover:text-text-primary'
               }`}
               aria-label={item.label}
+              aria-current={active ? 'page' : undefined}
             >
-              <span className={`material-symbols-rounded text-2xl ${active ? 'filled' : ''}`}>
+              <span className={`material-symbols-rounded text-2xl rounded-pill px-3 py-0.5 transition-colors ${active ? 'filled bg-primary-soft/70' : ''}`} aria-hidden="true">
                 {item.icon}
               </span>
-              <span className="text-[10px] font-medium leading-none">{item.label}</span>
+              <span className={`text-[11px] leading-4 ${active ? 'font-bold' : 'font-medium'}`}>{item.label}</span>
             </button>
           );
         })}

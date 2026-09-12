@@ -9,8 +9,8 @@ interface BadgeProps {
 }
 
 const variantClasses: Record<BadgeVariant, string> = {
-  aman: 'bg-aman-soft text-aman',
-  waspada: 'bg-waspada-soft text-waspada',
+  aman: 'bg-aman-soft text-tertiary',
+  waspada: 'bg-waspada-soft text-accent-dark',
   bahaya: 'bg-bahaya-soft text-bahaya',
   overbudget: 'bg-bahaya text-white',
   info: 'bg-primary-soft text-primary',

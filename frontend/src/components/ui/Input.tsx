@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, forwardRef } from 'react';
+import { InputHTMLAttributes, forwardRef, useId } from 'react';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -8,11 +8,14 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, icon, fullWidth = true, className = '', ...props }, ref) => {
+  ({ label, error, icon, fullWidth = true, className = '', id, 'aria-describedby': describedBy, ...props }, ref) => {
+    const generatedId = useId();
+    const inputId = id ?? generatedId;
+    const errorId = `${inputId}-error`;
     return (
       <div className={`flex flex-col gap-1.5 ${fullWidth ? 'w-full' : ''}`}>
         {label && (
-          <label className="text-body-sm font-medium text-text-secondary">{label}</label>
+          <label htmlFor={inputId} className="text-body-sm font-medium text-text-secondary">{label}</label>
         )}
         <div className="relative">
           {icon && (
@@ -22,12 +25,15 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           )}
           <input
             ref={ref}
+            id={inputId}
+            aria-invalid={error ? true : undefined}
+            aria-describedby={[describedBy, error ? errorId : undefined].filter(Boolean).join(' ') || undefined}
             className={`w-full h-12 bg-surface-container rounded-input text-body-lg text-text-primary border border-transparent focus:border-primary focus:ring-0 focus:outline-none placeholder:text-text-muted transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${icon ? 'pl-10 pr-4' : 'px-4'} ${error ? 'border-bahaya' : ''} ${className}`}
             {...props}
           />
         </div>
         {error && (
-          <span className="text-body-sm text-bahaya flex items-center gap-1">
+          <span id={errorId} role="alert" className="text-body-sm text-bahaya flex items-center gap-1">
             <span className="material-symbols-rounded text-sm">error</span>
             {error}
           </span>

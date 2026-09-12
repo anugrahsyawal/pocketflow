@@ -7,6 +7,7 @@
     font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    color-scheme: light;
   }
 
   body {
@@ -23,8 +24,29 @@
     flex-direction: column;
   }
 
-  *:focus-visible {
-    @apply outline-2 outline-offset-2 outline-primary;
+  :is(button, a, input, select, textarea, [tabindex]):focus-visible {
+    outline: 2px solid #004AC6;
+    outline-offset: 3px;
+  }
+
+  button, a, input, select, textarea {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  input, textarea, select { border-radius: 12px; }
+
+  ::selection { background: #DBEAFE; color: #004AC6; }
+
+  h1, h2, h3 { text-wrap: balance; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 
   input[type='number']::-webkit-inner-spin-button,
@@ -38,6 +60,53 @@
 }
 
 @layer components {
+  .app-frame {
+    background: #FFF8F2;
+    box-shadow: 0 0 80px rgba(0, 74, 198, 0.05);
+  }
+
+  .pocket-carousel {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    padding: 4px 4px 12px;
+    margin: -4px;
+    scrollbar-width: none;
+  }
+  .pocket-carousel::-webkit-scrollbar { display: none; }
+  .pocket-carousel > button { flex-shrink: 0; scroll-snap-align: start; }
+  .pocket-carousel > button:focus-visible { outline-offset: -3px; }
+
+  .pocket-summary-card .justify-between {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .pocket-summary-card .justify-between > :last-child {
+    margin-left: auto;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .app-dialog::backdrop {
+    background: rgba(30, 27, 23, 0.38);
+    backdrop-filter: blur(4px);
+  }
+  .app-dialog {
+    max-width: none;
+    max-height: none;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    padding: 16px;
+  }
+  .app-dialog[open] { display: flex; }
+
+  .financial-amount { font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+
   .material-symbols-rounded {
     font-variation-settings:
       'FILL' 0,
