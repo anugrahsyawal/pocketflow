@@ -121,11 +121,12 @@ this documentation audit did not rerun the feature.
 
 ## Epic 8 — Reports and insights
 
-Backend continuation: Phase 7B.5 contract refinement. The PO accepted DEC-031
-availability/local-exclusion choices on 2026-09-14. The
-[technical contract](../architecture/REPORTS_API_CONTRACT.md) is finalized for
-review; Reports endpoint implementation remains not started. The frontend
-acceptance states below are unchanged and do not imply backend delivery.
+Backend continuation: Phase 7B.5 Reports API implemented under the PO-approved
+[contract](../architecture/REPORTS_API_CONTRACT.md), committed as `0e2eb5e`.
+Implementation acceptance remains pending; see
+[verification evidence](../walkthroughs/phase-7b5-reports-api.md). DEC-031
+availability and local-exclusion choices are preserved. Frontend acceptance
+states below are unchanged; frontend/API integration is a separate phase.
 
 | ID | Story | Priority | Overall | Delivery / verification / acceptance | Acceptance and evidence |
 |---|---|---|---|---|---|

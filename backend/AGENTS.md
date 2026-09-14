@@ -11,6 +11,9 @@ The backend foundation is implemented in TypeScript, Fastify, Drizzle ORM, and P
 
 ## Roles & Authority
 
+- On 2026-09-14 the PO authorized Codex to implement Phase 7B.5 directly after
+  committing its accepted contract. Scope: two read-only Reports routes,
+  calculations, schemas, tests and delivery evidence. No frontend or deployment.
 - On 2026-09-14 the Product Owner explicitly assigned Codex direct implementation
   of the Phase 7B.4 idempotency remediation. Codex implements and verifies this
   bounded task; no Antigravity handoff is required. This overrides the historical
@@ -37,7 +40,9 @@ Before presenting backend changes for Tech Lead review:
 
 1. `npm run typecheck` (`tsc --noEmit`) passes with 0 errors.
 2. `npm run build` compiles cleanly to `backend/dist/`.
-3. `docker compose up -d --wait` runs PostgreSQL on loopback `127.0.0.1:5432`.
+3. PostgreSQL runs on loopback `127.0.0.1:5432`: Docker Compose or the
+   PO-approved native Windows PostgreSQL 16 installation. Keep development and
+   disposable test databases separate.
 4. `npm run db:migrate` runs cleanly and idempotently against live PostgreSQL.
 5. Integration verification passes cleanly against live server and database.
 6. Source code, git diff, and walkthrough evidence are updated.

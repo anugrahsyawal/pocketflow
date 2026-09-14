@@ -1,8 +1,8 @@
 # Current Sprint
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
-Status: Phase 7B.5 Contract Accepted and Implementation Authorized; Documentation Commit Gate Pending
-Current checkpoint: Phase 7B.4 remediation delivered at `5e019db`; Phase 7B.5 contract draft
+Status: Phase 7B.5 Reports API Implemented; Implementation PO Review Pending
+Current checkpoint: accepted contract committed locally at `0e2eb5e`; implementation uncommitted
 
 ## Terminology
 
@@ -28,12 +28,13 @@ Build a secure, verified TypeScript/Fastify/PostgreSQL backend foundation and de
 
 ### Implementation authorization — 2026-09-14
 
-The PO accepted the complete Reports contract and explicitly authorized Codex
-to implement it. The documentation checkpoint is still uncommitted; no source
-changes will begin before the required clean-tree entry gate. Commit permission
-for this documentation checkpoint is requested separately, not inferred from
-implementation authorization. No additional product approval is needed to start
-the approved implementation once that Git gate is satisfied.
+The PO accepted the complete Reports contract, authorized its commit and asked
+Codex to implement immediately. Contract `0e2eb5e` was committed first and the
+clean-tree gate passed. The two Reports routes and tests are implemented; see
+[delivery evidence](../walkthroughs/phase-7b5-reports-api.md). Implementation
+acceptance and commit remain pending. The older Reports exclusions and
+contract-only checkpoints below are historical and superseded for this bounded
+phase. Frontend, sync and deployment remain outside scope.
 
 ### Reports contract refinement — 2026-09-14
 
@@ -91,7 +92,7 @@ Phase 7B.4 Transaction API Implementation is **DELIVERED AND AUTOMATICALLY VERIF
 
 ## Explicitly out of scope for current task
 
-- Implementation of reports (`/v1/reports`) backend endpoints (awaiting separate API contract and PO authorization).
+- Frontend integration with Reports API and work beyond the approved two read-only routes.
 
 - Database migration execution or container state changes during docs reconciliation.
 - Frontend code modifications.

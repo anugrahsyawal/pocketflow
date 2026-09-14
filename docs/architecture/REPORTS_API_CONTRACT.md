@@ -3,8 +3,10 @@
 Date: 2026-09-14
 Status: Product Owner accepted the complete contract and explicitly authorized
 implementation in the delivery conversation on 2026-09-14. DEC-031 remains
-accepted. Implementation has not started: the clean-working-tree entry gate
-requires the documentation checkpoint to be committed first.
+accepted. The documentation checkpoint was committed as `0e2eb5e` before
+implementation began from a clean tree. Implementation and verification evidence
+are tracked in the [walkthrough](../walkthroughs/phase-7b5-reports-api.md);
+implementation acceptance is separate from contract acceptance.
 
 This replaces the exploratory [draft](REPORTS_API_CONTRACT_DRAFT.md).
 Authority: [decision log](../decisions/DECISION_LOG.md) DEC-019/020/023/024/030/031;

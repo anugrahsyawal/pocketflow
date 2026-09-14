@@ -1,18 +1,20 @@
 # PocketFlow Current State
 
-Last updated: 2026-08-13
-Branch: `main`
-Verified application checkpoint: `6cff955891bc4e09db4a4a08a3a3cf1ecfb17926`
+Last updated: 2026-09-14
+Branch: `codex/audit-pocketflow-documentation`
+Latest committed checkpoint: `0e2eb5e` (accepted Reports contract, local only)
 
 ## Executive state
 
-**Latest authorization — 2026-09-14:** PO accepted the complete Reports contract
-and explicitly authorized implementation. The existing nine-file documentation
-checkpoint is uncommitted. Backend implementation awaits permission to commit
-that checkpoint and satisfy the clean-tree gate; no further product decision is
-required for the approved scope.
+**Latest delivery — 2026-09-14:** PO authorized the contract commit and immediate
+Phase 7B.5 implementation. Contract checkpoint `0e2eb5e` is committed locally,
+not pushed. The two read-only Reports endpoints, calculation module, response
+schema and tests are implemented; implementation PO review is pending. See
+[Reports API evidence](../walkthroughs/phase-7b5-reports-api.md). This supersedes
+the older not-started/authorization-pending Reports statements retained below
+as historical checkpoints. No frontend integration, sync or deployment began.
 
-**Current work — 2026-09-14:** Phase 7B.4 remediation was committed and pushed
+**Earlier contract checkpoint — 2026-09-14:** Phase 7B.4 remediation was committed and pushed
 to `origin/main` at `5e019db`. The next authorized continuation is Reports API
 contract refinement, started from a clean tree. The PO accepted the three
 MVP-preserving availability/exclusion recommendations in DEC-031. The
@@ -95,7 +97,7 @@ Accepted legacy checkpoints remain accepted. Verification limitations from Phase
 
 ## Not implemented
 
-- Backend domain endpoints for reports (`/v1/reports`) remain not implemented and not authorized pending separate contract specification and PO authorization. (Setup & master data endpoints were delivered in Phase 7B.3; transaction endpoints were delivered in Phase 7B.4).
+- Frontend integration with the implemented Reports API (separate approval required).
 - Remote synchronization and conflict/deletion propagation queue.
 - Production deployment infrastructure, host platform, domain/DNS, and automated backup service.
 - Goals.
@@ -134,12 +136,12 @@ The two idempotency blockers reproduced on 2026-09-13 were fixed and verified
 on 2026-09-14 with 193 passing tests and repeat reproduction checks. PO accepted
 the remediation and authorized commit/push. See the
 [remediation walkthrough](../walkthroughs/phase-7b4-idempotency-remediation.md).
-Reports API implementation (`/v1/reports`) remains not started and not authorized
-pending separate contract specification and PO authorization.
+Reports API implementation is delivered locally under the accepted contract;
+implementation PO review remains pending. No current implementation blocker is recorded.
 
 ## Do not start
 
-- Reports (`/v1/reports`) backend endpoints before a separate API contract is specified, refined, and explicitly authorized by Product Owner.
+- A phase beyond the bounded Reports API implementation before PO review and approval.
 - Production infrastructure or deployment before a separate deployment phase is approved.
 - Historical snapshot implementation.
 - Automatic Sinking Fund transfer.

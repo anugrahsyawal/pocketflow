@@ -42,6 +42,7 @@ reference only and must not be copied into production.
 
 ## Verification evidence
 
+- [Phase 7B.5 Reports API — implementation review](walkthroughs/phase-7b5-reports-api.md)
 - [Phase 7B.4 idempotency remediation — PO accepted](walkthroughs/phase-7b4-idempotency-remediation.md)
 - [Phase 7B.4 Windows re-verification — original findings](walkthroughs/phase-7b4-windows-reverification.md)
 - [Frontend quality polish — PO accepted](walkthroughs/frontend-quality-polish.md)
@@ -69,7 +70,7 @@ introduced later, but are not required for this documentation bootstrap.
 
 ## Approved API contracts and specifications
 
-- [Phase 7B.5 Reports API](architecture/REPORTS_API_CONTRACT.md): technical specification finalized for review; three product choices accepted in DEC-031; endpoint implementation not yet authorized.
+- [Phase 7B.5 Reports API](architecture/REPORTS_API_CONTRACT.md): PO accepted contract (`0e2eb5e`); two endpoints implemented under explicit authorization, implementation acceptance pending.
 - [Setup & Master Data API Contract Specification](architecture/SETUP_MASTER_DATA_API_CONTRACT.md) (Product Owner Accepted 2026-08-13; Endpoint Implementation Delivered & PO Accepted in Current Delivery Session)
 - [Transaction API Contract Specification](architecture/TRANSACTIONS_API_CONTRACT.md) (Product Owner Accepted 2026-08-24, DEC-030; Endpoint Implementation Delivered & Verified at Checkpoint; PO Acceptance Pending)
 

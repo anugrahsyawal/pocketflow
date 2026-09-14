@@ -8,6 +8,7 @@ predates the current template.
 
 | Area or Phase | Delivery | Verification | PO acceptance | Representative commits / evidence |
 |---|---|---|---|---|
+| Reports API Phase 7B.5 | Implemented locally | See current [walkthrough](../walkthroughs/phase-7b5-reports-api.md) | Implementation review pending; contract accepted | Contract `0e2eb5e`; implementation uncommitted |
 | Repository foundation | Implemented | Legacy Evidence Incomplete | Accepted | `0f44515`; repository history |
 | Authentication foundation | Implemented (mock/dev only) | Legacy Evidence Incomplete | Accepted with production limitation | `5243596` |
 | Setup wizard and template | Implemented with period-field drift | Legacy Evidence Incomplete | Accepted with limitation | `b84176b` through `1993128` |

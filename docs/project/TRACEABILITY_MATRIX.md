@@ -6,6 +6,12 @@ This matrix highlights delivered MVP behavior and important gaps. The canonical
 [Product Backlog](../product/PRODUCT_BACKLOG.md) contains the complete story
 inventory.
 
+Backend Reports continuation (Epic 8, Phase 7B.5): implemented locally under the
+accepted [Reports contract](../architecture/REPORTS_API_CONTRACT.md), DEC-031.
+See [implementation evidence](../walkthroughs/phase-7b5-reports-api.md) for the
+RP-01–49 verification map. Implementation PO acceptance is pending; existing
+frontend acceptance below does not imply frontend/API integration is complete.
+
 | Story | Requirement | Design / decision | Implementation evidence | Verification / acceptance | Status |
 |---|---|---|---|---|---|
 | 1.1 | Development login and protected routes | `DL-003`; production auth TBD | `frontend/src/features/auth/`, `5243596` | Legacy evidence incomplete; accepted with dev-only limitation | Done (dev only) |

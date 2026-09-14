@@ -10,8 +10,9 @@ import { setupRoutes } from './routes/setup.js';
 import { pocketRoutes } from './routes/pockets.js';
 import { categoryRoutes } from './routes/categories.js';
 import { transactionRoutes } from './routes/transactions.js';
+import { reportRoutes } from './routes/reports.js';
 
-export async function buildApp(config: AppConfig): Promise<FastifyInstance> {
+export async function buildApp(config: AppConfig, options: { reportClock?: () => Date } = {}): Promise<FastifyInstance> {
   const app = Fastify({
     logger: config.nodeEnv === 'development' ? { level: 'info' } : false,
   });
@@ -50,6 +51,7 @@ export async function buildApp(config: AppConfig): Promise<FastifyInstance> {
   await app.register(pocketRoutes);
   await app.register(categoryRoutes);
   await app.register(transactionRoutes);
+  await app.register(reportRoutes, {clock: options.reportClock});
 
   return app;
 }
