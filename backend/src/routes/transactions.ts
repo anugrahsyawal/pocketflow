@@ -12,6 +12,7 @@ import {
   computeCanonicalRequestHash,
   findIdempotencyRecord,
   parseReplayEnvelope,
+  runIdempotentMutation,
 } from '../lib/idempotency.js';
 import { getDb } from '../db/client.js';
 import {
@@ -499,7 +500,7 @@ export async function transactionRoutes(app: FastifyInstance): Promise<void> {
       const db = getDb();
 
       // Execute SQL Transaction
-      const responsePayload = await db.transaction(async (tx) => {
+      const responsePayload = await runIdempotentMutation(db, user.id, clientMutationId, canonicalHash, async (tx) => {
         let budgetPocketId: string | null = null;
 
         if (type === 'expense') {
@@ -811,10 +812,10 @@ export async function transactionRoutes(app: FastifyInstance): Promise<void> {
           throw new AppError(`Field 'clientMutationId' is required in item at index ${i}`, 400, 'INVALID_INPUT');
         }
         const itemMutationId = validateUuidV4(item.clientMutationId, `items[${i}].clientMutationId`);
-        if (seenItemMutationIds.has(itemMutationId)) {
+        if (itemMutationId.toLowerCase() === rootClientMutationId.toLowerCase() || seenItemMutationIds.has(itemMutationId.toLowerCase())) {
           throw new AppError(`Duplicate clientMutationId '${itemMutationId}' within batch items`, 400, 'INVALID_INPUT');
         }
-        seenItemMutationIds.add(itemMutationId);
+        seenItemMutationIds.add(itemMutationId.toLowerCase());
 
         if (item.type !== 'expense') {
           throw new AppError(`Field 'type' in item at index ${i} must be 'expense'`, 400, 'INVALID_INPUT');
@@ -895,8 +896,21 @@ export async function transactionRoutes(app: FastifyInstance): Promise<void> {
       const db = getDb();
 
       // Execute SQL Transaction
-      const responsePayload = await db.transaction(async (tx) => {
-        const uniquePocketIds: string[] = Array.from(new Set<string>(body.items.map((i: any) => i.pocketId as string)));
+      const responsePayload = await runIdempotentMutation(db, user.id, rootClientMutationId, rootCanonicalHash, async (tx) => {
+        const replays = new Map<string, TransactionResponse>();
+        for (const item of body.items) {
+          const record = await findIdempotencyRecord(user.id, item.clientMutationId, tx);
+          if (record) {
+            const hash = computeCanonicalRequestHash('POST', '/v1/transactions', item);
+            if (record.requestHash !== hash || !record.responseReference) {
+              throw new AppError('Batch item mutation ID has a different payload.', 409, 'IDEMPOTENCY_CONFLICT');
+            }
+            const envelope = parseReplayEnvelope(record.responseReference);
+            replays.set(item.clientMutationId, (envelope.body as { transaction: TransactionResponse }).transaction);
+          }
+        }
+        const pendingItems = body.items.filter((item: any) => !replays.has(item.clientMutationId));
+        const uniquePocketIds: string[] = Array.from(new Set<string>(pendingItems.map((i: any) => i.pocketId as string)));
 
         // Lock all referenced pockets FOR UPDATE
         const lockedPockets = await tx
@@ -916,8 +930,8 @@ export async function transactionRoutes(app: FastifyInstance): Promise<void> {
         }
 
         // Validate categories
-        for (let i = 0; i < body.items.length; i++) {
-          const item = body.items[i];
+        for (let i = 0; i < pendingItems.length; i++) {
+          const item = pendingItems[i];
           if (item.categoryId) {
             const [catRow] = await tx
               .select()
@@ -937,7 +951,7 @@ export async function transactionRoutes(app: FastifyInstance): Promise<void> {
         // Combined Balance Checks (DEC-030.3)
         for (const pocket of lockedPockets) {
           const currentBalance = await getDerivedPocketBalance(tx, user.id, pocket.id);
-          const totalDeduction = body.items
+          const totalDeduction = pendingItems
             .filter((i: any) => i.pocketId === pocket.id)
             .reduce((sum: number, i: any) => sum + i.amount, 0);
 
@@ -954,6 +968,11 @@ export async function transactionRoutes(app: FastifyInstance): Promise<void> {
         const createdTransactions: TransactionResponse[] = [];
 
         for (const item of body.items) {
+          const replay = replays.get(item.clientMutationId);
+          if (replay) {
+            createdTransactions.push(replay);
+            continue;
+          }
           const pocket = lockedPockets.find((p) => p.id === item.pocketId)!;
           let budgetPocketId: string;
           if (pocket.templateKey === 'cash' || pocket.templateKey === 'nfc-card') {
@@ -1003,8 +1022,7 @@ export async function transactionRoutes(app: FastifyInstance): Promise<void> {
                 statusCode: 201,
                 body: { transaction: mapped },
               }),
-            })
-            .onConflictDoNothing();
+            });
         }
 
         const batchPayload = { transactions: createdTransactions };
@@ -1022,7 +1040,7 @@ export async function transactionRoutes(app: FastifyInstance): Promise<void> {
         });
 
         return batchPayload;
-      });
+      }, body.items.map((item: any) => item.clientMutationId));
 
       return reply.status(201).send(responsePayload);
     }
@@ -1175,7 +1193,7 @@ export async function transactionRoutes(app: FastifyInstance): Promise<void> {
       const db = getDb();
 
       // Execute SQL Transaction
-      const responsePayload = await db.transaction(async (tx) => {
+      const responsePayload = await runIdempotentMutation(db, user.id, clientMutationId, canonicalHash, async (tx) => {
         // Lock target transaction row FOR UPDATE
         const [existingTxn] = await tx
           .select()
@@ -1657,7 +1675,7 @@ export async function transactionRoutes(app: FastifyInstance): Promise<void> {
 
       const db = getDb();
 
-      const responsePayload = await db.transaction(async (tx) => {
+      const responsePayload = await runIdempotentMutation(db, user.id, clientMutationId, canonicalHash, async (tx) => {
         // Lock target transaction row FOR UPDATE
         const [existingTxn] = await tx
           .select()
@@ -1858,7 +1876,7 @@ export async function transactionRoutes(app: FastifyInstance): Promise<void> {
 
       const db = getDb();
 
-      const responsePayload = await db.transaction(async (tx) => {
+      const responsePayload = await runIdempotentMutation(db, user.id, clientMutationId, canonicalHash, async (tx) => {
         // Lock target transaction row FOR UPDATE
         const [existingTxn] = await tx
           .select()
@@ -2172,7 +2190,7 @@ export async function transactionRoutes(app: FastifyInstance): Promise<void> {
 
       const db = getDb();
 
-      const responsePayload = await db.transaction(async (tx) => {
+      const responsePayload = await runIdempotentMutation(db, user.id, clientMutationId, canonicalHash, async (tx) => {
         // Lock target transaction row FOR UPDATE
         const [existingTxn] = await tx
           .select()

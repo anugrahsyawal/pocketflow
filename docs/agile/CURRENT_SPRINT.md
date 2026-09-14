@@ -1,8 +1,8 @@
 # Current Sprint
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
-Status: Phase 7B.4 Implemented & Automatically Verified (PO Acceptance Pending)
-Current checkpoint: Phase 7B.4 Delivery Tracking Reconciliation
+Status: Phase 7B.4 Idempotency Remediation Verified and PO Accepted
+Current checkpoint: Phase 7B.4 Idempotency Remediation
 
 ## Terminology
 
@@ -25,6 +25,31 @@ Build a secure, verified TypeScript/Fastify/PostgreSQL backend foundation and de
 - Phase 6D — Rule-Based Insights and Sinking Fund Recommendation (Done, commit `9297f37`).
 
 ## Active status
+
+### PO-authorized direct remediation — 2026-09-14
+
+Implemented and locally verified: 193 tests pass, including 15 new idempotency
+regressions. Both Windows-review findings are closed at the technical level;
+PO accepted the remediation and authorized commit/push on 2026-09-14. See
+[remediation evidence](../walkthroughs/phase-7b4-idempotency-remediation.md).
+
+The Product Owner assigned Codex to implement the two Phase 7B.4 idempotency
+fixes directly. This continues the existing review/remediation work with its
+four uncommitted documentation files preserved; it does not start a new phase.
+Scope: transaction mutation replay/coordination, batch item replay, regression
+tests and delivery evidence only. No dependencies, schema changes, frontend,
+Reports API, sync or deployment are authorized by this bounded continuation.
+
+### Windows re-verification — 2026-09-13
+
+PO authorized local PostgreSQL setup and continuation of backend verification.
+PostgreSQL 16.15, separate development/test databases and four migrations are
+ready. All 178 baseline tests pass, but additional review reproduced two
+idempotency defects. Next gate is bounded Phase 7B.4 remediation and regression
+review, not Reports or deployment. See
+[review findings](../walkthroughs/phase-7b4-windows-reverification.md).
+This authorized verification supersedes the older docs-only restriction on
+local database state changes for this task; no production database is involved.
 
 ### PO-requested frontend polish interlude — 2026-09-12
 

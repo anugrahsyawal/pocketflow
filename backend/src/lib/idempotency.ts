@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, sql } from 'drizzle-orm';
 import { AppError } from './errors.js';
-import { getDb } from '../db/client.js';
+import { getDb, AppDatabase } from '../db/client.js';
 import { idempotencyRecords } from '../db/schema.js';
 
 export interface ReplayEnvelope {
@@ -34,9 +34,9 @@ export function computeCanonicalRequestHash(method: string, path: string, body: 
 
 export async function findIdempotencyRecord(
   userId: string,
-  clientMutationId: string
+  clientMutationId: string,
+  db: Pick<AppDatabase, 'select'> = getDb()
 ): Promise<{ requestHash: string; responseReference: string | null } | null> {
-  const db = getDb();
   const rows = await db
     .select({
       requestHash: idempotencyRecords.requestHash,
@@ -55,6 +55,36 @@ export async function findIdempotencyRecord(
     return null;
   }
   return rows[0];
+}
+
+type MutationTransaction = Parameters<Parameters<AppDatabase['transaction']>[0]>[0];
+
+/** Serialize mutation keys before domain locks; all locks release on commit/rollback. */
+export async function runIdempotentMutation<T>(
+  db: AppDatabase,
+  userId: string,
+  mutationId: string,
+  requestHash: string,
+  work: (tx: MutationTransaction) => Promise<T>,
+  itemIds: string[] = []
+): Promise<T> {
+  return db.transaction(async (tx) => {
+    // Sort the actual lock keys, so even hash collisions cannot reverse lock order.
+    const keys = [...new Set([mutationId, ...itemIds].map(id =>
+      crypto.createHash('sha256').update(`${userId.toLowerCase()}:${id.toLowerCase()}`)
+        .digest().readBigInt64BE(0).toString()))].sort();
+    for (const key of keys) {
+      await tx.execute(sql`SELECT pg_advisory_xact_lock(${key}::bigint)`);
+    }
+    const record = await findIdempotencyRecord(userId, mutationId, tx);
+    if (record) {
+      if (record.requestHash !== requestHash || !record.responseReference) {
+        throw new AppError('clientMutationId reused with a different request payload, HTTP method, or route path.', 409, 'IDEMPOTENCY_CONFLICT');
+      }
+      return parseReplayEnvelope(record.responseReference).body as T;
+    }
+    return work(tx);
+  });
 }
 
 export function parseReplayEnvelope(responseRef: string): ReplayEnvelope {

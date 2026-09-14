@@ -6,6 +6,23 @@ Verified application checkpoint: `6cff955891bc4e09db4a4a08a3a3cf1ecfb17926`
 
 ## Executive state
 
+**Latest remediation — 2026-09-14:** Codex implemented the two Phase 7B.4
+idempotency fixes under explicit PO authorization. All 193 integration tests
+(including 15 new regressions), type-check, build, repeat migrations and bounded
+HTTP smoke checks passed. The original duplicate-item and concurrent-500
+reproductions now return the original transaction without duplicate effects.
+PO accepted this remediation and authorized commit/push on 2026-09-14. See
+[remediation walkthrough](../walkthroughs/phase-7b4-idempotency-remediation.md).
+
+**Latest verification — 2026-09-13:** Frontend polish was pushed in `90b3e59`.
+PostgreSQL 16.15 is installed locally on Windows; development and test databases
+are separated. Type-check, build, repeated migrations and all 178 integration
+tests passed. Additional review reproduced duplicate expenses across batch
+roots with a reused item mutation ID and a 500 response for concurrent identical
+single POST requests. Phase 7B.4 requires bounded remediation before new feature
+work; its PO acceptance remains pending. See
+[Windows re-verification](../walkthroughs/phase-7b4-windows-reverification.md).
+
 **Latest local work — 2026-09-12:** After pulling `origin/main` through `84af8c9`,
 the Product Owner requested frontend quality polish before hosting work. This
 bounded visual/accessibility change is implemented locally, with type-check,
@@ -100,7 +117,12 @@ Frontend implementation is ready for review; automated checks and recorded manua
 
 ## Current blockers
 
-No application code blocker is recorded. Transaction API endpoints (`/v1/transactions*`) are implemented and verified against 178 automated tests (PO acceptance pending). Reports API implementation (`/v1/reports`) remains not started and not authorized pending separate contract specification and PO authorization.
+The two idempotency blockers reproduced on 2026-09-13 were fixed and verified
+on 2026-09-14 with 193 passing tests and repeat reproduction checks. PO accepted
+the remediation and authorized commit/push. See the
+[remediation walkthrough](../walkthroughs/phase-7b4-idempotency-remediation.md).
+Reports API implementation (`/v1/reports`) remains not started and not authorized
+pending separate contract specification and PO authorization.
 
 ## Do not start
 

@@ -11,6 +11,10 @@ The backend foundation is implemented in TypeScript, Fastify, Drizzle ORM, and P
 
 ## Roles & Authority
 
+- On 2026-09-14 the Product Owner explicitly assigned Codex direct implementation
+  of the Phase 7B.4 idempotency remediation. Codex implements and verifies this
+  bounded task; no Antigravity handoff is required. This overrides the historical
+  implementer assignment below for this task only.
 - Antigravity acts as backend implementer.
 - Codex acts as Technical Project Manager, Tech Lead, and reviewer.
 - Product Owner decisions in `docs/decisions/DECISION_LOG.md` (DEC-025 through DEC-029) and approved decision packs (`docs/architecture/BACKEND_ARCHITECTURE_DECISION_PACK.md`) are authoritative.

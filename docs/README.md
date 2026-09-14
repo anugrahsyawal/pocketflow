@@ -42,6 +42,8 @@ reference only and must not be copied into production.
 
 ## Verification evidence
 
+- [Phase 7B.4 idempotency remediation — PO accepted](walkthroughs/phase-7b4-idempotency-remediation.md)
+- [Phase 7B.4 Windows re-verification — original findings](walkthroughs/phase-7b4-windows-reverification.md)
 - [Frontend quality polish — PO accepted](walkthroughs/frontend-quality-polish.md)
 - [Phase 6B Reports visual analytics](walkthroughs/phase-6b-reports-visual-analytics.md)
 - [Phase 6C Budget vs Actual and Weekly Usage](walkthroughs/phase-6c-budget-vs-actual-and-weekly-usage.md)
