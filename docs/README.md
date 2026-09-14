@@ -69,6 +69,7 @@ introduced later, but are not required for this documentation bootstrap.
 
 ## Approved API contracts and specifications
 
+- [Phase 7B.5 Reports API](architecture/REPORTS_API_CONTRACT.md): technical specification finalized for review; three product choices accepted in DEC-031; endpoint implementation not yet authorized.
 - [Setup & Master Data API Contract Specification](architecture/SETUP_MASTER_DATA_API_CONTRACT.md) (Product Owner Accepted 2026-08-13; Endpoint Implementation Delivered & PO Accepted in Current Delivery Session)
 - [Transaction API Contract Specification](architecture/TRANSACTIONS_API_CONTRACT.md) (Product Owner Accepted 2026-08-24, DEC-030; Endpoint Implementation Delivered & Verified at Checkpoint; PO Acceptance Pending)
 

@@ -119,6 +119,13 @@ rather than removed in a way that breaks historical references.
 
 ## 6. Reports rules
 
+Phase 7B.5 clarification (DEC-031, PO accepted 2026-09-14): historical
+allocation/balance-dependent metrics remain unavailable, while historical
+transaction analytics remain available. Missing current allocation is "Belum
+diatur", not zero; report reads never create or roll over allocations. Sinking
+Fund exclusions remain locally persisted and may be passed through a validated
+read parameter; no preference database, sync or automatic transfer is implied.
+
 - Filter using `transaction.date` and valid local `YYYY-MM-DD` dates.
 - Selected-period boundaries are inclusive.
 - Archived transactions are excluded.

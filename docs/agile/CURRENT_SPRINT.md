@@ -1,8 +1,8 @@
 # Current Sprint
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
-Status: Phase 7B.4 Idempotency Remediation Verified and PO Accepted
-Current checkpoint: Phase 7B.4 Idempotency Remediation
+Status: Phase 7B.5 Contract Accepted and Implementation Authorized; Documentation Commit Gate Pending
+Current checkpoint: Phase 7B.4 remediation delivered at `5e019db`; Phase 7B.5 contract draft
 
 ## Terminology
 
@@ -25,6 +25,25 @@ Build a secure, verified TypeScript/Fastify/PostgreSQL backend foundation and de
 - Phase 6D — Rule-Based Insights and Sinking Fund Recommendation (Done, commit `9297f37`).
 
 ## Active status
+
+### Implementation authorization — 2026-09-14
+
+The PO accepted the complete Reports contract and explicitly authorized Codex
+to implement it. The documentation checkpoint is still uncommitted; no source
+changes will begin before the required clean-tree entry gate. Commit permission
+for this documentation checkpoint is requested separately, not inferred from
+implementation authorization. No additional product approval is needed to start
+the approved implementation once that Git gate is satisfied.
+
+### Reports contract refinement — 2026-09-14
+
+Phase 7B.4 remediation was committed and pushed to `origin/main` at `5e019db`.
+PO requested continuation; Codex started the required Reports contract stage
+from a clean tree. The PO accepted the three recommendations under DEC-031.
+The [technical contract](../architecture/REPORTS_API_CONTRACT.md) now defines
+wire fields, null states, exclusions, calculations, errors and test matrix.
+Endpoint implementation remains gated on finalized contract
+acceptance and separate explicit authorization. No new backend code in this stage.
 
 ### PO-authorized direct remediation — 2026-09-14
 

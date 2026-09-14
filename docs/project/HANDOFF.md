@@ -1,6 +1,35 @@
 # Current Handoff
 
-Last updated: 2026-09-01
+Last updated: 2026-09-14
+
+## Current handoff — supersedes historical checkpoint text below
+
+- Delivered: `5e019db` pushed to `origin/main`, Phase 7B.4 idempotency remediation
+  accepted by PO. [Evidence](../walkthroughs/phase-7b4-idempotency-remediation.md):
+  193 integration tests / 16 suites passed, type-check/build, migrations and
+  bounded HTTP checks passed. Older Phase acceptance states are unchanged.
+- Active: Phase 7B.5 Reports contract refinement, documentation only, started
+  from a clean tree after PO requested continuation. The
+  [draft](../architecture/REPORTS_API_CONTRACT_DRAFT.md) is not yet approved.
+- PO decisions accepted in DEC-031: historical budget-dependent unavailable
+  states; missing allocation shown as not configured (no automatic rollover);
+  Sinking exclusions kept local and passed as a validated read parameter.
+- The [technical specification](../architecture/REPORTS_API_CONTRACT.md) is now
+  finalized for review (the exploratory draft is superseded).
+- Next: obtain full contract acceptance and separate explicit Reports implementation
+  authorization. No Reports source implementation has started.
+- Codex performed the latest remediation under direct PO assignment; the old
+  Antigravity-only implementer restriction below does not govern that task.
+- Local Windows PostgreSQL 16.15: manual start, loopback only. Development DB
+  `pocketflow_dev_windows`; disposable integration DB `pocketflow_test_7b4_windows`.
+  [Start/stop reference](../walkthroughs/phase-7b4-windows-reverification.md).
+- No hosting, Supabase migration, sync, backup or historical snapshot work in
+  this stage. Draft changes remain uncommitted for PO review.
+
+## Historical handoff — 2026-09-01 (retained for delivery traceability)
+
+The following checkpoint descriptions and role assignments reflect September 1,
+not the current working tree; the current handoff above takes precedence.
 
 ## Last committed & pushed application checkpoint
 

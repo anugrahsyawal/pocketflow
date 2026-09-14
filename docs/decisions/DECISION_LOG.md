@@ -295,6 +295,25 @@ Decision: Following Product Owner audit of the MVP transaction management rules,
 10. **No-Op PATCH Revision Preservation**: A `PATCH /v1/transactions/:id` request supplying identical field values returns `200 OK` with the current entity and leaves stored `revision` unchanged.
 11. **Reallocation Target Period by Date & Auto-Period Creation**: `budget-reallocation` applies to the budget period containing `occurredOn` (26th–25th). If no `budget_periods` row exists for historical or future `occurredOn`, the backend automatically creates the `budget_periods` row within the same SQL transaction.
 
+### DEC-031 - Reports data availability and local exclusions
+
+Date: 2026-09-14
+Status: Accepted by Product Owner, conditional on preserving the existing MVP
+
+1. Phase 7B.5 historical reports show transaction analytics but not historical
+   allocation-dependent budget/weekly allowance, current balances presented as
+   historical balances, or Sinking Fund recommendations. Historical snapshots
+   remain deferred; existing per-period rows are not silently promoted to a
+   complete snapshot feature.
+2. Missing current-period allocation means "Belum diatur", not zero. Report GETs
+   never auto-copy previous allocations or create period/allocation records.
+3. Sinking Fund exclusions remain locally persisted and are sent through a
+   validated optional report query parameter. No preference database, sync
+   feature or transfer action is added by this decision.
+
+This acceptance authorizes finalizing the report contract, not production
+deployment, new MVP features or endpoint implementation before its contract gate.
+
 ## Pending decisions
 
 

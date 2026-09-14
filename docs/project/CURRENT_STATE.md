@@ -6,6 +6,19 @@ Verified application checkpoint: `6cff955891bc4e09db4a4a08a3a3cf1ecfb17926`
 
 ## Executive state
 
+**Latest authorization — 2026-09-14:** PO accepted the complete Reports contract
+and explicitly authorized implementation. The existing nine-file documentation
+checkpoint is uncommitted. Backend implementation awaits permission to commit
+that checkpoint and satisfy the clean-tree gate; no further product decision is
+required for the approved scope.
+
+**Current work — 2026-09-14:** Phase 7B.4 remediation was committed and pushed
+to `origin/main` at `5e019db`. The next authorized continuation is Reports API
+contract refinement, started from a clean tree. The PO accepted the three
+MVP-preserving availability/exclusion recommendations in DEC-031. The
+[technical specification](../architecture/REPORTS_API_CONTRACT.md) is finalized
+for complete-contract review; no Reports endpoint or hosting implementation has started.
+
 **Latest remediation — 2026-09-14:** Codex implemented the two Phase 7B.4
 idempotency fixes under explicit PO authorization. All 193 integration tests
 (including 15 new regressions), type-check, build, repeat migrations and bounded
