@@ -60,6 +60,8 @@ requirements or override Product Owner decisions.
 
 ## Execution tracking
 
+- [Phase 7C frontend/API integration plan](architecture/FRONTEND_API_INTEGRATION_PLAN.md): connected development mode accepted; 7C.1 implementation authorized, documentation commit gate pending.
+
 Repository Markdown remains the canonical planning/execution system and Git
 commits remain implementation checkpoints. GitHub Issues or Projects may be
 introduced later, but are not required for this documentation bootstrap.

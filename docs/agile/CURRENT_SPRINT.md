@@ -1,8 +1,8 @@
 # Current Sprint
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
-Status: Phase 7B.5 Reports API Implemented; Implementation PO Review Pending
-Current checkpoint: accepted contract committed locally at `0e2eb5e`; implementation uncommitted
+Status: Phase 7C.1 Authorized; Documentation Commit Gate Pending
+Current checkpoint: Reports API committed locally at `08e15fb`
 
 ## Terminology
 
@@ -25,6 +25,16 @@ Build a secure, verified TypeScript/Fastify/PostgreSQL backend foundation and de
 - Phase 6D — Rule-Based Insights and Sinking Fund Recommendation (Done, commit `9297f37`).
 
 ## Active status
+
+### Frontend/API continuation — 2026-09-15
+
+The PO requested the next integration stage. The source audit and
+[bounded integration plan](../architecture/FRONTEND_API_INTEGRATION_PLAN.md)
+identify identity, session, async-write, pagination and legacy-data boundaries.
+PO confirmed temporary connected-mode behavior and authorized 7C.1 implementation.
+The documentation checkpoint is uncommitted; obtain commit permission and satisfy
+the clean-tree gate before coding. No frontend, database or local storage changed.
+Older phase-specific exclusions below describe their historical scope.
 
 ### Implementation authorization — 2026-09-14
 
