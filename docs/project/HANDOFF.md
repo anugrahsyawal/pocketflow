@@ -4,6 +4,11 @@ Last updated: 2026-09-14
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- Latest implementation: `d4b2f36` commits the accepted integration plan. 7C.1
+  source changes are uncommitted for review. Real session mode is isolated on
+  dev port 5174; no financial API forms enabled. See
+  [walkthrough](../walkthroughs/phase-7c1-connected-session.md). Preview backend
+  was stopped after QA; no user development owner was provisioned.
 - Latest (2026-09-15): PO instructed commit of Reports implementation; completed
   as `08e15fb`, not pushed. PO then requested frontend/API continuation. Review
   the [Phase 7C plan](../architecture/FRONTEND_API_INTEGRATION_PLAN.md); PO confirmed

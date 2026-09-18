@@ -42,6 +42,7 @@ reference only and must not be copied into production.
 
 ## Verification evidence
 
+- [Phase 7C.1 connected sessions — local review](walkthroughs/phase-7c1-connected-session.md)
 - [Phase 7B.5 Reports API — implementation review](walkthroughs/phase-7b5-reports-api.md)
 - [Phase 7B.4 idempotency remediation — PO accepted](walkthroughs/phase-7b4-idempotency-remediation.md)
 - [Phase 7B.4 Windows re-verification — original findings](walkthroughs/phase-7b4-windows-reverification.md)
@@ -60,7 +61,7 @@ requirements or override Product Owner decisions.
 
 ## Execution tracking
 
-- [Phase 7C frontend/API integration plan](architecture/FRONTEND_API_INTEGRATION_PLAN.md): connected development mode accepted; 7C.1 implementation authorized, documentation commit gate pending.
+- [Phase 7C frontend/API integration plan](architecture/FRONTEND_API_INTEGRATION_PLAN.md): connected development mode accepted; 7C.1 implemented locally and awaiting review.
 
 Repository Markdown remains the canonical planning/execution system and Git
 commits remain implementation checkpoints. GitHub Issues or Projects may be

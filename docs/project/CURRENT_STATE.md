@@ -6,6 +6,12 @@ Latest committed checkpoint: `08e15fb` (Reports API implementation, local only)
 
 ## Executive state
 
+**Latest implementation — 2026-09-15:** Phase 7C.1 connected session foundation is
+implemented locally after the approved plan commit `d4b2f36`. Real login and
+session handling are isolated from the unchanged local financial application.
+See [evidence](../walkthroughs/phase-7c1-connected-session.md). Implementation
+review pending; no migration, financial API integration or deployment yet.
+
 **Current continuation — 2026-09-15:** PO requested frontend/API integration.
 Source audit and the [Phase 7C plan](../architecture/FRONTEND_API_INTEGRATION_PLAN.md)
 are prepared. PO confirmed first-stage connected development mode and authorized

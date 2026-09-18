@@ -2,9 +2,9 @@
 
 Date: 2026-09-15
 Status: temporary connected-development mode accepted by PO on 2026-09-15;
-Phase 7C.1 implementation authorized. The documentation checkpoint remains
-uncommitted; implementation awaits its commit to satisfy the clean-tree gate.
-No frontend cutover or data migration performed.
+Phase 7C.1 implemented locally after plan commit `d4b2f36` and a clean-tree check.
+See [verification](../walkthroughs/phase-7c1-connected-session.md). Implementation
+PO review is pending. No normal-mode cutover or data migration performed.
 
 ## Authority and baseline
 
@@ -55,8 +55,9 @@ it must be running and reachable from the browser.
 PO explicitly confirmed this behavior on 2026-09-15 and requested implementation
 following development best practices. This authorizes the bounded 7C.1 scope,
 not automatic migration, removal of offline MVP requirements, or deployment.
-Commit permission for the current documentation checkpoint is still required;
-do not infer Git mutation authority from implementation approval.
+The PO subsequently authorized its commit and immediate implementation;
+documentation checkpoint `d4b2f36` satisfied that entry gate. Implementation
+commit/push still requires separate instruction.
 
 ## Proposed bounded implementation sequence
 
