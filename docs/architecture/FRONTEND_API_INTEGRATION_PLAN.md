@@ -90,6 +90,67 @@ credential setup, not a test fixture left behind.
 
 ### 7C.2 — Setup, pockets and categories
 
+Consolidated checkpoint (2026-09-28): approved setup/master-data integration
+delivered. [Final audit](../walkthroughs/phase-7c2-final-audit.md) records current
+evidence and limitations. Earlier slice entries below preserve history; their
+pending statements are superseded. PO review and clean Git checkpoint remain
+required before 7C.3, whose listing below does not itself authorize implementation.
+
+Opening-balance slice (2026-09-28): correction UI and bounded transport delivered,
+with confirmation of base-balance effects, immutable retries and Reload-only
+conflicts. See [evidence](../walkthroughs/phase-7c2-opening-balance.md).
+Final phase audit/PO review remain; earlier pending-editor entries are historical.
+
+Classification slice (2026-09-28): groupId/isSpendable editor implemented. No
+ledger, base balance or allocation changes. See
+[checkpoint](../walkthroughs/phase-7c2-pocket-classification.md). Opening-balance
+correction UI and final phase audit remain; allocation writes stay excluded.
+
+Latest UI slice (2026-09-28): category creation uses an isolated IndexedDB journal
+with one atomic pending record per owner, persisted before POST. Explicit same-ID
+recovery only, acknowledgement-guarded cleanup, no background sync. See
+[implementation and recovery limitations](../walkthroughs/phase-7c2-category-create-ui.md).
+
+Latest transport slice: category creation POST integrated and regression-tested;
+UI remains disabled pending owner-scoped durable attempt recovery across reload.
+See [recovery gate](../walkthroughs/phase-7c2-category-create-transport.md).
+
+Latest continuation: pocket lifecycle UI and archived list delivered, including
+explicit invalid-owner recovery for Cash/NFC. No balance mutation or automatic
+remapping. See [UI checkpoint](../walkthroughs/phase-7c2-pocket-lifecycle-ui.md).
+
+Pocket lifecycle transport continuation: narrow PATCH plus archived GET allowlist
+added; UI confirmation, archived list and invalid-owner recovery remain next.
+See [transport evidence](../walkthroughs/phase-7c2-pocket-lifecycle-transport.md).
+
+Continuation 2026-09-27: category archive/restore delivered and reviewed;
+pocket name/emoji editor added using revision-aware immutable retries.
+See [current checkpoint](../walkthroughs/phase-7c2-pocket-label.md). No opening
+balance/allocation mutation or category creation enabled; pocket lifecycle pending.
+
+Latest 2026-09-25: existing category name/emoji editing enabled and verified
+with 271 integration tests plus browser QA. See
+[evidence](../walkthroughs/phase-7c2-category-edit.md). Creation/lifecycle and
+remaining pocket edit forms are still incomplete.
+
+Continuation 2026-09-25: Cash/NFC form enabled and browser-verified, including
+uncertain-response retry, revision conflict and reload without resubmission.
+See [form evidence](../walkthroughs/phase-7c2-budget-owner-form.md). This does not
+complete other pocket/category forms or authorize the transaction stage.
+
+Continuation 2026-09-24: Cash/NFC budget-owner PATCH transport foundation and
+tests added; no edit form enabled yet. UI must retain immutable retry identity
+and reconcile unresolved outcomes before exposing the transport. See
+[bounded checkpoint](../walkthroughs/phase-7c2-budget-owner-transport.md).
+
+Progress 2026-09-19: GET integration delivered as a read-only checkpoint after
+7C.1 commit/push `cd2154b`. Setup submission is now implemented, with automated
+verification (259 tests) and browser QA, including an insertion-order defect fix;
+PO review and master-data edits remain pending. See
+[setup continuation](../walkthroughs/phase-7c2-setup-submission.md);
+this is not full-phase completion. See
+[verification](../walkthroughs/phase-7c2-master-data-read.md).
+
 - Server setup status; fixed 26–25 setup flow; await atomic PUT setup result.
 - Map templateKey to UUID, opening balance, nullable allocation and revisions.
 - Read master data before enabling dependent forms; mutation errors retain input.

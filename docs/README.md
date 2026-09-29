@@ -1,6 +1,6 @@
 # PocketFlow Documentation Index
 
-Last updated: 2026-08-13
+Last updated: 2026-09-28
 
 This index identifies the single active authority for each documentation role.
 Relative links below are repository-valid and are checked as part of the docs
@@ -42,6 +42,34 @@ reference only and must not be copied into production.
 
 ## Verification evidence
 
+- [Phase 7C.2 consolidated technical audit — current review gate](walkthroughs/phase-7c2-final-audit.md)
+
+The slice entries below retain checkpoint-time statuses; the consolidated audit
+and current delivery summary supersede their historical pending-work labels.
+
+- [Phase 7C.2 opening balance correction — PO review](walkthroughs/phase-7c2-opening-balance.md)
+
+- [Phase 7C.2 pocket classification settings — PO review](walkthroughs/phase-7c2-pocket-classification.md)
+
+- [Phase 7C.2 category creation UI and recovery — PO review](walkthroughs/phase-7c2-category-create-ui.md)
+
+- [Phase 7C.2 category creation transport — recovery/UI pending](walkthroughs/phase-7c2-category-create-transport.md)
+
+- [Phase 7C.2 pocket archive/restore UI — PO review](walkthroughs/phase-7c2-pocket-lifecycle-ui.md)
+
+- [Phase 7C.2 pocket lifecycle transport — UI pending](walkthroughs/phase-7c2-pocket-lifecycle-transport.md)
+
+- [Phase 7C.2 category archive/restore — PO review](walkthroughs/phase-7c2-category-lifecycle.md)
+- [Phase 7C.2 pocket label editing — verification checkpoint](walkthroughs/phase-7c2-pocket-label.md)
+
+- [Phase 7C.2 category label editing — PO review](walkthroughs/phase-7c2-category-edit.md)
+
+- [Phase 7C.2 Cash/NFC budget-owner form — PO review](walkthroughs/phase-7c2-budget-owner-form.md)
+
+- [Phase 7C.2 budget-owner transport — edit UI pending](walkthroughs/phase-7c2-budget-owner-transport.md)
+
+- [Phase 7C.2 read-only master data — partial phase checkpoint](walkthroughs/phase-7c2-master-data-read.md)
+- [Phase 7C.2 setup submission — browser QA passed, PO review pending](walkthroughs/phase-7c2-setup-submission.md)
 - [Phase 7C.1 connected sessions — local review](walkthroughs/phase-7c1-connected-session.md)
 - [Phase 7B.5 Reports API — implementation review](walkthroughs/phase-7b5-reports-api.md)
 - [Phase 7B.4 idempotency remediation — PO accepted](walkthroughs/phase-7b4-idempotency-remediation.md)

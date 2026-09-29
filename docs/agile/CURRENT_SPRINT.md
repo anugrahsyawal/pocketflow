@@ -1,8 +1,8 @@
 # Current Sprint
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
-Status: Phase 7C.1 Implemented Locally; PO Review Pending
-Current checkpoint: integration plan committed at `d4b2f36`; implementation uncommitted
+Status: Phase 7C.2 Delivered — Technical Audit / Product Owner Review Gate
+Current checkpoint: Phase 7C.1 pushed as `cd2154b`; Phase 7C.2 uncommitted
 
 ## Terminology
 
@@ -25,6 +25,94 @@ Build a secure, verified TypeScript/Fastify/PostgreSQL backend foundation and de
 - Phase 6D — Rule-Based Insights and Sinking Fund Recommendation (Done, commit `9297f37`).
 
 ## Active status
+
+Current consolidated delivery: setup, master-data reads and approved pocket /
+category mutations implemented in connected mode. Refer to the
+[final audit](../walkthroughs/phase-7c2-final-audit.md) for exact verification,
+limitations and phase gate. No 7C.3 authorization or commit/push is inferred.
+
+### Historical slice checkpoints
+
+The entries below record progress at each date; pending statements in older
+entries and baseline exclusions are not current phase instructions.
+
+### Opening balance correction — 2026-09-28
+
+Connected editor and explicit impact confirmation delivered. Builds/type-checks
+and isolated browser QA passed; see [evidence](../walkthroughs/phase-7c2-opening-balance.md).
+Final 7C.2 audit/PO review remain, not advancement to transactions or deployment.
+
+### Pocket group/spendable settings — 2026-09-28
+
+Editor and API integration implemented; builds/type-check and browser QA passed.
+See [evidence](../walkthroughs/phase-7c2-pocket-classification.md). Opening-balance
+correction UI and phase audit remain; allocation editing is not in this contract.
+
+### Category creation UI and durable recovery — 2026-09-28
+
+Create form and owner-scoped IndexedDB journal implemented; 292 integration tests,
+browser recovery/regression checks, type-checks and builds passed.
+No fresh mutation ID on an unresolved outcome; legacy storage untouched. See
+[evidence](../walkthroughs/phase-7c2-category-create-ui.md). Final phase/PO review
+and remaining pocket fields are pending. No commit/push or phase advancement.
+
+### Category creation transport — 2026-09-27
+
+Typed immutable POST integration added; 289 tests, builds/type-checks and existing
+browser regressions pass. Create UI awaits durable owner-scoped
+attempt recovery. See [evidence and next-slice gate](../walkthroughs/phase-7c2-category-create-transport.md).
+No phase advancement or commit/push.
+
+### Pocket lifecycle UI — 2026-09-27
+
+Archive/restore confirmation and archived list delivered, with explicit wallet
+mapping recovery. 283 integration tests, browser QA, type-checks and builds pass; see
+[evidence](../walkthroughs/phase-7c2-pocket-lifecycle-ui.md). PO review pending.
+No new phase, migration, commit or push.
+
+### Pocket lifecycle transport — 2026-09-27
+
+Narrow revision-aware archive/restore transport added; 281 integration tests,
+build/type-check and existing UI browser regression checks pass.
+No lifecycle UI enabled; archived list/confirmation and wallet recovery UI are next.
+See [evidence](../walkthroughs/phase-7c2-pocket-lifecycle-transport.md).
+
+### Category lifecycle and pocket labels — 2026-09-27
+
+Category archive/restore delivered and reviewed with 272 tests and browser QA.
+Pocket name/emoji editor added in the same phase; 276 integration tests,
+builds/type-checks and browser QA pass. Current verification is recorded
+in [checkpoint](../walkthroughs/phase-7c2-pocket-label.md). Category creation and
+remaining pocket forms are pending. No advancement to 7C.3 or commit/push.
+
+### Category label editing — 2026-09-25
+
+Name/emoji editing delivered with 271 passing tests and browser evidence.
+See [checkpoint](../walkthroughs/phase-7c2-category-edit.md). No new phase started;
+category creation/lifecycle and remaining pocket forms still pending.
+
+### Cash/NFC configuration form — 2026-09-25
+
+Connected budget-owner form and browser error/retry/reload checks delivered.
+See [evidence](../walkthroughs/phase-7c2-budget-owner-form.md). PO review pending;
+other pocket and category mutation forms remain unfinished in the same phase.
+
+### Cash/NFC edit transport foundation — 2026-09-24
+
+Added typed revision-aware budget-owner PATCH transport and tests. No edit UI
+enabled yet; implement recovery/conflict UX before exposing the write. See
+[evidence](../walkthroughs/phase-7c2-budget-owner-transport.md). Same phase;
+no commit/push or advancement to transactions.
+
+### Read-only master-data continuation — 2026-09-19
+
+PO authorized commit/push of 7C.1 and continuation. Commit `cd2154b` is pushed
+to the active branch, not main. 7C.2 read integration is implemented and verified
+with 252 passing tests and browser evidence. Setup submission is now implemented
+with 259 passing tests after a browser-discovered insertion-order bug fix.
+Browser QA passed; PO review and master-data edits remain unfinished.
+See [read checkpoint](../walkthroughs/phase-7c2-master-data-read.md)
+and [setup checkpoint](../walkthroughs/phase-7c2-setup-submission.md).
 
 ### Connected session implementation — 2026-09-15
 

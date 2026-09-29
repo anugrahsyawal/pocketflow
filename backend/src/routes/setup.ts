@@ -236,8 +236,15 @@ export async function setupRoutes(app: FastifyInstance): Promise<void> {
         let categoriesCreatedCount = 0;
         let totalAllocatedAmount = 0;
 
-        // Insert selected pockets
-        for (const key of selectedKeys) {
+        // Foreign keys are immediate: create budget owners before Cash/NFC,
+        // independently of checkbox/request order. Keep the original payload
+        // untouched for idempotency hashing and replay.
+        const isWallet = (key: string) => key === 'cash' || key === 'nfc-card';
+        const insertionKeys = [
+          ...selectedKeys.filter(key => !isWallet(key)),
+          ...selectedKeys.filter(isWallet),
+        ];
+        for (const key of insertionKeys) {
           const spec = SETUP_TEMPLATES[key];
           const pocketId = templateKeyToIdMap[key];
 

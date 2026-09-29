@@ -2,6 +2,7 @@ import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { ApiError, SessionClient, ServerUser, sessionErrorMessage } from '@/lib/api/sessionClient';
+import { ConnectedPockets } from './ConnectedPockets';
 
 /** Isolated entry: deliberately imports no persisted auth or financial store. */
 export default function ConnectedApp() {
@@ -14,6 +15,9 @@ export default function ConnectedApp() {
   const [password, setPassword] = useState('');
   const running = useRef(false);
   const mounted = useRef(true);
+  const expire = useCallback(() => {
+    client.clear(); setUser(null); setChecked(true); setError('Sesi berakhir. Silakan masuk kembali.');
+  },[client]);
 
   const run = useCallback(async (action: () => Promise<void>) => {
     if (running.current) return;
@@ -69,7 +73,7 @@ export default function ConnectedApp() {
         </> : user ? <>
           <h2 className="font-display text-headline-md break-words">Halo, {user.displayName}</h2>
           <p className="text-body-sm text-text-secondary break-all">{user.email}</p>
-          <p className="rounded-input bg-primary-soft p-3 text-body-sm text-primary">Login server berhasil. Setup, pocket, dan transaksi akan dihubungkan pada tahap berikutnya.</p>
+          <p className="rounded-input bg-primary-soft p-3 text-body-sm text-primary">Setup, pengaturan budget Cash/NFC, edit nama/emoji pocket dan kategori, serta arsip/pulihkan kategori tersedia. Belum ada migrasi atau penyimpanan transaksi dari halaman ini.</p>
           <Button fullWidth variant="secondary" disabled={busy} onClick={() => void check()}>Periksa sesi</Button>
           <Button fullWidth loading={busy} onClick={() => void run(async () => {
             await client.logout();
@@ -82,7 +86,10 @@ export default function ConnectedApp() {
           <p className="text-body-sm text-text-secondary">Gunakan akun pemilik yang dibuat melalui backend, bukan akun demo lokal.</p>
         </form>}
       </section>
-      <p className="text-center text-body-sm text-text-secondary">Tahap 7C.1 · Belum ada migrasi data atau sinkronisasi otomatis.</p>
+      {user && <fieldset hidden={busy || !!error} disabled={busy || !!error} className="min-w-0 border-0 p-0 m-0">
+        <ConnectedPockets key={user.id} ownerId={user.id} client={client} onExpired={expire} />
+      </fieldset>}
+      <p className="text-center text-body-sm text-text-secondary">Tahap 7C.2 · Belum ada migrasi data atau sinkronisasi otomatis.</p>
     </div>
   </main>;
 }

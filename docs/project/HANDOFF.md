@@ -1,9 +1,72 @@
 # Current Handoff
 
-Last updated: 2026-09-14
+Last updated: 2026-09-28
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- Phase 7C.2 implementation delivered; read the [consolidated audit](../walkthroughs/phase-7c2-final-audit.md)
+  before continuing. Next gate: PO review and explicit Git checkpoint approval,
+  then approval of 7C.3 scope. Do not automatically start transactions, migrate
+  data or deploy. The entries below are historical slice progress.
+
+- Latest 2026-09-28: opening-balance correction delivered with confirmation,
+  validation and explicit immutable retry. Read [evidence](../walkthroughs/phase-7c2-opening-balance.md).
+  Next is final 7C.2 audit and PO review. Earlier pending-editor entries are
+  historical. No new phase or commit/push authorized in this continuation.
+
+- Latest: pocket group/spendable settings implemented in connected mode.
+  See [evidence](../walkthroughs/phase-7c2-pocket-classification.md). Next bounded
+  work is opening-balance correction UI with explicit financial-impact warning,
+  then 7C.2 audit. No allocation editor, commit/push or 7C.3 started.
+
+- Latest 2026-09-28: interrupted category-create UI now completed with a durable,
+  owner-scoped IndexedDB journal. Read [evidence and limitations](../walkthroughs/phase-7c2-category-create-ui.md).
+  Do not discard unresolved requests or introduce automatic retry/legacy imports.
+  Same uncommitted 7C.2; remaining pocket fields/phase review still pending.
+
+- Latest: category creation transport added; no create UI yet. Implement and
+  verify durable owner-scoped recovery before exposing POST. Read
+  [checkpoint](../walkthroughs/phase-7c2-category-create-transport.md), especially
+  reload/uncertain outcome and replay-not-current-state rules. Same 7C.2.
+
+- Latest UI continuation: pocket archive/restore now enabled in connected mode,
+  with explicit wallet mapping recovery and read-only archived categories.
+  See [checkpoint](../walkthroughs/phase-7c2-pocket-lifecycle-ui.md). Category
+  creation/remaining pocket fields still pending; no commit/push or 7C.3.
+
+- Latest continuation: pocket lifecycle transport added, UI still pending.
+  Read [evidence and next slice](../walkthroughs/phase-7c2-pocket-lifecycle-transport.md).
+  Preserve explicit wallet mapping choices and immutable recovery. No commit/push.
+
+- Latest 2026-09-27: category archive/restore reviewed (272 tests plus browser QA);
+  pocket name/emoji editor added (276 tests, builds/type-checks, browser regressions
+  passed). Disposable backend stopped after QA. Read [current evidence](../walkthroughs/phase-7c2-pocket-label.md)
+  before continuing remaining 7C.2 forms. Dirty tree is accumulated same-phase
+  work, not a new phase. No commit/push performed.
+
+- Latest 2026-09-25: category label editor enabled; 271 tests pass, browser
+  retry/conflict/reload checks passed. See
+  [evidence](../walkthroughs/phase-7c2-category-edit.md). Continue remaining category
+  creation/lifecycle and pocket forms within 7C.2; no commit/push yet.
+
+- 2026-09-25: Cash/NFC form now calls the tested transport. Immutable retry,
+  Reload-only conflict handling and browser reload reconciliation verified.
+  See [form checkpoint](../walkthroughs/phase-7c2-budget-owner-form.md).
+  Other pocket/category forms remain; no commit/push or 7C.3 advancement.
+
+- 2026-09-24: Cash/NFC budget-owner PATCH transport foundation added. It is not
+  called from UI yet. Next: immutable-attempt/reload reconciliation and conflict
+  UX, then the form and browser checks. See
+  [checkpoint](../walkthroughs/phase-7c2-budget-owner-transport.md). No commit/push.
+
+- Latest (2026-09-19): `cd2154b` committed/pushed to the active branch on PO
+  request, then clean-tree entry into 7C.2. Read-only setup/pockets/categories
+  and report balances implemented; setup PUT and browser QA delivered, 259 tests
+  pass after fixing order-dependent setup insertion. PO review and pocket/category
+  edits remain pending; see
+  [setup evidence and gate](../walkthroughs/phase-7c2-setup-submission.md).
+  New changes are uncommitted. Main unchanged. Disposable preview restarted for
+  QA on loopback 3000, connected frontend on 5174; no user data migrated.
 - Latest implementation: `d4b2f36` commits the accepted integration plan. 7C.1
   source changes are uncommitted for review. Real session mode is isolated on
   dev port 5174; no financial API forms enabled. See

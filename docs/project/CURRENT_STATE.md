@@ -1,10 +1,97 @@
 # PocketFlow Current State
 
-Last updated: 2026-09-14
+Last updated: 2026-09-28
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `08e15fb` (Reports API implementation, local only)
+Latest committed checkpoint: `cd2154b` (Phase 7C.1, pushed to origin/codex/audit-pocketflow-documentation)
 
 ## Executive state
+
+**Current consolidated checkpoint — 2026-09-28:** Phase 7C.2 implementation is
+delivered in isolated connected-development mode: setup; canonical master-data
+reads; pocket labels/classification/opening-balance correction; Cash/NFC owner
+settings; category creation/editing; pocket/category archive and restore.
+See [technical audit](../walkthroughs/phase-7c2-final-audit.md) for verification
+and limitations. PO acceptance, commit/push and the next phase are separate gates.
+No transaction UI, migration, offline sync or deployment is included.
+
+### Historical checkpoints and baseline notes
+
+The remaining dated entries and older baseline sections below describe earlier
+checkpoints. Their pending/not-started statements do not override the summary
+above or the consolidated audit; older PO acceptance is retained unchanged.
+
+**Latest opening-balance continuation — 2026-09-28:** Connected correction form,
+explicit impact confirmation, narrow PATCH transport and regression checks
+implemented. See [evidence](../walkthroughs/phase-7c2-opening-balance.md).
+No ledger/allocation mutation; final 7C.2 audit and PO review remain. Earlier
+opening-balance-pending entries below are historical. No commit/push or 7C.3.
+
+**Latest classification continuation — 2026-09-28:** Pocket group/spendable editor
+enabled in connected mode, with typed transport, canonical reads and revision
+protection. See [evidence](../walkthroughs/phase-7c2-pocket-classification.md).
+No base balance/allocation change; opening-balance UI and phase audit remain.
+Same uncommitted 7C.2, no migration or phase advancement.
+
+**Latest UI continuation — 2026-09-28:** Interrupted category creation work
+completed with an isolated owner-scoped IndexedDB recovery journal and explicit
+same-ID retry after reload/login. 292 integration tests, browser recovery/regression
+checks, type-checks and builds passed. No background send or legacy store mutation.
+See [checkpoint](../walkthroughs/phase-7c2-category-create-ui.md). Same uncommitted
+7C.2; remaining pocket fields and phase-level review are pending.
+
+**Latest creation transport — 2026-09-27:** Category POST transport and six
+integration tests added. 289 integration tests, builds/type-checks and existing
+browser regressions pass. No create form enabled until durable attempt recovery
+across reload is implemented. See [checkpoint and recovery gate](../walkthroughs/phase-7c2-category-create-transport.md).
+Same uncommitted 7C.2, no deployment or local data migration.
+
+**Latest UI continuation — 2026-09-27:** Pocket archive/restore controls and archived
+list delivered in connected mode. Cash/NFC recovery requires explicit replacement
+when the retained budget owner is invalid. 283 integration tests, browser scenarios,
+type-checks and builds pass;
+see [evidence](../walkthroughs/phase-7c2-pocket-lifecycle-ui.md). Category creation
+and other pocket fields remain pending. Same uncommitted Phase 7C.2.
+
+**Latest transport continuation — 2026-09-27:** Pocket archive/restore transport
+and archived-pocket read allowlist added, with explicit Cash/NFC restore mapping.
+281 integration tests, build/type-check and existing UI browser regressions pass.
+No new UI controls yet. See [checkpoint](../walkthroughs/phase-7c2-pocket-lifecycle-transport.md).
+Same uncommitted 7C.2; next slice is lifecycle UI and recovery confirmation.
+
+**Latest continuation — 2026-09-27:** Category archive/restore reviewed: prior
+272-test run and browser verification passed. Pocket name/emoji editing added
+within the same Phase 7C.2; 276 integration tests, builds/type-checks and browser
+regressions pass. See [checkpoint](../walkthroughs/phase-7c2-pocket-label.md).
+No balance/allocation editor, category creation, pocket lifecycle, migration,
+commit/push or new phase. Earlier entries below are historical checkpoints.
+
+**Latest continuation — 2026-09-25:** Existing category name/emoji editing is
+enabled in connected mode with revision protection and browser-verified retry/
+reload handling. 271 integration tests pass. See
+[category edit evidence](../walkthroughs/phase-7c2-category-edit.md). Category
+creation/archive/restore and other pocket mutations remain pending. No commit/push.
+
+**Continuation — 2026-09-25:** Connected Cash/NFC budget-owner form is enabled
+with immutable retries, Reload-only conflict handling and server reconciliation.
+Browser QA passed; see [form evidence](../walkthroughs/phase-7c2-budget-owner-form.md).
+Other pocket/category edit and lifecycle forms remain pending. No local migration
+or commit/push; the phase is not complete.
+
+**Continuation — 2026-09-24:** Added the narrow Cash/NFC budget-owner PATCH
+transport and regression tests (266 passing), without enabling an edit form. See
+[transport checkpoint](../walkthroughs/phase-7c2-budget-owner-transport.md).
+Phase 7C.2 is still partial; UI recovery/conflict handling and category edits
+remain pending. Existing uncommitted setup/read work is preserved.
+
+**Latest continuation — 2026-09-19:** PO requested commit, push and continuation.
+7C.1 was committed/pushed as `cd2154b` on the active branch; main is unchanged.
+The read-only part of 7C.2 now reads setup, pockets, categories and report-derived
+balances. [Evidence](../walkthroughs/phase-7c2-master-data-read.md): 252 tests pass,
+frontend checks/builds and bounded browser checks pass. Full 7C.2 remains partial:
+Setup submission has since been implemented and browser-verified. QA found and
+fixed order-dependent setup foreign-key failure; 259 integration tests now pass.
+See [setup evidence](../walkthroughs/phase-7c2-setup-submission.md). PO review is
+pending. Pocket/category edits remain disabled. No user data migrated.
 
 **Latest implementation — 2026-09-15:** Phase 7C.1 connected session foundation is
 implemented locally after the approved plan commit `d4b2f36`. Real login and
