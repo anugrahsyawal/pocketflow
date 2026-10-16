@@ -6,6 +6,27 @@ Phase 7C.1 implemented locally after plan commit `d4b2f36` and a clean-tree chec
 See [verification](../walkthroughs/phase-7c1-connected-session.md). Implementation
 PO review is pending. No normal-mode cutover or data migration performed.
 
+## Latest edit checkpoint — 2026-10-04
+
+2026-10-16 UI continuation: canonical DTO-prefilled edit form and explicit
+changed-field confirmation now use shared durable recovery. See
+[UI evidence](../walkthroughs/phase-7c3-edit-ui.md). Manual/extended verification
+remains pending; prior form-pending notes below are historical.
+
+2026-10-16 continuation: shared edit journal and existing recovery controls now
+support explicit edit retry/stop; all discriminated consumers updated. See
+[recovery evidence](../walkthroughs/phase-7c3-edit-recovery.md). This supersedes
+journal-pending text below; canonical edit form/confirmation remains next.
+
+DEC-035 approves edit terminal resolution and nullable PATCH category/source
+clearing. Backend implementation is delivered; see
+[verification](../walkthroughs/phase-7c3-edit-resolution.md). Frontend edit
+transport is implemented and browser-tested; immutable shared journal, recovery
+and form remain to be implemented within this approval. See the
+[transport checkpoint](../walkthroughs/phase-7c3-edit-transport.md).
+This supersedes earlier edit-proposal approval gates only;
+no full-phase acceptance, normal-mode cutover, migration or deployment is implied.
+
 ## Authority and baseline
 
 The PO requested the next frontend/backend integration stage after Reports API
@@ -160,6 +181,88 @@ this is not full-phase completion. See
 - Old LocalStorage remains untouched; no automatic import or merge.
 
 ### 7C.3 — Transactions and lifecycle
+
+Edit checkpoint 2026-10-04: [bounded proposal](EDIT_ATTEMPT_RESOLUTION_PROPOSAL.md)
+accepted as DEC-035. Backend resolution and PATCH optional-null schema are
+implemented; frontend transport/recovery/form remain pending within approved scope.
+
+Delete recovery/UI 2026-10-04: DEC-034 accepted and implemented; shared journal
+strictly distinguishes delete, original confirmation is retained, terminal
+resolution precedes matching cleanup and canonical refresh. See
+[verification](../walkthroughs/phase-7c3-delete-recovery-ui.md). Earlier delete
+approval/UI gates below are historical; edit/batch resolution remains excluded.
+
+Delete recovery audit 2026-10-01: [proposal awaiting PO approval](DELETE_ATTEMPT_RESOLUTION_PROPOSAL.md).
+Confirmed rejection is not terminal and acknowledgement survives tombstone purge.
+No contract/UI change until the delete-specific extension is approved.
+
+Delete transport 2026-10-01: strict frontend DELETE transport verified against
+section 7.2.7, with required confirmation and immutable request snapshot. See
+[evidence](../walkthroughs/phase-7c3-delete-transport.md). No UI dispatch until
+durable recovery and a reviewed rejection exit policy exist. DEC-033 does not
+authorize delete resolution; no API expansion in this continuation.
+
+Lifecycle UI 2026-10-01: archive/restore confirmation and explicit recovery are
+connected to the shared journal and DEC-033 transport. Canonical refresh follows
+matching acknowledgement; error/reload alone never clears recovery. See
+[evidence](../walkthroughs/phase-7c3-lifecycle-ui.md). This supersedes action-UI
+gates below for archive/restore only; edit/delete/batch remain unintegrated.
+
+Lifecycle terminal resolution 2026-09-30: DEC-033 accepted; dedicated lifecycle
+endpoint and strict transport verified. See [evidence](../walkthroughs/phase-7c3-lifecycle-resolution.md).
+Committed acknowledgements are preserved; unexecuted attempts are permanently
+fenced. Lost responses retain recovery until explicit retry and matching terminal
+acknowledgement. History confirmation/recovery UI remains pending; older endpoint
+approval gates below are superseded. No automatic undo or replacement request.
+
+Lifecycle recovery foundation 2026-09-30: [evidence](../walkthroughs/phase-7c3-lifecycle-recovery.md).
+One owner-scoped journal now supports create/archive/restore records atomically,
+without a schema upgrade. Conflicts remain retained; no automatic discard/revision
+change. Confirmation, explicit lifecycle retry and safe rejection exit remain
+required before enabling history action buttons.
+
+Archive/restore transport 2026-09-30: [checkpoint](../walkthroughs/phase-7c3-transaction-lifecycle-transport.md).
+Owner-scoped request snapshots and strict acknowledgement/revision checks delivered;
+history remains read-only. Durable lifecycle journal, conflict/rejection policy
+and confirmation UI must precede action enablement. Create-only terminal resolution
+must not be reused for archive/restore attempts.
+
+Transfer continuation 2026-09-30: six approved single-transfer types now use the
+shared journal, explicit retry and terminal resolution; [evidence](../walkthroughs/phase-7c3-transfer-ui.md).
+Canonical balance/allocation refresh is server-driven. Batch and lifecycle remain
+pending; older transfer-UI-pending notes below are historical.
+
+Income continuation 2026-09-30: single-income UI uses shared create/recovery
+orchestration; [evidence](../walkthroughs/phase-7c3-income-ui.md). Canonical balance
+and history refresh, no allocation write or auto-transfer. Transfer/batch/lifecycle
+remain pending. This supersedes earlier income-form-pending notes only.
+
+Terminal resolution 2026-09-30: DEC-032 implemented; explicit confirmation either
+preserves the committed result or fences the uncommitted attempt before journal
+cleanup. See [verification](../walkthroughs/phase-7c3-attempt-resolution.md).
+This supersedes the earlier cancellation-unavailable gate, not the remaining
+income/transfer/batch/lifecycle scope or PO review requirement.
+
+Expense UI 2026-09-30: [development checkpoint](../walkthroughs/phase-7c3-expense-ui.md).
+Durable explicit retry wired; rejected-attempt cancellation/replacement remains
+unavailable and blocks daily-use acceptance. Resolve before extending form types.
+
+POST continuation 2026-09-29: single-create transport and original-acknowledgement
+validation implemented; [evidence](../walkthroughs/phase-7c3-transaction-create-transport.md).
+Financial forms and pending/rejection UI remain gated. No automatic resend.
+
+Recovery continuation 2026-09-29: atomic owner-scoped single-create journal
+implemented; see [evidence](../walkthroughs/phase-7c3-transaction-recovery.md).
+Transport/form integration and uncertain/definite-outcome handling remain gates.
+
+History UI continuation 2026-09-29: paginated/filterable read-only panel delivered;
+see [evidence](../walkthroughs/phase-7c3-history-ui.md). Financial submission and
+durable recovery remain pending. Earlier read-transport notes are historical.
+
+Entry authorized 2026-09-29 after clean checkpoint `871576f` (7C.2 pushed).
+First slice: explicit paginated GET transport, query/response validation and live
+HTTP tests. [Evidence](../walkthroughs/phase-7c3-transaction-read.md). Not a complete
+history UI, full export, balance calculation or financial-write integration.
 
 - Async income/expense/transfer/batch submission and validation feedback.
 - Stable mutation UUID per immutable attempt; identical uncertain retries reuse

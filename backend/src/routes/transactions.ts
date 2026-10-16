@@ -13,6 +13,10 @@ import {
   findIdempotencyRecord,
   parseReplayEnvelope,
   runIdempotentMutation,
+  resolveCreateAttempt,
+  resolveLifecycleAttempt,
+  resolveDeleteAttempt,
+  resolveEditAttempt,
 } from '../lib/idempotency.js';
 import { getDb } from '../db/client.js';
 import {
@@ -342,8 +346,10 @@ export async function transactionRoutes(app: FastifyInstance): Promise<void> {
   });
 
   // POST /v1/transactions
+  // Resolution shares create shape validation and original hash, but never runs domain writes.
+  for (const resolving of [false, true]) {
   app.post(
-    '/v1/transactions',
+    resolving ? '/v1/transactions/resolve-attempt' : '/v1/transactions',
     { preHandler: [authenticateRequest, validateCsrfToken] },
     async (req: FastifyRequest, reply: FastifyReply) => {
       const user = req.user!;
@@ -482,6 +488,10 @@ export async function transactionRoutes(app: FastifyInstance): Promise<void> {
       }
 
       const canonicalHash = computeCanonicalRequestHash('POST', '/v1/transactions', body);
+
+      if (resolving) {
+        return reply.status(200).send(await resolveCreateAttempt(user.id, clientMutationId, canonicalHash));
+      }
 
       // Pre-lock Idempotency Check
       const existingRecord = await findIdempotencyRecord(user.id, clientMutationId);
@@ -754,6 +764,8 @@ export async function transactionRoutes(app: FastifyInstance): Promise<void> {
       return reply.status(201).send(responsePayload);
     }
   );
+
+  }
 
   // POST /v1/transactions/batch
   app.post(
@@ -1046,16 +1058,20 @@ export async function transactionRoutes(app: FastifyInstance): Promise<void> {
     }
   );
 
-  // PATCH /v1/transactions/:id
-  app.patch(
-    '/v1/transactions/:id',
-    { preHandler: [authenticateRequest, validateCsrfToken] },
-    async (req: FastifyRequest, reply: FastifyReply) => {
+  // PATCH and edit resolution share shape validation and original request hashing.
+  const handleEdit = async (req: FastifyRequest, reply: FastifyReply, resolving = false) => {
       const user = req.user!;
       const params = (req.params || {}) as Record<string, string>;
       const transactionId = validateUuidV4(params.id, 'id');
 
-      const body = (req.body || {}) as Record<string, any>;
+      const wrapper = (req.body || {}) as Record<string, any>;
+      if(resolving && (!wrapper || typeof wrapper!=='object' || Array.isArray(wrapper) ||
+        Object.keys(wrapper).some(key=>!['operation','clientMutationId','expectedRevision','changes'].includes(key)) ||
+        wrapper.operation!=='edit' || !wrapper.changes || typeof wrapper.changes!=='object' || Array.isArray(wrapper.changes) ||
+        Object.keys(wrapper.changes).some(key=>['clientMutationId','expectedRevision'].includes(key)))) {
+        throw new AppError('Invalid edit resolution request',400,'INVALID_INPUT');
+      }
+      const body = resolving ? {...wrapper.changes,clientMutationId:wrapper.clientMutationId,expectedRevision:wrapper.expectedRevision} : wrapper;
       if (typeof body !== 'object' || body === null || Array.isArray(body)) {
         throw new AppError('Request body must be a JSON object', 400, 'INVALID_INPUT');
       }
@@ -1088,7 +1104,7 @@ export async function transactionRoutes(app: FastifyInstance): Promise<void> {
 
       if (
         typeof body.expectedRevision !== 'number' ||
-        !Number.isInteger(body.expectedRevision) ||
+        !Number.isSafeInteger(body.expectedRevision) ||
         body.expectedRevision < 1
       ) {
         throw new AppError("Field 'expectedRevision' must be a positive integer", 400, 'INVALID_INPUT');
@@ -1175,6 +1191,10 @@ export async function transactionRoutes(app: FastifyInstance): Promise<void> {
       }
 
       const canonicalHash = computeCanonicalRequestHash('PATCH', `/v1/transactions/${transactionId}`, body);
+
+      if(resolving){
+        return reply.status(200).send(await resolveEditAttempt(user.id,clientMutationId,canonicalHash,transactionId,expectedRevision));
+      }
 
       // Pre-lock Idempotency Check
       const existingRecord = await findIdempotencyRecord(user.id, clientMutationId);
@@ -1615,8 +1635,33 @@ export async function transactionRoutes(app: FastifyInstance): Promise<void> {
       });
 
       return reply.status(200).send(responsePayload);
-    }
-  );
+    };
+  app.patch('/v1/transactions/:id', {preHandler:[authenticateRequest,validateCsrfToken]},
+    (req,reply)=>handleEdit(req,reply));
+
+  // Resolve confirmed lifecycle/delete/edit attempts using their original request identity.
+  app.post('/v1/transactions/:id/resolve-attempt',
+    {preHandler: [authenticateRequest, validateCsrfToken]}, async (req, reply) => {
+      const transactionId = validateUuidV4((req.params as {id:string}).id, 'id');
+      const body = req.body as Record<string, unknown>;
+      if(body && typeof body==='object' && !Array.isArray(body) && body.operation==='edit')return handleEdit(req,reply,true);
+      if (!body || typeof body !== 'object' || Array.isArray(body) ||
+        Object.keys(body).some(key => !(body.operation==='delete'?['operation','clientMutationId','expectedRevision','confirmPermanentDelete']:['operation','clientMutationId','expectedRevision']).includes(key)) ||
+        (body.operation !== 'archive' && body.operation !== 'restore' && body.operation !== 'delete') ||
+        (body.operation==='delete'&&body.confirmPermanentDelete!==true) ||
+        typeof body.expectedRevision !== 'number' || !Number.isSafeInteger(body.expectedRevision) || body.expectedRevision < 1) {
+        throw new AppError('Invalid lifecycle resolution request', 400, 'INVALID_INPUT');
+      }
+      const clientMutationId = validateUuidV4(body.clientMutationId, 'clientMutationId');
+      if(body.operation==='delete'){
+        const hash=computeCanonicalRequestHash('DELETE', `/v1/transactions/${transactionId}`,
+          {clientMutationId,expectedRevision:body.expectedRevision,confirmPermanentDelete:body.confirmPermanentDelete});
+        return reply.status(200).send(await resolveDeleteAttempt(req.user!.id,clientMutationId,hash,transactionId));
+      }
+      const originalBody = {clientMutationId, expectedRevision: body.expectedRevision};
+      const hash = computeCanonicalRequestHash('POST', `/v1/transactions/${transactionId}/${body.operation}`, originalBody);
+      return reply.status(200).send(await resolveLifecycleAttempt(req.user!.id, clientMutationId, hash));
+    });
 
   // POST /v1/transactions/:id/archive
   app.post(

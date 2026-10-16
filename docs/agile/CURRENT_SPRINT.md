@@ -1,8 +1,8 @@
 # Current Sprint
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
-Status: Phase 7C.2 Delivered — Technical Audit / Product Owner Review Gate
-Current checkpoint: Phase 7C.1 pushed as `cd2154b`; Phase 7C.2 uncommitted
+Status: Phase 7C.3 In Progress — Edit Form Delivered; Verification/Review Pending
+Current checkpoint: Phase 7C.2 pushed as `871576f`; Phase 7C.3 uncommitted
 
 ## Terminology
 
@@ -25,6 +25,107 @@ Build a secure, verified TypeScript/Fastify/PostgreSQL backend foundation and de
 - Phase 6D — Rule-Based Insights and Sinking Fund Recommendation (Done, commit `9297f37`).
 
 ## Active status
+
+2026-10-16 extended edit review: inactive-reference preflight aligned to PATCH
+contract, with archived/reallocation browser coverage. See the
+[extended evidence](../walkthroughs/phase-7c3-edit-ui.md#extended-review--2026-10-16-continuation).
+Manual and PO acceptance remain gates; no backend contract change.
+
+2026-10-16 continuation: connected edit form, explicit confirmation, changed-only
+PATCH and shared journal dispatch implemented. See [evidence](../walkthroughs/phase-7c3-edit-ui.md).
+Next is manual and extended edge-case verification; no new phase or commit/push.
+
+2026-10-16: shared edit journal and recovery consumers implemented; explicit retry,
+terminal stop, reload/logout retention and competing-operation blocking verified
+in a disposable browser. [Evidence](../walkthroughs/phase-7c3-edit-recovery.md).
+Next: canonical edit form/confirmation and broader user-flow verification, not a
+new phase or commit/push. Journal-pending statements below are historical.
+
+2026-10-04 continuation: strict frontend edit transport delivered and exercised
+against the real backend/browser. See [evidence](../walkthroughs/phase-7c3-edit-transport.md).
+Next is shared edit journal and all consumers, then confirmation/recovery UI;
+no connected edit button activated at this checkpoint.
+
+2026-10-04: DEC-035 accepted; edit resolution backend and nullable PATCH schema
+reconciliation implemented. See [checkpoint](../walkthroughs/phase-7c3-edit-resolution.md).
+Next within approved scope: frontend immutable edit transport, shared recovery
+journal and confirmation/form integration. No edit UI activated at this checkpoint.
+
+2026-10-04: DEC-034 accepted; confirmed permanent-delete UI, durable shared
+recovery and server cancellation fence delivered in connected development.
+See [verification](../walkthroughs/phase-7c3-delete-recovery-ui.md). Earlier
+delete-proposal approval/UI gates are superseded, not full Phase 7C.3 completion.
+
+2026-10-01 recovery audit: review the
+[bounded delete proposal](../architecture/DELETE_ATTEMPT_RESOLUTION_PROPOSAL.md)
+before extending DEC-033. Only tests/docs change here; no delete UI activated.
+
+2026-10-01 delete continuation: strict confirmed DELETE transport added against
+the existing contract; [checkpoint](../walkthroughs/phase-7c3-delete-transport.md).
+No delete UI or journal yet. A rejected delete must not be treated as cancelled;
+review durable recovery and terminal-resolution policy before UI enablement.
+
+2026-10-01: Archive/restore actions and explicit recovery controls now integrated
+in connected history; [evidence](../walkthroughs/phase-7c3-lifecycle-ui.md).
+Shared journal guards competing creates; conflicts retain the exact request until
+server resolution. Canonical refresh follows acknowledgement. This supersedes
+the action-UI-pending checkpoint below; not full Phase 7C.3 completion.
+
+2026-09-30 DEC-033 continuation supersedes the approval-pending audit below:
+lifecycle resolution backend/transport verified with 336 passing integration
+tests and browser recovery QA. See [evidence](../walkthroughs/phase-7c3-lifecycle-resolution.md).
+Next bounded slice: confirmation and explicit retry/resolution orchestration in
+history, with canonical refresh. No history mutation buttons enabled yet.
+
+2026-09-30 exit-policy audit: a delayed same-ID restore can succeed after an earlier
+business rejection. Seven lifecycle tests passed. Review the
+[resolution extension proposal](../architecture/LIFECYCLE_ATTEMPT_RESOLUTION_PROPOSAL.md)
+before backend/UI changes; do not reinterpret the create-only approval as lifecycle.
+
+2026-09-30 recovery foundation: shared create/archive/restore journal verified,
+with fail-closed create UI guard; [evidence](../walkthroughs/phase-7c3-lifecycle-recovery.md).
+Still no user-facing archive/restore dispatch. Conflicts retain the original
+request; complete the recovery/confirmation flow before enabling history actions.
+
+2026-09-30 lifecycle continuation: archive/restore transport implemented and
+verified separately from user-facing controls; [evidence](../walkthroughs/phase-7c3-transaction-lifecycle-transport.md).
+Do not enable actions until durable recovery, revision-conflict and confirmation
+flows are verified. Same uncommitted phase; earlier checkpoints are retained below.
+
+2026-09-30 transfer continuation: all approved single-transfer types enabled in
+connected development; [evidence](../walkthroughs/phase-7c3-transfer-ui.md).
+Earlier transfer-pending statements are historical. Batch and lifecycle UI remain;
+this does not declare phase completion or production readiness.
+
+2026-09-30 income continuation: shared expense/income form with existing safe
+recovery flow; [evidence](../walkthroughs/phase-7c3-income-ui.md). Earlier income-
+pending statements below describe historical checkpoints. No new phase or commit.
+
+2026-09-30 resolution continuation: DEC-032 authorizes explicit server-confirmed
+resolution. Implementation and [evidence](../walkthroughs/phase-7c3-attempt-resolution.md)
+supersede the cancellation-unavailable gate below. Income/transfer/batch and
+transaction lifecycle UI remain pending; do not treat this as full phase acceptance.
+
+2026-09-30 expense form checkpoint: [evidence](../walkthroughs/phase-7c3-expense-ui.md).
+Explicit retry tested, but safe rejection/cancellation flow remains a required
+gate before daily-use acceptance. Earlier form-pending notes are historical.
+
+Single-create POST transport continuation: [evidence](../walkthroughs/phase-7c3-transaction-create-transport.md).
+Durable journal/API combination tested; user-facing orchestration/form still
+pending. Earlier POST-not-enabled notes describe earlier slices.
+
+Recovery continuation: strict single-create journal implemented; transport and
+form orchestration remain pending. See [evidence](../walkthroughs/phase-7c3-transaction-recovery.md).
+No financial POST or automatic send is enabled by this slice.
+
+2026-09-29 continuation: read-only connected history UI and filter/pagination
+states implemented. See [evidence](../walkthroughs/phase-7c3-history-ui.md).
+No financial submissions enabled; earlier history-UI-pending notes are historical.
+
+PO authorized continuation on 2026-09-29 after the 7C.2 checkpoint. First slice:
+paginated transaction read transport; [evidence](../walkthroughs/phase-7c3-transaction-read.md).
+No transaction UI writes or migration enabled. The following 7C.2 entries are
+historical and do not override this current phase status.
 
 Current consolidated delivery: setup, master-data reads and approved pocket /
 category mutations implemented in connected mode. Refer to the

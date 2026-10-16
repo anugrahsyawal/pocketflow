@@ -73,7 +73,7 @@ export default function ConnectedApp() {
         </> : user ? <>
           <h2 className="font-display text-headline-md break-words">Halo, {user.displayName}</h2>
           <p className="text-body-sm text-text-secondary break-all">{user.email}</p>
-          <p className="rounded-input bg-primary-soft p-3 text-body-sm text-primary">Setup, pengaturan budget Cash/NFC, edit nama/emoji pocket dan kategori, serta arsip/pulihkan kategori tersedia. Belum ada migrasi atau penyimpanan transaksi dari halaman ini.</p>
+          <p className="rounded-input bg-primary-soft p-3 text-body-sm text-primary">Setup, pengaturan pocket/kategori, riwayat, pengeluaran, pemasukan dan transfer server tersedia. Batch, edit transaksi dan migrasi data belum tersedia di mode ini.</p>
           <Button fullWidth variant="secondary" disabled={busy} onClick={() => void check()}>Periksa sesi</Button>
           <Button fullWidth loading={busy} onClick={() => void run(async () => {
             await client.logout();
@@ -89,7 +89,7 @@ export default function ConnectedApp() {
       {user && <fieldset hidden={busy || !!error} disabled={busy || !!error} className="min-w-0 border-0 p-0 m-0">
         <ConnectedPockets key={user.id} ownerId={user.id} client={client} onExpired={expire} />
       </fieldset>}
-      <p className="text-center text-body-sm text-text-secondary">Tahap 7C.2 · Belum ada migrasi data atau sinkronisasi otomatis.</p>
+      <p className="text-center text-body-sm text-text-secondary">Tahap 7C.3 · Arsip, pulihkan dan hapus permanen tersedia dengan konfirmasi. Belum ada migrasi data atau sinkronisasi otomatis.</p>
     </div>
   </main>;
 }

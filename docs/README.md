@@ -42,6 +42,43 @@ reference only and must not be copied into production.
 
 ## Verification evidence
 
+- [Connected edit form and confirmation](walkthroughs/phase-7c3-edit-ui.md)
+
+- [Edit shared recovery checkpoint](walkthroughs/phase-7c3-edit-recovery.md)
+
+- [Edit integration proposal — accepted DEC-035](architecture/EDIT_ATTEMPT_RESOLUTION_PROPOSAL.md)
+- [Edit resolution backend checkpoint](walkthroughs/phase-7c3-edit-resolution.md)
+- [Edit frontend transport checkpoint](walkthroughs/phase-7c3-edit-transport.md)
+
+- [Phase 7C.3 delete recovery and confirmation UI](walkthroughs/phase-7c3-delete-recovery-ui.md)
+- [Delete recovery proposal — accepted DEC-034](architecture/DELETE_ATTEMPT_RESOLUTION_PROPOSAL.md)
+
+- [Phase 7C.3 permanent-delete transport — recovery/UI gated](walkthroughs/phase-7c3-delete-transport.md)
+
+- [Phase 7C.3 archive/restore UI — review checkpoint](walkthroughs/phase-7c3-lifecycle-ui.md)
+
+- [Phase 7C.3 lifecycle terminal resolution — action UI pending](walkthroughs/phase-7c3-lifecycle-resolution.md)
+
+- [Phase 7C.3 shared lifecycle recovery — action UI pending](walkthroughs/phase-7c3-lifecycle-recovery.md)
+
+- [Phase 7C.3 transaction archive/restore transport — recovery/UI pending](walkthroughs/phase-7c3-transaction-lifecycle-transport.md)
+
+- [Phase 7C.3 transfer UI — PO review](walkthroughs/phase-7c3-transfer-ui.md)
+
+- [Phase 7C.3 income UI — PO review](walkthroughs/phase-7c3-income-ui.md)
+
+- [Phase 7C.3 terminal attempt resolution — PO review](walkthroughs/phase-7c3-attempt-resolution.md)
+
+- [Phase 7C.3 expense form — development checkpoint, rejection recovery pending](walkthroughs/phase-7c3-expense-ui.md)
+
+- [Phase 7C.3 transaction POST transport — form pending](walkthroughs/phase-7c3-transaction-create-transport.md)
+
+- [Phase 7C.3 transaction recovery foundation — partial checkpoint](walkthroughs/phase-7c3-transaction-recovery.md)
+
+- [Phase 7C.3 read-only history UI — PO review](walkthroughs/phase-7c3-history-ui.md)
+
+- [Phase 7C.3 transaction read transport — partial checkpoint](walkthroughs/phase-7c3-transaction-read.md)
+
 - [Phase 7C.2 consolidated technical audit — current review gate](walkthroughs/phase-7c2-final-audit.md)
 
 The slice entries below retain checkpoint-time statuses; the consolidated audit

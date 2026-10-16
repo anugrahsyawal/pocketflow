@@ -179,7 +179,129 @@ All error responses MUST strictly conform to the canonical error envelope:
 
 ## 4. Idempotency, Concurrency & Revision Control
 
+### 4.0 Phase 7C.3 extension — terminal single-create resolution (DEC-032)
+
+The original seven-route inventory is extended by
+`POST /v1/transactions/resolve-attempt`. Requires owner authentication and CSRF.
+The body is exactly the original single-create body, including `clientMutationId`;
+unknown fields, invalid primitive values and invalid topology are rejected using
+the create validators. It is not an archive/delete or arbitrary mutation API.
+
+Hash uses the original `POST|/v1/transactions|canonical body`, not the resolution
+route. Under the same owner/mutation advisory lock as creation:
+
+- Existing matching success: HTTP 200
+  `{ "status": "committed", "clientMutationId": "<original UUID>",
+  "acknowledgement": { "transaction": "<original complete creation DTO>" } }`.
+  The acknowledgement is the original replay, not current ledger state.
+- No existing record: persist a cancellation fence, then HTTP 200
+  `{ "status": "cancelled", "clientMutationId": "<original UUID>" }`.
+- Existing matching cancellation: return the same cancelled result.
+- Hash/operation conflict: HTTP 409 `IDEMPOTENCY_CONFLICT`; never report cancelled.
+
+Cancellation uses `idempotency_records` with the original request hash, a version-1
+409 replay envelope carrying `error.code = MUTATION_CANCELLED`, and null
+`expiresAt`. No migration is required. This fence has no automatic expiry and must
+not be removed by transaction tombstone purge. Success replay remains unchanged.
+Single-create replay and batch item execution must reject a cancelled key with
+409 `MUTATION_CANCELLED`; changed payload/route remains an idempotency conflict.
+No domain-reference availability or balance check is needed to cancel: the
+operation reserves only the authenticated owner's key and creates no ledger row.
+
+Clients snapshot the original payload, explicitly confirm resolution, validate
+the returned ID/status and (if committed) full original acknowledgement, then
+compare-and-clear the matching local journal and refresh canonical data. Timeout,
+conflict, malformed response or cleanup failure must retain recovery. No automatic
+network retry except the existing explicit CSRF-rejection refresh policy.
+
+### 4.0.1 Lifecycle resolution extension (DEC-033)
+
+`POST /v1/transactions/:id/resolve-attempt` requires authenticated owner and CSRF.
+`:id` and `clientMutationId` are UUID v4. JSON body has exactly
+`{operation: 'archive' | 'restore', clientMutationId, expectedRevision}` where
+expectedRevision is a positive safe integer. Unknown fields/operations fail 400.
+
+The original identity is `POST /v1/transactions/:id/archive` or `/restore`, hashing
+only `{clientMutationId, expectedRevision}`. Under the SAME owner/mutation lock:
+
+- Existing matching 200 success (including no-op): 200
+  `{status:'committed', clientMutationId, acknowledgement:{transaction:<original DTO>}}`.
+- No existing record: insert permanent MUTATION_CANCELLED fence under that original
+  hash, then 200 `{status:'cancelled', clientMutationId}`. Matching fence replays it.
+- Different hash/route/revision/operation: 409 IDEMPOTENCY_CONFLICT, never success.
+
+Reuse existing idempotency_records with null expiresAt. Cancellation does not
+change transaction state/revision, balances or allocations; it does not require
+business conditions or target availability. Owner scoping prevents foreign data
+disclosure or cancellation. Delayed same-ID lifecycle execution returns 409
+MUTATION_CANCELLED; cross-route reuse conflicts. A committed result is never undone.
+This branch covers archive/restore only. The separately approved delete variant is
+specified in section 4.0.2, and edit in section 4.0.3. Batch resolution remains unavailable.
+
+Client validates ID/status and committed DTO (target, state, revision), then
+compare-and-clears only the matching journal and refreshes canonical state.
+Response loss/error retains the original record. Explicit retry only, except
+bounded CSRF rejection refresh. No auto-revision or replacement mutation.
+
+### 4.0.2 Delete resolution extension (DEC-034)
+
+The same `POST /v1/transactions/:id/resolve-attempt` additionally accepts exactly
+`{operation:'delete', clientMutationId, expectedRevision, confirmPermanentDelete:true}`.
+Authentication, CSRF, UUID-v4 and positive safe revision validation apply. Delete
+requires literal confirmation; archive/restore still reject that field.
+
+Hash the original `DELETE /v1/transactions/:id` and original body without operation.
+Under the same owner/mutation lock, matching execution returns 200
+`{status:'committed',clientMutationId,acknowledgement:{success:true,deletedTransactionId,deletedAt}}`.
+Validate stored acknowledgement against the target; return the original result even
+after tombstone purge, never recreating financial data. Invalid stored result fails
+closed. Different request identity returns 409 IDEMPOTENCY_CONFLICT.
+
+Absent execution reserves a permanent cancellation fence in existing idempotency
+storage (null expiry), returning 200 `{status:'cancelled',clientMutationId}`. Matching
+fence returns the same result; delayed DELETE fails MUTATION_CANCELLED. Cancellation
+needs no current entity/business state and changes no transaction, balance, allocation,
+revision or audit data. It only stops this attempt, not other operations on the target.
+No cross-owner data disclosure. Concurrent execution and resolution have one winner.
+
+Client preserves the exact confirmed delete in the shared owner recovery slot before
+dispatch. Explicit retry only; validated terminal acknowledgement precedes matching
+compare-and-clear and canonical refresh. Errors, list absence or 404 do not authorize
+discard. Existing create/lifecycle behavior is unchanged. No undo, retention change,
+batch resolution or offline synchronization is added. Edit is separately covered by 4.0.3.
+
+### 4.0.3 Edit resolution extension (DEC-035)
+
+`POST /v1/transactions/:id/resolve-attempt` also accepts exactly
+`{operation:'edit',clientMutationId,expectedRevision,changes:{...}}`. Changes must
+contain at least one PATCH-mutable field and no identity/revision, type or
+budgetPocketId fields. Reuse PATCH shape validation, UUID-v4 and positive safe
+revision checks. Auth/CSRF required. Omitted fields and explicit null are distinct;
+never trim/drop values when hashing. Target-dependent business validation does
+not run for resolution, so a rejected/missing-target attempt can still be stopped.
+
+Identity is original `PATCH /v1/transactions/:id` with flattened body
+`{clientMutationId,expectedRevision,...changes}`. Under the same owner/mutation lock:
+matching successful/no-op execution returns 200 `{status:'committed',clientMutationId,
+acknowledgement:{transaction:<original complete DTO>}}`. Validate stored DTO, target
+and revision (expected or expected+1); invalid stored result fails closed. Preserve
+historical acknowledgement even after later edits/archive/delete, never undo it.
+
+Absent execution writes a permanent MUTATION_CANCELLED fence (null expiry) and
+returns 200 `{status:'cancelled',clientMutationId}`; matching fence replays it.
+Different identity returns 409 IDEMPOTENCY_CONFLICT. Cancelled PATCH cannot execute
+later, even when business conditions change. Cancellation changes no financial data,
+revision, allocation, archive state or audit records; owner scoping prevents leaks.
+It stops this attempt, not all operations on the target. No target existence claim.
+
+Client keeps exact confirmed edits in the shared owner journal, with explicit
+same-ID retry/stop, matching terminal validation before cleanup and canonical refresh.
+No automatic merge, revision replacement or treating errors/list absence as success.
+Other operation variants remain strict; no edit keys accepted on their wrappers.
+Batch/offline/undo are excluded. UI/recovery implementation has its own verification gate.
+
 ### 4.1 Single Mutation Idempotency (`clientMutationId`)
+
 
 Every single mutating request (`POST /v1/transactions`, `PATCH /v1/transactions/:id`, `POST /v1/transactions/:id/archive`, `POST /v1/transactions/:id/restore`, `DELETE /v1/transactions/:id`) MUST require a valid RFC 4122 v4 UUID `clientMutationId`.
 
@@ -624,6 +746,9 @@ All object schemas enforce `additionalProperties: false`.
 ---
 
 #### 7.2.4 `PATCH /v1/transactions/:id`
+- DEC-035: categoryId and incomeSource may be explicitly null to clear; omission
+  preserves their values. This does not change create schemas. Pocket/amount/date/
+  time/transferType cannot be null. Budget attribution remains server controlled.
 - **Request Body Schema** (`minProperties: 3` enforces `clientMutationId` + `expectedRevision` + at least 1 mutable field; *`budgetPocketId` is omitted because it is server-controlled per DEC-024*):
 ```json
 {
@@ -638,14 +763,14 @@ All object schemas enforce `additionalProperties: false`.
     "pocketId": { "$ref": "#/components/schemas/UUIDv4" },
     "fromPocketId": { "$ref": "#/components/schemas/UUIDv4" },
     "toPocketId": { "$ref": "#/components/schemas/UUIDv4" },
-    "categoryId": { "$ref": "#/components/schemas/UUIDv4" },
+    "categoryId": { "anyOf": [{ "$ref": "#/components/schemas/UUIDv4" }, { "type": "null" }] },
     "transferType": {
       "type": "string",
       "enum": ["normal", "tarik-tunai", "top-up-nfc", "reimbursement", "saving-allocation", "budget-reallocation"]
     },
     "incomeSource": {
-      "type": "string",
-      "enum": ["gaji", "bonus", "cashback", "reimbursement", "other"]
+      "type": ["string", "null"],
+      "enum": ["gaji", "bonus", "cashback", "reimbursement", "other", null]
     },
     "occurredOn": { "type": "string", "format": "date" },
     "occurredAtLocalTime": { "type": "string", "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$" },

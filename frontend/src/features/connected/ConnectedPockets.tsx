@@ -11,6 +11,8 @@ import { PocketArchiveForm } from './PocketArchiveForm';
 import { CategoryCreateForm } from './CategoryCreateForm';
 import { PocketClassificationForm } from './PocketClassificationForm';
 import { OpeningBalanceForm } from './OpeningBalanceForm';
+import { ConnectedHistory } from './ConnectedHistory';
+import { TransactionCreateForm } from './TransactionCreateForm';
 
 export function ConnectedPockets({ownerId,client,onExpired}:{ownerId:string;client:SessionClient;onExpired:()=>void}) {
   const [data,setData] = useState<MasterData | null>(null);
@@ -18,6 +20,9 @@ export function ConnectedPockets({ownerId,client,onExpired}:{ownerId:string;clie
   const [refresh,setRefresh] = useState(0);
   const [editing,setEditing] = useState<string|null>(null);
   const [creationLocked,setCreationLocked] = useState(false);
+  const [expenseLocked,setExpenseLocked] = useState(false);
+  const [lifecycleLocked,setLifecycleLocked] = useState(false);
+  const [resolutionNotice,setResolutionNotice] = useState('');
   const reload=()=>{setEditing(null);setRefresh(n=>n+1);};
   useEffect(() => {
     let active = true;
@@ -32,17 +37,22 @@ export function ConnectedPockets({ownerId,client,onExpired}:{ownerId:string;clie
   return <section aria-label="Pocket server" className="space-y-4">
     <div className="flex items-center justify-between gap-3">
       <h2 className="font-display text-headline-md">Pocket saya</h2>
-      <Button size="sm" variant="secondary" disabled={!!editing || creationLocked || (!data?.isSetupCompleted && !error)} onClick={reload}>Muat ulang</Button>
+      <Button size="sm" variant="secondary" disabled={!!editing || creationLocked || expenseLocked || lifecycleLocked || (!data?.isSetupCompleted && !error)} onClick={reload}>Muat ulang</Button>
     </div>
     <p className="text-body-sm text-text-secondary">Data dari server · {data?.isSetupCompleted ? 'Pengaturan budget Cash/NFC tersedia' : 'Setup akun'}</p>
+    {resolutionNotice&&<p role="status" className="rounded-card bg-primary-soft p-4 text-body-sm">{resolutionNotice}</p>}
     {error ? <p role="alert" className="rounded-card bg-bahaya-soft p-4 text-bahaya">{error} Data belum ditampilkan.</p>
       : !data ? <p role="status">Memuat pocket server…</p>
       : !data.isSetupCompleted ? <ConnectedSetup client={client} onExpired={onExpired} onComplete={()=>setRefresh(n=>n+1)} /> : <>
         <p className="text-body-sm text-text-secondary">Periode {data.period?.startDate} — {data.period?.endDate}</p>
-        <fieldset disabled={!!editing} className="min-w-0 border-0 p-0 m-0">
+        <ConnectedHistory ownerId={ownerId} client={client} data={data} onExpired={onExpired} blocked={!!editing||creationLocked||expenseLocked} onLock={setLifecycleLocked} onResolved={message=>{setResolutionNotice(message);reload();}}/>
+        <fieldset disabled={!!editing||creationLocked||lifecycleLocked} className="min-w-0 border-0 p-0 m-0">
+          <TransactionCreateForm ownerId={ownerId} pockets={data.pockets} client={client} onReload={()=>{setResolutionNotice('');reload();}} onResolved={status=>{setResolutionNotice(status==='cancelled'?'Permintaan dibatalkan oleh server. Tidak ada transaksi baru dari permintaan ini.':'Transaksi ternyata sudah tersimpan. Transaksi tetap dipertahankan; periksa riwayat sebelum membuat pengganti.');reload();}} onExpired={onExpired} onLock={setExpenseLocked}/>
+        </fieldset>
+        <fieldset disabled={!!editing||expenseLocked||lifecycleLocked} className="min-w-0 border-0 p-0 m-0">
           <CategoryCreateForm ownerId={ownerId} pockets={data.pockets} client={client} onReload={reload} onExpired={onExpired} onLock={setCreationLocked} />
         </fieldset>
-        <fieldset disabled={creationLocked} className="min-w-0 border-0 p-0 m-0 space-y-4">
+        <fieldset disabled={creationLocked||expenseLocked||lifecycleLocked} className="min-w-0 border-0 p-0 m-0 space-y-4">
         {data.pockets.length === 0 && <p className="rounded-card bg-surface p-5">Belum ada pocket aktif di server.</p>}
         {data.pockets.map(p => {
           const owner = p.budgetOwnerPocketId ? data.pockets.find(other=>other.id===p.budgetOwnerPocketId) : null;

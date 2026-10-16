@@ -4,6 +4,149 @@ Last updated: 2026-09-28
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- 2026-10-17: PO authorized commit/push of accumulated Phase 7C.3 implementation
+  and continuation. Next is consolidated audit against the plan, explicitly
+  distinguishing delivered single-transaction operations from batch/other remaining
+  scope and manual acceptance. Historical no-commit instructions below are superseded
+  only for this checkpoint. No production deployment or normal-mode cutover.
+
+- Latest extended review 2026-10-16: inactive category/pocket preflight now stops
+  known-invalid edits before durable submission. Archived expense and reallocation
+  amount/date/destination/cross-period browser checks recorded in
+  [edit UI evidence](../walkthroughs/phase-7c3-edit-ui.md). Next gate is manual/PO
+  review and final consolidated phase audit, not additional feature expansion.
+
+- Latest continuation 2026-10-16: connected edit form and confirmation now wired
+  through the shared durable journal. See [verification](../walkthroughs/phase-7c3-edit-ui.md).
+  Continue manual/mobile review and extended archived/reference/reallocation
+  transitions before claiming complete acceptance. Do not implement another edit
+  transport or queue. Preserve existing uncommitted Phase 7C.3 work; no push authority.
+
+- Latest 2026-10-16: edit journal/recovery checkpoint implemented. See
+  [evidence](../walkthroughs/phase-7c3-edit-recovery.md). Next is canonical edit
+  prefill and confirmation UI: use the existing slot and original transaction type,
+  dispatch only after durable preparation, retain conflicts and refresh canonical
+  data after validated acknowledgement. No new edit button/form yet. Do not ask
+  again for DEC-035 approval. Preserve ongoing uncommitted Phase 7C.3 work.
+
+- Latest continuation 2026-10-04: backend checkpoint passed 361 tests; frontend
+  edit transport added with five new tests and browser verification. See
+  [evidence](../walkthroughs/phase-7c3-edit-transport.md). Next: extend the SAME owner
+  IndexedDB journal with edit and update every discriminated consumer before enabling
+  form/recovery UI. Keep exact confirmed body and original transaction type; no
+  automatic retries, new mutation IDs or revision merging. Transport must not bypass
+  durable preparation. No edit UI enabled, no commit/push performed.
+
+- Latest 2026-10-04: DEC-035 accepted; backend edit resolution and nullable PATCH
+  contract reconciliation delivered. See [checkpoint](../walkthroughs/phase-7c3-edit-resolution.md).
+  Next: implement frontend immutable edit transport, strict shared-journal variant,
+  recovery controls and form/confirmation. Approval is already recorded; do not ask
+  for the same proposal approval again. Preserve all prior uncommitted 7C.3 work.
+  Edit UI is not yet enabled; no commit/push, migration or deployment authorized.
+
+- Latest 2026-10-04: DEC-034 accepted and delete resolution/recovery/UI delivered;
+  [checkpoint](../walkthroughs/phase-7c3-delete-recovery-ui.md). Review separate
+  destructive confirmation, same-ID retry, explicit stop and canonical refresh.
+  No restoration of deleted records. Prior delete-approval gates are historical.
+  Remaining integration work includes edit/batch and phase-level review; do not
+  infer migration, deployment, a new phase or commit/push authorization.
+
+- Latest 2026-10-01: [delete recovery proposal](../architecture/DELETE_ATTEMPT_RESOLUTION_PROPOSAL.md)
+  awaits PO approval. Tests cover later success after business rejection and
+  acknowledgement replay after tombstone purge. Do not implement the proposed
+  delete variant until approved; DEC-033 remains archive/restore-only. This is a
+  test/documentation audit, not delete UI delivery or a new phase.
+
+- Latest 2026-10-01: confirmed permanent-delete transport implemented and tested,
+  without UI activation; [evidence](../walkthroughs/phase-7c3-delete-transport.md).
+  Next bounded work is delete recovery/exit-policy review. Existing shared journal
+  and DEC-033 resolution are archive/restore only; do not cast delete into them.
+  Business rejection can become executable later; never discard or replace an
+  uncertain delete. No backend extension, new phase or commit/push in this slice.
+
+- Latest 2026-10-01: connected history archive/restore UI and explicit recovery
+  delivered; [checkpoint](../walkthroughs/phase-7c3-lifecycle-ui.md). Review the
+  confirmation, archived filter, same-ID retry and server-confirmed stop flows.
+  Canonical balances/history reload after acknowledgement; no local optimistic
+  mutations. Prior action-UI-pending notes are historical. Next is review of this
+  slice, then separately scoped remaining transaction integration, not deployment.
+  No commit/push or new phase authorized by this continuation.
+
+- Latest 2026-09-30: DEC-033 accepted and lifecycle terminal resolution implemented
+  in backend and frontend transport. [Verification](../walkthroughs/phase-7c3-lifecycle-resolution.md):
+  336 integration tests pass; browser lost-response/reload/resolution retry passes.
+  This supersedes the approval-pending proposal below. Next: history confirmation,
+  explicit retry/resolution controls and canonical refresh, using the shared journal.
+  Do not discard uncertain attempts, undo committed operations or replace revision/ID.
+  No action UI, new phase, commit or push in this continuation.
+
+- Latest 2026-09-30 exit-policy audit: confirmed that a rejected restore can later
+  succeed with identical ID/revision after balance changes. Seven lifecycle tests
+  pass. See [bounded resolution proposal](../architecture/LIFECYCLE_ATTEMPT_RESOLUTION_PROPOSAL.md).
+  Await PO approval for the archive/restore terminal-resolution extension before
+  implementing it or enabling history actions. Do not silently extend DEC-032.
+
+- Latest 2026-09-30: shared lifecycle recovery foundation verified; see
+  [checkpoint](../walkthroughs/phase-7c3-lifecycle-recovery.md). Existing create
+  records remain compatible; lifecycle records block new creates and survive reload.
+  Next: define safe conflict/rejection exit, explicit lifecycle retry and confirmation
+  flow before history actions. Do not discard a rejected request or increment its
+  revision automatically. Create-only server resolution is still not lifecycle resolution.
+
+- Latest 2026-09-30: archive/restore transport implemented; read
+  [evidence and UI gate](../walkthroughs/phase-7c3-transaction-lifecycle-transport.md).
+  Next bounded slice: durable lifecycle attempt recovery and conflict handling,
+  then confirmation/action UI. Single-create journal and resolve-attempt endpoint
+  do not support lifecycle; never route lifecycle cancellation through create.
+  Delete/edit/batch remain separate. No new phase or commit/push authorized.
+
+- Latest 2026-09-30: single-transfer UI implemented; read
+  [checkpoint](../walkthroughs/phase-7c3-transfer-ui.md). Review NFC top-up, cash
+  withdrawal, reallocation and recovery. Next: transaction lifecycle integration
+  planning/review within 7C.3; batch recovery needs separate assessment before UI.
+  Do not infer a new phase or commit/push from this checkpoint.
+
+- Latest 2026-09-30: connected income form added; read
+  [checkpoint](../walkthroughs/phase-7c3-income-ui.md). Review income pocket/source,
+  canonical balance/history, unchanged allocation and recovery behavior. Next
+  bounded slice is transfer UI, after review/continuation; no batch, lifecycle or
+  new phase inferred. ExpenseCreateForm is now the shared TransactionCreateForm.
+
+- Latest 2026-09-30: DEC-032 accepted; terminal resolution implemented in backend
+  and connected expense UI. See [evidence](../walkthroughs/phase-7c3-attempt-resolution.md).
+  Review this slice with the PO before extending form types. Earlier proposal
+  approval/cancellation-unavailable notes below are historical. No commit/push.
+
+- 2026-09-30 rejection-resolution review: client-only discard is unsafe because
+  business rejection does not durably fence a later same-ID execution. See the
+  [bounded proposal](../architecture/TRANSACTION_ATTEMPT_RESOLUTION_PROPOSAL.md).
+  Await PO approval for the terminal-resolution contract extension before
+  backend/schema/UI changes. No cancellation capability is implemented yet.
+
+- Latest 2026-09-30: expense development form delivered with a retained rejected
+  attempt limitation. Read [checkpoint](../walkthroughs/phase-7c3-expense-ui.md).
+  Next: safe rejection/abandonment handling, not expanding form types first.
+  Never silently erase an unresolved journal record or generate a replacement ID.
+
+- Latest: single-create POST transport verified; read [evidence and gates](../walkthroughs/phase-7c3-transaction-create-transport.md).
+  Next bounded slice is form orchestration with explicit pending recovery and
+  rejection handling; do not equate transport tests with complete transaction UI.
+
+- Latest 2026-09-29: single-create recovery journal foundation implemented;
+  [evidence and integration gates](../walkthroughs/phase-7c3-transaction-recovery.md).
+  Next bounded slice: POST transport/acknowledgement/replay verification, then
+  form integration. Do not equate the storage module with completed write recovery.
+
+- Latest 2026-09-29: history UI delivered in connected mode; read
+  [evidence](../walkthroughs/phase-7c3-history-ui.md). Next: durable financial-write
+  recovery and a bounded transaction submission slice. No automatic sync/import.
+
+- 2026-09-29: 7C.2 committed/pushed as `871576f`; PO authorized continuation.
+  7C.3 first slice: validated paginated transaction transport. Read
+  [checkpoint](../walkthroughs/phase-7c3-transaction-read.md). Next: bounded history
+  UI with race-safe filter/pagination state, then durable write recovery before
+  enabling financial submissions. Earlier 7C.2 gates below are historical.
+
 - Phase 7C.2 implementation delivered; read the [consolidated audit](../walkthroughs/phase-7c2-final-audit.md)
   before continuing. Next gate: PO review and explicit Git checkpoint approval,
   then approval of 7C.3 scope. Do not automatically start transactions, migrate

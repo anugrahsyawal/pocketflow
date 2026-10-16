@@ -314,7 +314,61 @@ Status: Accepted by Product Owner, conditional on preserving the existing MVP
 This acceptance authorizes finalizing the report contract, not production
 deployment, new MVP features or endpoint implementation before its contract gate.
 
+### DEC-032 - Safe single-create attempt resolution
+
+Date: 2026-09-30
+Status: Accepted by Product Owner via continuation following the explicit proposal
+
+Authorize the bounded Phase 7C.3 contract extension and implementation described
+in [attempt resolution](../architecture/TRANSACTION_ATTEMPT_RESOLUTION_PROPOSAL.md).
+An explicitly confirmed resolution preserves an already committed transaction,
+or durably prevents an uncommitted attempt from executing. It must not change
+balances, archive/delete a transaction, or clear client recovery before a matching
+terminal acknowledgement. Concurrent creation and batch reuse must respect the
+same mutation fence. No offline queue, deployment or new phase is authorized.
+
+Implementation verification and PO acceptance of the delivered result are separate.
+
+### DEC-033 - Terminal resolution for archive/restore attempts
+
+Date: 2026-09-30
+Status: Accepted by Product Owner through continuation after the explicit proposal
+
+Authorize finalizing and implementing the bounded
+[lifecycle resolution proposal](../architecture/LIFECYCLE_ATTEMPT_RESOLUTION_PROPOSAL.md).
+Explicit resolution preserves completed archive/restore (including no-op), or
+fences an unexecuted attempt without financial effects. No automatic undo,
+revision increment, replacement ID or journal discard. Create resolution remains
+unchanged. Edit, delete, batch, offline sync and deployment are excluded.
+Delivery acceptance is separate from this implementation authorization.
+
+### DEC-034 - Terminal resolution and durable recovery for delete attempts
+
+Date: 2026-10-04
+Status: Accepted by Product Owner through continuation after the explicit proposal
+
+Authorize the bounded [delete recovery proposal](../architecture/DELETE_ATTEMPT_RESOLUTION_PROPOSAL.md):
+preserve completed deletion or permanently fence an unexecuted attempt, using the
+original confirmation, mutation ID and revision. Extend the shared durable journal
+and explicitly confirmed UI only after verification. No undo, retention change,
+edit/batch resolution, offline sync, deployment, personal-data deletion, new phase,
+commit or push. Delivery acceptance remains separate.
+
+### DEC-035 - Safe edit recovery and optional-field clearing
+
+Date: 2026-10-04
+Status: Accepted by Product Owner through continuation after explicit proposal
+
+Authorize the [bounded edit proposal](../architecture/EDIT_ATTEMPT_RESOLUTION_PROPOSAL.md).
+Reconcile PATCH-only categoryId/incomeSource null clearing (omitted means preserve),
+and implement edit terminal resolution, immutable shared recovery and connected UI
+under verification gates. Preserve committed/no-op edits, fence unexecuted attempts,
+never auto-merge or replace revision/ID. Budget attribution remains server-owned.
+No batch resolution, offline sync, deployment, migration, new phase or commit/push.
+Delivery acceptance is separate from implementation authorization.
+
 ## Pending decisions
+
 
 
 The following are deliberately unresolved and must not be guessed:

@@ -1,4 +1,22 @@
+import { transactionQuery,parseTransactionPage,type TransactionQuery,type TransactionPage } from './transactionRead';
+import { parseTransactionAttempt,type TransactionAttempt } from './transactionAttempt';
+import { snapshotEditRequest,validateEditAcknowledgement,type TransactionEditRequest } from './transactionEdit';
+
 export interface ServerUser { id: string; email: string; displayName: string }
+export interface TransactionLifecycleRequest {
+  ownerId:string;
+  transactionId:string;
+  clientMutationId:string;
+  expectedRevision:number;
+  operation:'archive'|'restore';
+}
+export interface TransactionDeleteRequest {
+  ownerId:string;transactionId:string;clientMutationId:string;expectedRevision:number;
+  confirmPermanentDelete:true;
+}
+export interface TransactionDeleteAcknowledgement {
+  success:true;deletedTransactionId:string;deletedAt:string;
+}
 export interface SetupRequest {
   clientMutationId: string;
   selectedPocketKeys: string[];
@@ -111,6 +129,183 @@ export class SessionClient {
   }
 
   async me(): Promise<ServerUser> { return parseUser(await this.request('/me')); }
+
+  async listTransactions(query:TransactionQuery={}):Promise<TransactionPage> {
+    const request=transactionQuery(query);
+    return parseTransactionPage(await this.request(request.path),request.query);
+  }
+
+  /** Transport only. UI must durably retain this immutable request before dispatch. */
+  async setTransactionArchived(input:TransactionLifecycleRequest):Promise<TransactionPage['transactions'][number]> {
+    const {ownerId,transactionId,clientMutationId,expectedRevision,operation}=this.snapshotLifecycleRequest(input);
+    const body={clientMutationId,expectedRevision};
+    const result=await this.transactionMutationRequest(ownerId,`/transactions/${transactionId}/${operation}`,body);
+    return this.validateLifecycleAcknowledgement({ownerId,transactionId,clientMutationId,expectedRevision,operation},result);
+  }
+
+  private snapshotLifecycleRequest(input:TransactionLifecycleRequest):TransactionLifecycleRequest {
+    if(!input||Object.keys(input).some(key=>!['ownerId','transactionId','clientMutationId','expectedRevision','operation'].includes(key))||
+      !isUuid(input.ownerId)||!isUuid(input.transactionId)||!isUuid(input.clientMutationId)||
+      !Number.isSafeInteger(input.expectedRevision)||input.expectedRevision<1||
+      !['archive','restore'].includes(input.operation))throw new ApiError(400,'INVALID_INPUT');
+    const {ownerId,transactionId,clientMutationId,expectedRevision,operation}=input;
+    return {ownerId,transactionId,clientMutationId,expectedRevision,operation};
+  }
+
+  /** Transport only; caller must durably retain the confirmed request before dispatch. */
+  async editTransaction(input:TransactionEditRequest):Promise<TransactionPage['transactions'][number]> {
+    const safe=snapshotEditRequest(input);
+    const result=await this.transactionMutationRequest(safe.ownerId,`/transactions/${safe.transactionId}`,
+      {clientMutationId:safe.clientMutationId,expectedRevision:safe.expectedRevision,...safe.changes},'PATCH');
+    return validateEditAcknowledgement(safe,result);
+  }
+
+  async resolveTransactionEdit(input:TransactionEditRequest):Promise<'cancelled'|'committed'> {
+    const safe=snapshotEditRequest(input);
+    const result=await this.transactionMutationRequest(safe.ownerId,`/transactions/${safe.transactionId}/resolve-attempt`,
+      {operation:'edit',clientMutationId:safe.clientMutationId,expectedRevision:safe.expectedRevision,changes:safe.changes});
+    if(!result||typeof result!=='object'||Array.isArray(result)||
+      Object.keys(result).some(key=>!['status','clientMutationId','acknowledgement'].includes(key)))throw new ApiError(502,'INVALID_RESPONSE');
+    const resolution=result as Record<string,unknown>;
+    if(resolution.clientMutationId!==safe.clientMutationId)throw new ApiError(502,'INVALID_RESPONSE');
+    if(resolution.status==='committed'){validateEditAcknowledgement(safe,resolution.acknowledgement);return 'committed';}
+    if(resolution.status!=='cancelled'||'acknowledgement' in resolution)throw new ApiError(502,'INVALID_RESPONSE');
+    return 'cancelled';
+  }
+
+  private async transactionMutationRequest(ownerId:string,path:string,body:unknown,method:'POST'|'DELETE'|'PATCH'='POST'):Promise<unknown> {
+    if((await this.me()).id!==ownerId)throw new ApiError(401,'OWNER_CHANGED');
+    let result:unknown;
+    try{result=await this.request(path,method,body,this.csrf??await this.refreshToken());}
+    catch(error){
+      if(!(error instanceof ApiError)||error.status!==403||error.code!=='INVALID_CSRF_TOKEN')throw error;
+      if((await this.me()).id!==ownerId)throw new ApiError(401,'OWNER_CHANGED');
+      result=await this.request(path,method,body,await this.refreshToken());
+    }
+    return result;
+  }
+
+  private snapshotDeleteRequest(input:TransactionDeleteRequest):TransactionDeleteRequest {
+    if(!input||typeof input!=='object'||Array.isArray(input)||
+      Object.keys(input).some(key=>!['ownerId','transactionId','clientMutationId','expectedRevision','confirmPermanentDelete'].includes(key))||
+      !isUuid(input.ownerId)||!isUuid(input.transactionId)||!isUuid(input.clientMutationId)||
+      !Number.isSafeInteger(input.expectedRevision)||input.expectedRevision<1||input.confirmPermanentDelete!==true)throw new ApiError(400,'INVALID_INPUT');
+    // Copy primitives before the first await, including the explicit confirmation.
+    const {ownerId,transactionId,clientMutationId,expectedRevision,confirmPermanentDelete}=input;
+    return {ownerId,transactionId,clientMutationId,expectedRevision,confirmPermanentDelete};
+  }
+
+  /** Caller retains a durably confirmed attempt before dispatch. */
+  async deleteTransaction(input:TransactionDeleteRequest):Promise<TransactionDeleteAcknowledgement> {
+    const {ownerId,transactionId,clientMutationId,expectedRevision,confirmPermanentDelete}=this.snapshotDeleteRequest(input);
+    const result=await this.transactionMutationRequest(ownerId,`/transactions/${transactionId}`,
+      {clientMutationId,expectedRevision,confirmPermanentDelete},'DELETE');
+    return this.validateDeleteAcknowledgement(transactionId,result);
+  }
+
+  async resolveTransactionDelete(input:TransactionDeleteRequest):Promise<'cancelled'|'committed'> {
+    const {ownerId,transactionId,clientMutationId,expectedRevision,confirmPermanentDelete}=this.snapshotDeleteRequest(input);
+    const result=await this.transactionMutationRequest(ownerId,`/transactions/${transactionId}/resolve-attempt`,
+      {operation:'delete',clientMutationId,expectedRevision,confirmPermanentDelete});
+    if(!result||typeof result!=='object'||Array.isArray(result)||
+      Object.keys(result).some(key=>!['status','clientMutationId','acknowledgement'].includes(key)))throw new ApiError(502,'INVALID_RESPONSE');
+    const resolution=result as Record<string,unknown>;
+    if(resolution.clientMutationId!==clientMutationId)throw new ApiError(502,'INVALID_RESPONSE');
+    if(resolution.status==='committed'){this.validateDeleteAcknowledgement(transactionId,resolution.acknowledgement);return 'committed';}
+    if(resolution.status!=='cancelled'||'acknowledgement' in resolution)throw new ApiError(502,'INVALID_RESPONSE');
+    return 'cancelled';
+  }
+
+  private validateDeleteAcknowledgement(transactionId:string,result:unknown):TransactionDeleteAcknowledgement {
+    if(!result||typeof result!=='object'||Array.isArray(result)||
+      Object.keys(result).some(key=>!['success','deletedTransactionId','deletedAt'].includes(key)))throw new ApiError(502,'INVALID_RESPONSE');
+    const ack=result as Record<string,unknown>;
+    if(ack.success!==true||ack.deletedTransactionId!==transactionId||typeof ack.deletedAt!=='string'||
+      !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(ack.deletedAt)||
+      !Number.isFinite(Date.parse(ack.deletedAt))||new Date(ack.deletedAt).toISOString()!==ack.deletedAt)throw new ApiError(502,'INVALID_RESPONSE');
+    return {success:true,deletedTransactionId:transactionId,deletedAt:ack.deletedAt};
+  }
+
+  /** Explicit terminal resolution; no journal cleanup or financial compensation here. */
+  async resolveTransactionLifecycle(input:TransactionLifecycleRequest):Promise<'cancelled'|'committed'> {
+    const safe=this.snapshotLifecycleRequest(input);
+    const result=await this.transactionMutationRequest(safe.ownerId,`/transactions/${safe.transactionId}/resolve-attempt`,
+      {operation:safe.operation,clientMutationId:safe.clientMutationId,expectedRevision:safe.expectedRevision});
+    const resolution=result as {status?:unknown;clientMutationId?:unknown;acknowledgement?:unknown}|null;
+    if(!resolution||resolution.clientMutationId!==safe.clientMutationId)throw new ApiError(502,'INVALID_RESPONSE');
+    if(resolution.status==='committed'){
+      this.validateLifecycleAcknowledgement(safe,resolution.acknowledgement);return 'committed';
+    }
+    if(resolution.status!=='cancelled'||resolution.acknowledgement!==undefined)throw new ApiError(502,'INVALID_RESPONSE');
+    return 'cancelled';
+  }
+
+  private validateLifecycleAcknowledgement({transactionId,expectedRevision,operation}:TransactionLifecycleRequest,result:unknown):TransactionPage['transactions'][number] {
+    const raw=(result as {transaction?:unknown}|null)?.transaction;
+    const transaction=parseTransactionPage({transactions:[raw],pagination:{page:1,limit:1,total:1,totalPages:1,hasMore:false}},transactionQuery({limit:1,includeArchived:true}).query).transactions[0];
+    if(!transaction||transaction.id!==transactionId||transaction.isArchived!==(operation==='archive')||
+      (transaction.revision!==expectedRevision&&transaction.revision!==expectedRevision+1))throw new ApiError(502,'INVALID_RESPONSE');
+    // Replay is the original acknowledgement, not current financial state. Caller refetches.
+    return transaction;
+  }
+
+  /** Requires a durably prepared attempt. Never creates/replaces its mutation ID. */
+  async createTransaction(attempt:TransactionAttempt):Promise<TransactionPage['transactions'][number]> {
+    let safe:TransactionAttempt;
+    try{safe=parseTransactionAttempt(attempt,attempt.ownerId);}catch{throw new ApiError(400,'INVALID_INPUT');}
+    const {body}=safe;
+    if((await this.me()).id!==safe.ownerId)throw new ApiError(401,'OWNER_CHANGED');
+    const token=this.csrf??await this.refreshToken();let result:unknown;
+    try{result=await this.request('/transactions','POST',body,token);}catch(error){
+      if(!(error instanceof ApiError)||error.status!==403||error.code!=='INVALID_CSRF_TOKEN')throw error;
+      // Recheck ownership before the only allowed automatic retry.
+      if((await this.me()).id!==safe.ownerId)throw new ApiError(401,'OWNER_CHANGED');
+      result=await this.request('/transactions','POST',body,await this.refreshToken());
+    }
+    return this.validateCreateAcknowledgement(safe,result);
+  }
+
+  /** Explicit terminal resolution only; caller retains journal until validated acknowledgement. */
+  async resolveTransactionAttempt(attempt:TransactionAttempt):Promise<'cancelled'|'committed'> {
+    let safe:TransactionAttempt;
+    try{safe=parseTransactionAttempt(attempt,attempt.ownerId);}catch{throw new ApiError(400,'INVALID_INPUT');}
+    if((await this.me()).id!==safe.ownerId)throw new ApiError(401,'OWNER_CHANGED');
+    let result:unknown;
+    try{result=await this.request('/transactions/resolve-attempt','POST',safe.body,this.csrf??await this.refreshToken());}
+    catch(error){
+      if(!(error instanceof ApiError)||error.status!==403||error.code!=='INVALID_CSRF_TOKEN')throw error;
+      if((await this.me()).id!==safe.ownerId)throw new ApiError(401,'OWNER_CHANGED');
+      result=await this.request('/transactions/resolve-attempt','POST',safe.body,await this.refreshToken());
+    }
+    const resolution=result as {status?:unknown;clientMutationId?:unknown;acknowledgement?:unknown}|null;
+    if(!resolution||resolution.clientMutationId!==safe.body.clientMutationId)throw new ApiError(502,'INVALID_RESPONSE');
+    if(resolution.status==='committed'){
+      this.validateCreateAcknowledgement(safe,resolution.acknowledgement);
+      return 'committed';
+    }
+    if(resolution.status!=='cancelled'||resolution.acknowledgement!==undefined)throw new ApiError(502,'INVALID_RESPONSE');
+    return 'cancelled';
+  }
+
+  private validateCreateAcknowledgement(safe:TransactionAttempt,result:unknown):TransactionPage['transactions'][number] {
+    const {body}=safe;
+    const raw=(result as {transaction?:unknown}|null)?.transaction;
+    const transaction=parseTransactionPage({transactions:[raw],pagination:{page:1,limit:1,total:1,totalPages:1,hasMore:false}},transactionQuery({limit:1}).query).transactions[0];
+    const time=(v:string)=>v.length===5?`${v}:00`:v;
+    if(!transaction||transaction.type!==body.type||transaction.amount!==body.amount||transaction.occurredOn!==body.occurredOn||
+      time(transaction.occurredAtLocalTime)!==time(body.occurredAtLocalTime)||transaction.note!==(body.note??null)||
+      transaction.revision!==1||transaction.isArchived||transaction.archivedAt!==null)throw new ApiError(502,'INVALID_RESPONSE');
+    if(body.type==='transfer'){
+      if(transaction.fromPocketId!==body.fromPocketId||transaction.toPocketId!==body.toPocketId||transaction.transferType!==body.transferType||
+        transaction.categoryId!==null||transaction.budgetPocketId!==null||transaction.incomeSource!==null)throw new ApiError(502,'INVALID_RESPONSE');
+    }else{
+      if(transaction.pocketId!==body.pocketId||transaction.transferType!==null)throw new ApiError(502,'INVALID_RESPONSE');
+      if(body.type==='expense'?(transaction.categoryId!==(body.categoryId??null)||transaction.budgetPocketId===null||transaction.incomeSource!==null):
+        (transaction.categoryId!==null||transaction.budgetPocketId!==null||transaction.incomeSource!==(body.incomeSource??null)))throw new ApiError(502,'INVALID_RESPONSE');
+    }
+    // Original replay acknowledgement is not current ledger state. Refetch after cleanup.
+    return transaction;
+  }
 
   /** Explicit read allowlist; no arbitrary endpoint transport. */
   async read(path: '/setup' | '/pockets' | '/pockets?includeArchived=true' | '/categories' | '/categories?includeArchived=true' | '/reports/current-period'): Promise<unknown> {

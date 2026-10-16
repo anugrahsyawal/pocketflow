@@ -1,10 +1,157 @@
 # PocketFlow Current State
 
-Last updated: 2026-09-28
+Last updated: 2026-10-17
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `cd2154b` (Phase 7C.1, pushed to origin/codex/audit-pocketflow-documentation)
+Latest committed checkpoint: `871576f` (Phase 7C.2, pushed to origin/codex/audit-pocketflow-documentation)
 
 ## Executive state
+
+**Commit authorization — 2026-10-17:** PO explicitly requested commit/push of
+the accumulated Phase 7C.3 checkpoint and continuation. This authorizes Git
+delivery, not a claim of completed manual acceptance. Next task is consolidated
+phase audit and the remaining acceptance checklist; no production cutover.
+
+**Edit extended review — 2026-10-16:** Inactive category/pocket references now
+block edit confirmation with guidance before journal/network dispatch. Automated
+browser coverage now includes archived expense neutrality, explicit category
+clearing and reallocation amount/date/destination/cross-period rejection. See
+[evidence](../walkthroughs/phase-7c3-edit-ui.md#extended-review--2026-10-16-continuation).
+Manual/PO acceptance remains pending; no new phase or commit/push.
+
+**Edit form — 2026-10-16:** Connected history now opens an expense/income/transfer
+editor prefilled from its server DTO, with fixed type, changed-only PATCH,
+confirmation and shared durable recovery. Category is cleared explicitly when the
+expense payment pocket changes; budget attribution remains server-owned. See
+[evidence](../walkthroughs/phase-7c3-edit-ui.md). Earlier form-pending entries are
+historical. Manual acceptance and extended edge-case review remain pending; this
+is not normal-mode cutover or full Phase 7C.3 acceptance.
+
+**Edit shared recovery — 2026-10-16:** Edit records now use the existing owner
+IndexedDB slot with original type, target and exact PATCH body. All consumers
+recognize edit; history recovery offers explicit same-ID retry/stop and canonical
+refresh while create remains blocked. See [evidence](../walkthroughs/phase-7c3-edit-recovery.md).
+No new edit form/button yet. Next is canonical prefill/confirmation UI within DEC-035;
+earlier journal-pending notes are historical. Same uncommitted Phase 7C.3.
+
+**Edit frontend transport — 2026-10-04:** Typed PATCH/resolve transport now validates
+immutable requests, owner preflight and matching historical acknowledgements.
+Five targeted integration tests, both frontend builds and real-browser transport
+QA pass. See [evidence](../walkthroughs/phase-7c3-edit-transport.md). Shared edit
+journal, recovery controls and user-facing form remain unfinished; transport alone
+must not be wired to a button. Same approved, uncommitted Phase 7C.3.
+
+**Edit resolution backend — 2026-10-04:** PO approved DEC-035 by requesting
+continuation after the proposal. Shared PATCH validation, original-request hashing,
+terminal cancellation fencing and strict historical acknowledgement validation are
+implemented. PATCH schema now documents nullable category/source clearing. See
+[checkpoint](../walkthroughs/phase-7c3-edit-resolution.md). Frontend edit transport,
+journal and form remain unfinished within the approved scope; no edit UI activated.
+This supersedes the edit-proposal approval gate, not full Phase 7C.3 acceptance.
+
+**Delete recovery/UI — 2026-10-04:** PO approved DEC-034. Server resolution,
+strict delete journal/transport and separate permanent-delete confirmation are
+implemented in connected development. Lost responses retain original intent;
+resolution preserves completed deletion or fences an unexecuted request. See
+[verification](../walkthroughs/phase-7c3-delete-recovery-ui.md). This supersedes
+approval/recovery/UI gates below. Edit/batch, offline, migration and deployment
+remain outside this slice; same uncommitted 7C.3, PO delivery review pending.
+
+**Delete recovery audit — 2026-10-01:** A bounded
+[delete resolution proposal](../architecture/DELETE_ATTEMPT_RESOLUTION_PROPOSAL.md)
+is ready for PO approval. Existing rejection replay and post-purge acknowledgement
+are audited; no contract, backend or UI behavior changed in this continuation.
+Next gate: approve the delete-specific extension before implementing recovery/UI.
+
+**Delete transport — 2026-10-01:** Existing DELETE contract now has a strict,
+owner-checked frontend transport with explicit confirmation and immutable retry.
+See [evidence](../walkthroughs/phase-7c3-delete-transport.md). No delete button or
+delete journal enabled: durable recovery and safe rejection exit remain gates.
+DEC-032/033 resolution does not cover delete. Backend contract/source unchanged;
+same uncommitted Phase 7C.3, not daily-use or full-phase acceptance.
+
+**Lifecycle UI — 2026-10-01:** Connected history now offers explicit archive/restore
+confirmation, durable same-ID retry and confirmed terminal resolution (DEC-033).
+Successful acknowledgement triggers canonical pocket/history reload; no optimistic
+balance changes. See [checkpoint](../walkthroughs/phase-7c3-lifecycle-ui.md).
+This supersedes the read-only/action-UI-pending notes below. Edit/delete/batch,
+offline sync, migration and deployment remain excluded. Same uncommitted 7C.3;
+PO review of this delivery remains pending.
+
+**Lifecycle terminal resolution — 2026-09-30:** PO authorized DEC-033 after the
+proposal below. Backend endpoint and strict frontend transport are implemented;
+336 integration tests, lifecycle recovery browser QA and both frontend builds pass.
+See [evidence](../walkthroughs/phase-7c3-lifecycle-resolution.md). This supersedes
+the approval-pending gate below, not the history action UI gate: confirmation,
+explicit retry/resolution controls and canonical refresh remain to be integrated.
+Same uncommitted Phase 7C.3; no deployment or PO delivery acceptance claimed.
+
+**Lifecycle exit-policy audit — 2026-09-30:** Seven lifecycle tests pass, including
+proof that a business-rejected restore can succeed later with identical ID/revision
+after balance changes. A [bounded server-resolution extension](../architecture/LIFECYCLE_ATTEMPT_RESOLUTION_PROPOSAL.md)
+is proposed and awaiting PO approval. No application behavior changed in this audit;
+history action buttons remain disabled. DEC-032 still covers create only.
+
+**Shared lifecycle recovery — 2026-09-30:** Durable journal now admits validated
+archive/restore attempts under the same owner key as create, preserving old records
+without a database upgrade. Concurrent attempts cannot overwrite each other;
+create UI blocks on lifecycle recovery. See [evidence](../walkthroughs/phase-7c3-lifecycle-recovery.md).
+No history action buttons: conflict/rejection exit policy and confirmation/retry
+UI remain incomplete. No automatic resend, discard, contract extension or commit.
+
+**Lifecycle transport — 2026-09-30:** Validated archive/restore API transport added
+with immutable request snapshots, owner checks, revision protection and explicit
+retry. See [evidence](../walkthroughs/phase-7c3-transaction-lifecycle-transport.md).
+No history action buttons enabled: durable lifecycle recovery, conflicts and
+confirmation UI remain gates. No delete/edit transport or backend contract change.
+
+**Transfer UI continuation — 2026-09-30:** Connected single-transfer form now
+supports all six approved types, distinct endpoints, source balance guard, explicit
+same-ID recovery and terminal resolution. See [evidence](../walkthroughs/phase-7c3-transfer-ui.md).
+Standard transfer changes balances only; budget reallocation also changes the
+transaction-date period allocation under server validation. Batch/lifecycle UI
+remain pending. No backend contract change, migration, commit or push.
+
+**Income UI continuation — 2026-09-30:** Connected single-income form added using
+the shared transaction journal, retry and terminal resolution. Source chips use
+existing labels/emojis and flexible layout. See [evidence](../walkthroughs/phase-7c3-income-ui.md).
+No allocation mutation, automatic transfer or backend contract change. Transfer,
+batch and transaction lifecycle UI remain pending. Same uncommitted Phase 7C.3.
+
+**Terminal attempt resolution — 2026-09-30:** PO accepted DEC-032. Explicit
+confirmed resolution now preserves a committed transaction or durably fences an
+uncommitted create attempt. Backend, transport and expense recovery UI implemented;
+see [verification](../walkthroughs/phase-7c3-attempt-resolution.md). The earlier
+cancellation-unavailable limitation below is superseded. Still connected
+development, not full 7C.3 completion or everyday-use acceptance. No commit/push.
+
+**Expense UI continuation — 2026-09-30:** Single expense form added to connected
+development screen with durable explicit retry and canonical refresh. See
+[evidence and remaining rejection gate](../walkthroughs/phase-7c3-expense-ui.md).
+Dispatched attempts cannot yet be cancelled/replaced; rejected requests can block
+new expense entry. Not ready for everyday use. No income/transfer forms or commit.
+
+**Transaction POST transport — 2026-09-29:** Single-create transport and strict
+acknowledgement validation added; journal + live API replay verified in an isolated
+browser. See [evidence](../walkthroughs/phase-7c3-transaction-create-transport.md).
+User-facing form/orchestration and rejection recovery remain pending; no automatic
+submission, migration or commit/push. Same ongoing 7C.3.
+
+**Recovery foundation — 2026-09-29:** Owner-scoped single-create transaction
+journal and strict parser implemented and browser-tested. See
+[evidence](../walkthroughs/phase-7c3-transaction-recovery.md). Not connected to
+POST/forms yet; explicit retry, acknowledgement and rejection handling remain
+gates before financial writes. Same uncommitted 7C.3; no automatic sync.
+
+**History UI continuation — 2026-09-29:** Read-only connected transaction history
+now has page navigation and type/pocket/category/date/note/archive filters.
+See [evidence](../walkthroughs/phase-7c3-history-ui.md). Financial write forms and
+durable recovery remain pending. Same uncommitted 7C.3, local mode unchanged.
+
+**Phase 7C.3 entry — 2026-09-29:** PO requested continuation after the successful
+7C.2 commit/push; clean working tree verified. First bounded slice is validated
+transaction-list transport with explicit pagination/filters, not a transaction
+write form. See [evidence](../walkthroughs/phase-7c3-transaction-read.md).
+History UI, durable financial-write recovery and lifecycle integration remain.
 
 **Current consolidated checkpoint — 2026-09-28:** Phase 7C.2 implementation is
 delivered in isolated connected-development mode: setup; canonical master-data
