@@ -1,6 +1,7 @@
 import { transactionQuery,parseTransactionPage,type TransactionQuery,type TransactionPage } from './transactionRead';
 import { parseTransactionAttempt,type TransactionAttempt } from './transactionAttempt';
 import { snapshotEditRequest,validateEditAcknowledgement,type TransactionEditRequest } from './transactionEdit';
+import { snapshotBatchRequest, validateBatchAcknowledgement, validateBatchResolution, type TransactionBatchRequest, type TransactionBatchResolution } from './transactionBatch';
 
 export interface ServerUser { id: string; email: string; displayName: string }
 export interface TransactionLifecycleRequest {
@@ -183,6 +184,17 @@ export class SessionClient {
       result=await this.request(path,method,body,await this.refreshToken());
     }
     return result;
+  }
+
+  /** Transport only: shared durable preparation must precede UI dispatch. */
+  async createTransactionBatch(input:TransactionBatchRequest):Promise<TransactionPage['transactions']> {
+    const safe=snapshotBatchRequest(input);
+    return validateBatchAcknowledgement(safe,await this.transactionMutationRequest(safe.ownerId,'/transactions/batch',safe.body));
+  }
+
+  async resolveTransactionBatch(input:TransactionBatchRequest):Promise<TransactionBatchResolution> {
+    const safe=snapshotBatchRequest(input);
+    return validateBatchResolution(safe,await this.transactionMutationRequest(safe.ownerId,'/transactions/batch/resolve-attempt',safe.body));
   }
 
   private snapshotDeleteRequest(input:TransactionDeleteRequest):TransactionDeleteRequest {

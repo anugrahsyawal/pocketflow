@@ -2,9 +2,31 @@
 
 Last updated: 2026-10-17
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `871576f` (Phase 7C.2, pushed to origin/codex/audit-pocketflow-documentation)
+Latest committed checkpoint: `89b4e65` (Phase 7C.3 single-transaction integration, pushed to origin/codex/audit-pocketflow-documentation)
 
 ## Executive state
+
+**Batch transport — 2026-10-17:** Typed immutable batch create/resolve transport
+and strict ordered/mixed-outcome validation implemented. [Evidence](../walkthroughs/phase-7c3-batch-transport.md):
+26 targeted tests, both frontend builds and automated browser transport QA passed.
+Shared journal and connected batch UI remain pending; no batch button enabled.
+
+**Batch resolution backend — 2026-10-17:** PO continuation approved DEC-036.
+Shared batch validation and root/item locking now support terminal resolution,
+preserving committed items and fencing remaining identities. See
+[checkpoint](../walkthroughs/phase-7c3-batch-resolution.md). Connected batch transport,
+shared journal and UI are next within the same phase; no new user-facing control yet.
+
+**Batch recovery audit — 2026-10-17:** Existing API characterization and a
+[bounded proposal](../architecture/BATCH_ATTEMPT_RESOLUTION_PROPOSAL.md) now cover
+root/item identity and previously committed items. The audit-time approval gate
+is superseded by DEC-036 above. See consolidated audit for historical tests.
+
+**Consolidated audit — 2026-10-17:** Checkpoint `89b4e65` committed/pushed; fresh
+backend/frontend checks pass. [Audit and manual checklist](../walkthroughs/phase-7c3-consolidated-audit.md)
+separate delivered single operations from missing connected batch/export and
+manual acceptance. Phase 7C.3 remains open; no 7C.4 cutover/deployment implied.
+The audit itself is subsequent local documentation, not part of that commit.
 
 **Commit authorization — 2026-10-17:** PO explicitly requested commit/push of
 the accumulated Phase 7C.3 checkpoint and continuation. This authorizes Git

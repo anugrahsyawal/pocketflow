@@ -19,6 +19,8 @@ changes them.
 
 ## Current delivery authority
 
+- [Batch recovery proposal — accepted DEC-036](architecture/BATCH_ATTEMPT_RESOLUTION_PROPOSAL.md)
+
 - [Current state](project/CURRENT_STATE.md)
 - [Current sprint](agile/CURRENT_SPRINT.md)
 - [Progress ledger](agile/PROGRESS.md)
@@ -41,6 +43,12 @@ Screenshots are supporting visual evidence. Raw Stitch HTML is a raw visual
 reference only and must not be copied into production.
 
 ## Verification evidence
+
+- [Batch frontend transport checkpoint](walkthroughs/phase-7c3-batch-transport.md)
+
+- [Batch terminal resolution backend checkpoint](walkthroughs/phase-7c3-batch-resolution.md)
+
+- [Phase 7C.3 consolidated delivery audit and manual checklist](walkthroughs/phase-7c3-consolidated-audit.md)
 
 - [Connected edit form and confirmation](walkthroughs/phase-7c3-edit-ui.md)
 

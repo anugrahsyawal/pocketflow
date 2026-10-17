@@ -367,6 +367,19 @@ never auto-merge or replace revision/ID. Budget attribution remains server-owned
 No batch resolution, offline sync, deployment, migration, new phase or commit/push.
 Delivery acceptance is separate from implementation authorization.
 
+### DEC-036 - Safe batch recovery and optional create fields
+
+Date: 2026-10-17
+Status: Accepted by Product Owner through continuation after explicit proposal
+
+Authorize the [bounded batch recovery proposal](../architecture/BATCH_ATTEMPT_RESOLUTION_PROPOSAL.md).
+Preserve prior committed items, atomically fence the root and remaining items, and
+return explicit per-item outcomes for a stopped batch. Reconcile existing nullable
+categoryId/note in create/batch without changing request hashes or omission behavior.
+Implement backend first, then shared recovery and connected multi-entry UI under
+verification gates. No offline queue, migration, deployment, new phase or Git delivery
+is authorized. Implementation verification and delivery acceptance remain separate.
+
 ## Pending decisions
 
 

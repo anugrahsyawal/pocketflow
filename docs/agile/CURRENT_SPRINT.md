@@ -1,8 +1,16 @@
 # Current Sprint
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
-Status: Phase 7C.3 In Progress — Edit Form Delivered; Verification/Review Pending
-Current checkpoint: Phase 7C.2 pushed as `871576f`; Phase 7C.3 uncommitted
+Status: Phase 7C.3 In Progress — Single Operations Pushed; Batch/Export and Manual Gates Remain
+Current checkpoint: Phase 7C.3 single-transaction integration pushed as `89b4e65`
+
+Batch recovery approved as DEC-036; [backend checkpoint](../walkthroughs/phase-7c3-batch-resolution.md)
+implements terminal root/item resolution. Next: connected transport and shared
+durable recovery, then multi-entry UI. Same Phase 7C.3, not delivery acceptance.
+
+2026-10-17 transport checkpoint: [batch transport](../walkthroughs/phase-7c3-batch-transport.md)
+implemented and tested. Next is shared durable batch journal plus all recovery
+consumers, then capture UI; no automatic dispatch or second queue.
 
 ## Terminology
 
@@ -25,6 +33,11 @@ Build a secure, verified TypeScript/Fastify/PostgreSQL backend foundation and de
 - Phase 6D — Rule-Based Insights and Sinking Fund Recommendation (Done, commit `9297f37`).
 
 ## Active status
+
+2026-10-17: implementation checkpoint pushed; consolidated audit identifies
+remaining connected batch/export scope and manual acceptance. See
+[audit/checklist](../walkthroughs/phase-7c3-consolidated-audit.md). Historical
+uncommitted/no-push labels below describe earlier checkpoints only.
 
 2026-10-16 extended edit review: inactive-reference preflight aligned to PATCH
 contract, with archived/reallocation browser coverage. See the

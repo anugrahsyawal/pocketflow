@@ -4,6 +4,29 @@ Last updated: 2026-09-28
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- 2026-10-17 batch transport: [checkpoint](../walkthroughs/phase-7c3-batch-transport.md)
+  passed 26 targeted tests, both frontend builds and Edge transport QA on disposable
+  preview at 127.0.0.1:5175 (5174 timed out). Journal/UI unchanged; next update the
+  shared slot and all consumers together. Mixed stopped outcomes must stay explicit.
+  No new commit/push; preceding backend/audit changes remain in the working tree.
+
+- 2026-10-17 continuation: DEC-036 accepted; batch resolution backend implemented.
+  [Evidence](../walkthroughs/phase-7c3-batch-resolution.md) separates backend tests
+  from pending connected transport/journal/UI and manual gates. Continue that
+  approved scope without a second recovery queue. No commit/push this turn.
+
+- Batch recovery audit continuation: three existing-API characterization tests added.
+  [Proposal](../architecture/BATCH_ATTEMPT_RESOLUTION_PROPOSAL.md) subsequently approved as DEC-036.
+  Do not treat an absent batch root as proof that no item committed; preserve prior
+  item acknowledgements and fence all remaining identities under shared locks.
+  No production implementation, frontend change or new commit in this audit turn.
+
+- 2026-10-17 delivery: `89b4e65` pushed and upstream matched; working tree was
+  clean before the next documentation task. [Consolidated audit](../walkthroughs/phase-7c3-consolidated-audit.md)
+  is now local follow-up work. Single operations delivered, but connected batch,
+  complete-period export and manual acceptance remain. Next bounded technical work
+  is batch contract/recovery audit, not unapproved batch writes or Phase 7C.4.
+
 - 2026-10-17: PO authorized commit/push of accumulated Phase 7C.3 implementation
   and continuation. Next is consolidated audit against the plan, explicitly
   distinguishing delivered single-transaction operations from batch/other remaining

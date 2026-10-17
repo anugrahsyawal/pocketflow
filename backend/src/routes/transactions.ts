@@ -19,6 +19,7 @@ import {
   resolveEditAttempt,
 } from '../lib/idempotency.js';
 import { getDb } from '../db/client.js';
+import { resolveBatchAttempt, type BatchRequest } from '../lib/batchResolution.js';
 import {
   transactions,
   pockets,
@@ -768,8 +769,10 @@ export async function transactionRoutes(app: FastifyInstance): Promise<void> {
   }
 
   // POST /v1/transactions/batch
+  // Both operations share exact shape validation and hash the unchanged batch.
+  for (const resolving of [false, true]) {
   app.post(
-    '/v1/transactions/batch',
+    resolving ? '/v1/transactions/batch/resolve-attempt' : '/v1/transactions/batch',
     { preHandler: [authenticateRequest, validateCsrfToken] },
     async (req: FastifyRequest, reply: FastifyReply) => {
       const user = req.user!;
@@ -867,6 +870,10 @@ export async function transactionRoutes(app: FastifyInstance): Promise<void> {
       }
 
       const rootCanonicalHash = computeCanonicalRequestHash('POST', '/v1/transactions/batch', body);
+
+      if (resolving) {
+        return reply.status(200).send(await resolveBatchAttempt(user.id, body as BatchRequest));
+      }
 
       // Pre-lock Root Idempotency Check
       const existingRootRecord = await findIdempotencyRecord(user.id, rootClientMutationId);
@@ -1057,6 +1064,8 @@ export async function transactionRoutes(app: FastifyInstance): Promise<void> {
       return reply.status(201).send(responsePayload);
     }
   );
+
+  }
 
   // PATCH and edit resolution share shape validation and original request hashing.
   const handleEdit = async (req: FastifyRequest, reply: FastifyReply, resolving = false) => {

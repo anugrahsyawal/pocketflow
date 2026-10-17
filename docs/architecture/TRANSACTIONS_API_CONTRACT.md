@@ -25,6 +25,7 @@ Phase 7B.4 defines the canonical API contract for owner financial transactions (
 - `GET /v1/transactions` — Query and list owner transactions with pagination and multi-field filtering (`type`, `pocketId`, `categoryId`, `startDate`, `endDate`, `search`, `includeArchived`).
 - `POST /v1/transactions` — Create a single transaction (Expense, Income, Standard Transfer, or Budget Reallocation Transfer).
 - `POST /v1/transactions/batch` — Create multiple expense transactions atomically in a single SQL transaction (preserves frontend multi-entry expense capture atomicity).
+- `POST /v1/transactions/batch/resolve-attempt` — Resolve an original batch safely; preserve committed items and permanently stop remaining identities (DEC-036, §4.2.1).
 - `PATCH /v1/transactions/:id` — Update an existing active transaction with optimistic revision control and idempotency.
 - `POST /v1/transactions/:id/archive` — Mark a transaction as archived (reversibly removing its financial impact from active derived balances and active reports).
 - `POST /v1/transactions/:id/restore` — Restore an archived transaction to active status (re-applying its financial impact to derived balances and reports).
@@ -236,7 +237,8 @@ business conditions or target availability. Owner scoping prevents foreign data
 disclosure or cancellation. Delayed same-ID lifecycle execution returns 409
 MUTATION_CANCELLED; cross-route reuse conflicts. A committed result is never undone.
 This branch covers archive/restore only. The separately approved delete variant is
-specified in section 4.0.2, and edit in section 4.0.3. Batch resolution remains unavailable.
+specified in section 4.0.2, and edit in section 4.0.3. Batch resolution is separately
+specified in section 4.2.1 under DEC-036.
 
 Client validates ID/status and committed DTO (target, state, revision), then
 compare-and-clears only the matching journal and refreshes canonical state.
@@ -317,6 +319,73 @@ Multi-entry expense creation (`POST /v1/transactions/batch`) uses a dual-level i
 1. **Top-Level Batch `clientMutationId`**: Required at root of request body to ensure the overall batch operation is idempotent.
 2. **Per-Item `clientMutationId`**: Each expense entry in the `items` array MUST include its own unique RFC 4122 v4 UUID `clientMutationId`.
 3. **Atomic Execution & Replay**: The entire batch operation and all item idempotency records are committed within a SINGLE SQL transaction. Retrying the batch with identical payload replays the stored `201 Created` array response. Reusing any `clientMutationId` with a mismatched payload returns `409 Conflict` (`code: "IDEMPOTENCY_CONFLICT"`).
+
+### 4.2.1 Batch terminal resolution (DEC-036)
+
+`POST /v1/transactions/batch/resolve-attempt` requires owner authentication and
+CSRF. Its body is EXACTLY the original batch request from §7.2.3, including array
+order, root/item IDs, whitespace, and explicit null versus omitted fields. It uses
+the same shape validation (expense-only, 1–50 unique item UUIDs distinct from root).
+No new operation/confirmation field is allowed. Client confirmation precedes dispatch.
+
+Canonical hashes use the original execution routes, not the resolution route:
+root `POST /v1/transactions/batch`; each item `POST /v1/transactions`.
+This operation never creates financial rows, changes balances or undoes earlier work.
+It does not require current pocket/category availability or sufficient balance.
+
+HTTP 200 response is exactly one of these structures (no additional fields):
+
+```ts
+type BatchResolution =
+  | { status: 'committed'; clientMutationId: UUIDv4;
+      acknowledgement: { transactions: Transaction[] } }
+  | { status: 'stopped'; clientMutationId: UUIDv4;
+      items: Array<
+        | { clientMutationId: UUIDv4; status: 'cancelled' }
+        | { clientMutationId: UUIDv4; status: 'committed';
+            acknowledgement: { transaction: Transaction } }
+      > };
+```
+
+The committed array and stopped item array have the original request length/order.
+Each committed DTO is the original create acknowledgement (revision 1, unarchived),
+not the current row. IDs are unique, amount/type/pocket/category/date/time/note must
+match the original create semantics, and server budget ownership remains historical.
+Single-create preserves note whitespace while batch-created items trim it; either
+historical form can legitimately appear because batch execution adopts prior items.
+Later edit/archive/delete does not change this acknowledgement. Refresh current data
+separately; never use this replay as a current balance or transaction snapshot.
+
+Within one SQL transaction, acquire the same sorted owner-scoped advisory locks for
+root AND all item IDs as batch execution before reading/writing idempotency records:
+
+- Matching successful root: return its validated stored original acknowledgement.
+- Matching stopped root: return its validated persisted terminal result unchanged.
+- Absent root: preserve each matching successful item, preserve existing matching
+  item cancellation, and permanently fence every remaining item and the root.
+  Store the full stopped result atomically. An item mismatch or corrupt record rolls
+  back ALL new fences. Existing committed transactions are never reversed.
+- Stopped can include zero, some, or all committed items: it means the root was
+  prevented, NOT that no expenses were saved. UI must display these outcomes.
+
+Fences use original hashes, null expiry, and version-1 HTTP-409 replay envelopes
+with `error: {code: 'MUTATION_CANCELLED', message: string}`. The root envelope body
+also includes `resolution: <stopped result>`; individual item fences contain only
+`error`. Execution of the original batch/item thereafter returns 409 MUTATION_CANCELLED.
+Resolution is repeatable even if its response is lost. Cross-owner IDs are isolated.
+
+Errors: 400 INVALID_INPUT for invalid shape; 401/403 for authentication/CSRF;
+409 IDEMPOTENCY_CONFLICT for mismatched original identity/hash (or a root record
+with no replay reference, following the existing shared idempotency guard);
+500 INTERNAL_SERVER_ERROR for malformed stored acknowledgement (no terminal claim).
+No new table, expiration policy, dependency, offline queue or background retry.
+
+DEC-036 also reconciles existing create/batch optional `categoryId` and `note` null
+acceptance in §7.2.2/3; omitted fields remain optional. Type-specific topology rules
+still apply (`categoryId` is not allowed on income/transfer even when null).
+Null versus omission remains distinct in the hash. No incomeSource schema extension.
+Frontend durable journal/transport and UI verification are separate implementation
+checkpoints; this endpoint alone does not enable connected batch capture.
 
 ### 4.3 Optimistic Revision Control (`expectedRevision`)
 
@@ -554,7 +623,7 @@ All object schemas enforce `additionalProperties: false`.
     "pocketId": { "$ref": "#/components/schemas/UUIDv4" },
     "fromPocketId": { "$ref": "#/components/schemas/UUIDv4" },
     "toPocketId": { "$ref": "#/components/schemas/UUIDv4" },
-    "categoryId": { "$ref": "#/components/schemas/UUIDv4" },
+    "categoryId": { "anyOf": [{ "$ref": "#/components/schemas/UUIDv4" }, { "type": "null" }] },
     "transferType": {
       "type": "string",
       "enum": ["normal", "tarik-tunai", "top-up-nfc", "reimbursement", "saving-allocation", "budget-reallocation"]
@@ -565,7 +634,7 @@ All object schemas enforce `additionalProperties: false`.
     },
     "occurredOn": { "type": "string", "format": "date" },
     "occurredAtLocalTime": { "type": "string", "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$" },
-    "note": { "type": "string", "maxLength": 500 }
+    "note": { "type": ["string", "null"], "maxLength": 500 }
   }
 }
 ```
@@ -643,10 +712,10 @@ All object schemas enforce `additionalProperties: false`.
           "type": { "type": "string", "const": "expense" },
           "amount": { "type": "integer", "minimum": 1, "maximum": 9007199254740991 },
           "pocketId": { "$ref": "#/components/schemas/UUIDv4" },
-          "categoryId": { "$ref": "#/components/schemas/UUIDv4" },
+          "categoryId": { "anyOf": [{ "$ref": "#/components/schemas/UUIDv4" }, { "type": "null" }] },
           "occurredOn": { "type": "string", "format": "date" },
           "occurredAtLocalTime": { "type": "string", "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$" },
-          "note": { "type": "string", "maxLength": 500 }
+          "note": { "type": ["string", "null"], "maxLength": 500 }
         }
       }
     }
