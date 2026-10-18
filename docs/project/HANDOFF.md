@@ -4,6 +4,18 @@ Last updated: 2026-09-28
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- 2026-10-18: [batch capture](../walkthroughs/phase-7c3-batch-capture.md) available
+  in connected development. Entry point “Tambah beberapa pengeluaran”; drafts are
+  ephemeral until confirmation, then use the shared durable slot. Both builds and
+  automated browser flow pass. Review manually before acceptance; export remains
+  pending. No commit/push of shared recovery or capture yet.
+
+- 2026-10-17: `48bc98c` committed/pushed; tree clean before continuing. Batch now
+  uses shared IndexedDB owner slot and history recovery controls; individual terminal
+  outcomes persist in the parent notice across canonical refresh failure. See
+  [evidence](../walkthroughs/phase-7c3-batch-recovery.md). Next: capture form and
+  confirmation; current recovery work is uncommitted, no second queue.
+
 - 2026-10-17 batch transport: [checkpoint](../walkthroughs/phase-7c3-batch-transport.md)
   passed 26 targeted tests, both frontend builds and Edge transport QA on disposable
   preview at 127.0.0.1:5175 (5174 timed out). Journal/UI unchanged; next update the

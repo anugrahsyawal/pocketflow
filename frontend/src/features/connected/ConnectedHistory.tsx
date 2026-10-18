@@ -44,7 +44,23 @@ export function ConnectedHistory({ownerId,client,data,onExpired,onResolved,onLoc
       {!lifecycle.ready?<Button variant="secondary" disabled={lifecycle.busy} onClick={()=>void lifecycle.inspect()}>Periksa pemulihan riwayat</Button>:lifecycle.record?.operation==='create'?<>
         <p>Ada transaksi baru tertunda. Selesaikan pada bagian Tambah transaksi sebelum tindakan riwayat lainnya.</p>
         <Button variant="secondary" onClick={()=>void lifecycle.inspect()}>Periksa pemulihan riwayat</Button>
-      </>:lifecycle.pending?<div className="space-y-3 rounded-input bg-primary-soft p-3">
+      </>:lifecycle.pending?.operation==='batch'?<div className="space-y-3 rounded-input bg-primary-soft p-3" aria-label="Pemulihan batch pengeluaran">
+        <h3 className="font-semibold">Batch {lifecycle.pending.body.items.length} pengeluaran tertunda</h3>
+        <p>Isi dan urutan dikunci. Tetap tersimpan setelah reload/logout; tidak dikirim otomatis.</p>
+        <ol className="space-y-3 max-h-80 overflow-y-auto" aria-label="Item batch asli">
+          {lifecycle.pending.body.items.map((item,index)=><li key={item.clientMutationId} className="rounded-input bg-surface p-3 space-y-1 break-words">
+            <p className="font-semibold">{index+1}. {formatRupiah(item.amount)} · {pocketLabel(item.pocketId)}</p>
+            <p>{item.occurredOn} · {item.occurredAtLocalTime} WIB · {categoryLabel(item.categoryId??null)}</p>
+            {item.note&&<p className="whitespace-pre-wrap">{item.note}</p>}
+          </li>)}
+        </ol>
+        <Button fullWidth disabled={blocked} loading={lifecycle.busy} className="h-auto min-h-11 py-2" onClick={()=>void lifecycle.execute()}>Coba lagi batch yang sama</Button>
+        {!lifecycle.confirmStop?<Button fullWidth variant="secondary" disabled={blocked||lifecycle.busy} onClick={()=>lifecycle.setConfirmStop(true)}>Hentikan permintaan batch</Button>:<>
+          <p>Item yang sudah tersimpan tetap dipertahankan. Server menghentikan item yang belum tersimpan; ini bukan menghapus pengeluaran yang berhasil. Hasil tiap item akan ditampilkan.</p>
+          <Button fullWidth variant="secondary" disabled={blocked} loading={lifecycle.busy} className="h-auto min-h-11 py-2" onClick={()=>void lifecycle.execute(true)}>Konfirmasi penghentian batch</Button>
+          <Button fullWidth variant="ghost" disabled={lifecycle.busy} onClick={()=>lifecycle.setConfirmStop(false)}>Kembali</Button>
+        </>}
+      </div>:lifecycle.pending?<div className="space-y-3 rounded-input bg-primary-soft p-3">
         <p className="font-semibold">Permintaan {lifecycle.pending.operation==='edit'?'edit':lifecycle.pending.operation==='delete'?'hapus permanen':lifecycle.pending.operation==='archive'?'arsip':'pulihkan'} tertunda</p>
         <p>ID transaksi: {lifecycle.pending.transactionId} · Revisi: {lifecycle.pending.body.expectedRevision}</p>
         {lifecycle.pending.operation==='edit'&&<EditChangesSummary changes={editAttemptRequest(lifecycle.pending).changes} data={data}/>}

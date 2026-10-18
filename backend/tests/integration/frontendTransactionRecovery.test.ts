@@ -35,6 +35,23 @@ describe('Transaction create recovery record validation',()=>{
   });
 });
 
+describe('Shared batch recovery record validation',()=>{
+  const ownerId=randomUUID();
+  const record=()=>({version:1,ownerId,operation:'batch',body:{clientMutationId:randomUUID(),items:[1000,2000].map(amount=>({clientMutationId:randomUUID(),type:'expense',amount,pocketId:randomUUID(),occurredOn:'2026-10-17',occurredAtLocalTime:'10:15',categoryId:null,note:' exact '}))}});
+  it('deep copies ordered items preserving nulls/omission and original IDs',()=>{
+    const r=record(),copy=parseTransactionRecoveryRecord(r,ownerId);
+    assert.equal(copy.operation,'batch');assert.deepEqual(copy,r);
+    r.body.items.reverse();r.body.items[0].note='changed';
+    assert.notDeepEqual(copy,r);assert.deepEqual(parseTransactionRecoveryRecord(copy,ownerId),copy);
+  });
+  it('rejects foreign owners, hybrids, invalid items and colliding keys',()=>{
+    const r=record();
+    for(const patch of [{ownerId:randomUUID()},{version:2},{transactionId:randomUUID()},{transactionType:'expense'}])assert.throws(()=>parseTransactionRecoveryRecord({...r,...patch},ownerId));
+    for(const body of [{...r.body,items:[]},{...r.body,items:[r.body.items[0],r.body.items[0]]},{...r.body,items:[{...r.body.items[0],clientMutationId:r.body.clientMutationId.toUpperCase()}]},{...r.body,items:[{...r.body.items[0],note:undefined}]},{...r.body,items:[{...r.body.items[0],type:'income'}]}])assert.throws(()=>parseTransactionRecoveryRecord({...r,body},ownerId));
+    assert.throws(()=>parseTransactionAttempt(r,ownerId));
+  });
+});
+
 describe('Shared lifecycle recovery record validation',()=>{
   const ownerId=randomUUID();
   const record=()=>({version:1,ownerId,operation:'archive',transactionId:randomUUID(),body:{clientMutationId:randomUUID(),expectedRevision:2}});

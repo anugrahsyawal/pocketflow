@@ -1,10 +1,22 @@
 # PocketFlow Current State
 
-Last updated: 2026-10-17
+Last updated: 2026-10-18
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `89b4e65` (Phase 7C.3 single-transaction integration, pushed to origin/codex/audit-pocketflow-documentation)
+Latest committed checkpoint: `48bc98c` (Phase 7C.3 batch backend/transport, pushed to origin/codex/audit-pocketflow-documentation)
 
 ## Executive state
+
+**Batch capture — 2026-10-18:** Connected transaction section now opens multi-entry
+expense drafts with ordered confirmation, combined per-pocket preflight and durable
+same-slot dispatch/recovery. [Evidence](../walkthroughs/phase-7c3-batch-capture.md).
+Both frontend builds and browser capture test pass. Manual acceptance, complete-period
+export and overall 7C.3 review remain open; this work is uncommitted.
+
+**Batch shared recovery — 2026-10-17:** Checkpoint `48bc98c` committed/pushed under
+explicit PO request; tree clean before continuation. Batch now shares the existing
+owner journal with explicit retry/stop and per-item terminal outcomes. See
+[evidence](../walkthroughs/phase-7c3-batch-recovery.md). New multi-entry form remains
+pending. This continuation is uncommitted; no full Phase 7C.3 acceptance claimed.
 
 **Batch transport — 2026-10-17:** Typed immutable batch create/resolve transport
 and strict ordered/mixed-outcome validation implemented. [Evidence](../walkthroughs/phase-7c3-batch-transport.md):

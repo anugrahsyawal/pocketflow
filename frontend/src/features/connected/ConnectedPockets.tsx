@@ -40,7 +40,7 @@ export function ConnectedPockets({ownerId,client,onExpired}:{ownerId:string;clie
       <Button size="sm" variant="secondary" disabled={!!editing || creationLocked || expenseLocked || lifecycleLocked || (!data?.isSetupCompleted && !error)} onClick={reload}>Muat ulang</Button>
     </div>
     <p className="text-body-sm text-text-secondary">Data dari server · {data?.isSetupCompleted ? 'Pengaturan budget Cash/NFC tersedia' : 'Setup akun'}</p>
-    {resolutionNotice&&<p role="status" className="rounded-card bg-primary-soft p-4 text-body-sm">{resolutionNotice}</p>}
+    {resolutionNotice&&<p role="status" className="rounded-card bg-primary-soft p-4 text-body-sm whitespace-pre-wrap break-words">{resolutionNotice}</p>}
     {error ? <p role="alert" className="rounded-card bg-bahaya-soft p-4 text-bahaya">{error} Data belum ditampilkan.</p>
       : !data ? <p role="status">Memuat pocket server…</p>
       : !data.isSetupCompleted ? <ConnectedSetup client={client} onExpired={onExpired} onComplete={()=>setRefresh(n=>n+1)} /> : <>

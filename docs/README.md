@@ -44,6 +44,10 @@ reference only and must not be copied into production.
 
 ## Verification evidence
 
+- [Connected multi-expense capture](walkthroughs/phase-7c3-batch-capture.md)
+
+- [Shared batch recovery checkpoint](walkthroughs/phase-7c3-batch-recovery.md)
+
 - [Batch frontend transport checkpoint](walkthroughs/phase-7c3-batch-transport.md)
 
 - [Batch terminal resolution backend checkpoint](walkthroughs/phase-7c3-batch-resolution.md)

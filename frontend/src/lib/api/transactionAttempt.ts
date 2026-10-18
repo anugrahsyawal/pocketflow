@@ -1,4 +1,5 @@
 import {snapshotEditRequest,type TransactionEditRequest,type TransactionEditChanges} from './transactionEdit';
+import {snapshotBatchRequest,type TransactionBatchRequest} from './transactionBatch';
 /** Durable owner-scoped recovery. No network or legacy-store access. */
 export type TransactionCreateBody={clientMutationId:string;amount:number;occurredOn:string;occurredAtLocalTime:string;note?:string}&(
   {type:'expense';pocketId:string;categoryId?:string}|
@@ -19,7 +20,10 @@ export interface TransactionEditAttempt {
   transactionType:TransactionEditRequest['transactionType'];
   body:TransactionEditChanges&{clientMutationId:string;expectedRevision:number};
 }
-export type TransactionRecoveryRecord=TransactionAttempt|TransactionLifecycleAttempt|TransactionDeleteAttempt|TransactionEditAttempt;
+export interface TransactionBatchAttempt {
+  version:1;ownerId:string;operation:'batch';body:TransactionBatchRequest['body'];
+}
+export type TransactionRecoveryRecord=TransactionAttempt|TransactionLifecycleAttempt|TransactionDeleteAttempt|TransactionEditAttempt|TransactionBatchAttempt;
 export function editAttemptRequest(record:TransactionEditAttempt):TransactionEditRequest {
   const {clientMutationId,expectedRevision,...changes}=record.body;
   return snapshotEditRequest({ownerId:record.ownerId,transactionId:record.transactionId,
@@ -66,6 +70,14 @@ export function parseTransactionAttempt(value:unknown,ownerId:string):Transactio
 export function parseTransactionRecoveryRecord(value:unknown,ownerId:string):TransactionRecoveryRecord {
   const r=object(value);
   if(r.operation==='create')return parseTransactionAttempt(value,ownerId);
+  if(r.operation==='batch'){
+    exactKeys(r,['version','ownerId','operation','body']);
+    if(r.version!==1||r.ownerId!==ownerId||!uuid(ownerId))return fail();
+    try{
+      const safe=snapshotBatchRequest({ownerId,body:r.body as TransactionBatchRequest['body']});
+      return {version:1,ownerId,operation:'batch',body:safe.body};
+    }catch{return fail();}
+  }
   if(r.operation==='edit'){
     exactKeys(r,['version','ownerId','operation','transactionId','transactionType','body']);
     if(r.version!==1||r.ownerId!==ownerId||!uuid(ownerId))return fail();

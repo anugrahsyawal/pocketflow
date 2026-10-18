@@ -6,6 +6,7 @@ import {parseTransactionAttempt,TransactionAttemptStore,TransactionStorageError,
 import type {ServerPocket} from '@/lib/api/masterData';
 import {formatRupiah} from '@/lib/currency';
 import {INCOME_SOURCE_LABELS,INCOME_SOURCE_EMOJIS,TRANSFER_TYPE_LABELS,TRANSFER_TYPE_EMOJIS} from '@/data/constants';
+import {BatchExpenseForm} from './BatchExpenseForm';
 
 const transactionNames={expense:'pengeluaran',income:'pemasukan',transfer:'transfer'};
 
@@ -18,11 +19,13 @@ export function TransactionCreateForm({ownerId,pockets,client,onReload,onResolve
   const [store]=useState(()=>new TransactionAttemptStore()),[now]=useState(jakartaNow),id=useId();
   const [record,setPending]=useState<TransactionRecoveryRecord|null>(null),[ready,setReady]=useState(false),[opened,setOpened]=useState(false);
   const pending=record?.operation==='create'?record:null;
-  const lifecycle=record&&record.operation!=='create'?record:null;
+  const batch=record?.operation==='batch'?record:null;
+  const lifecycle=record&&record.operation!=='create'&&record.operation!=='batch'?record:null;
   const [pocketId,setPocket]=useState(pockets[0]?.id??''),[categoryId,setCategory]=useState(''),[amount,setAmount]=useState('');
   const [date,setDate]=useState(now.date),[time,setTime]=useState(now.time),[note,setNote]=useState('');
   const [busy,setBusy]=useState(false),[message,setMessage]=useState('');
   const [confirmStop,setConfirmStop]=useState(false);
+  const [batchOpened,setBatchOpened]=useState(false);
   const [kind,setKind]=useState<'expense'|'income'|'transfer'>('expense'),[incomeSource,setIncomeSource]=useState('');
   const [toPocketId,setToPocket]=useState(''),[transferType,setTransferType]=useState('normal');
   const noun=transactionNames[kind];
@@ -32,9 +35,9 @@ export function TransactionCreateForm({ownerId,pockets,client,onReload,onResolve
   const inspect=async()=>{try{const record=await store.read(ownerId);if(active.current){setPending(record);setReady(true);setMessage('');}}
     catch{if(active.current){setReady(false);setMessage('Penyimpanan pemulihan tidak tersedia atau rusak. Pengiriman diblokir; jangan hapus data situs.');}}};
   useEffect(()=>{active.current=true;void inspect();return()=>{active.current=false;};},[ownerId,store]);
-  useEffect(()=>{onLock(busy||(opened&&!pending));return()=>onLock(false);},[busy,opened,pending,onLock]);
+  useEffect(()=>{onLock(busy||batchOpened||(opened&&!pending));return()=>onLock(false);},[busy,batchOpened,opened,pending,onLock]);
   const send=async()=>{
-    if(running.current||!ready||lifecycle)return;
+    if(running.current||!ready||lifecycle||batch)return;
     let candidate:TransactionAttempt;
     try{
       if(pending)candidate=pending;
@@ -80,7 +83,9 @@ export function TransactionCreateForm({ownerId,pockets,client,onReload,onResolve
   return <section aria-label="Tambah transaksi server" className="space-y-3 rounded-card border border-border bg-surface p-5">
     <h2 className="font-display text-headline-md">{record?'Transaksi tertunda':opened?`Tambah ${noun}`:'Tambah transaksi'}</h2>
     {message&&<p role="alert" className="text-body-sm text-bahaya break-words">{message}</p>}
-    {!ready?<Button disabled={busy} variant="secondary" onClick={()=>void inspect()}>Periksa pemulihan transaksi</Button>:lifecycle?<>
+    {!ready?<Button disabled={busy} variant="secondary" onClick={()=>void inspect()}>Periksa pemulihan transaksi</Button>:batch?<>
+      <p role="alert" className="text-body-sm">Ada batch {batch.body.items.length} pengeluaran tertunda. Selesaikan pemulihannya pada Riwayat transaksi; jangan buat transaksi pengganti.</p>
+    </>:lifecycle?<>
       <p role="alert" className="text-body-sm">Ada permintaan {lifecycle.operation==='edit'?'edit':lifecycle.operation==='delete'?'hapus permanen':lifecycle.operation==='archive'?'arsip':'pulihkan'} tertunda. Transaksi baru diblokir. Selesaikan pemulihan pada bagian Riwayat transaksi; jangan hapus data situs.</p>
       <p className="text-body-sm break-words">ID transaksi: {lifecycle.transactionId} · Revisi: {lifecycle.body.expectedRevision}</p>
       <Button variant="secondary" onClick={()=>void inspect()}>Periksa pemulihan transaksi</Button>
@@ -100,7 +105,7 @@ export function TransactionCreateForm({ownerId,pockets,client,onReload,onResolve
         <Button fullWidth variant="secondary" loading={busy} className="h-auto min-h-11 py-2" onClick={()=>void stop()}>Konfirmasi penghentian</Button>
         <Button fullWidth variant="ghost" disabled={busy} onClick={()=>setConfirmStop(false)}>Kembali</Button>
       </div>}
-    </>:opened?<form aria-label={`Form ${noun} server`} className="space-y-3" onSubmit={e=>{e.preventDefault();void send();}}>
+    </>:batchOpened?<BatchExpenseForm ownerId={ownerId} pockets={pockets} client={client} onCancel={()=>setBatchOpened(false)} onFinished={()=>{setBatchOpened(false);onReload();}} onExpired={onExpired}/>:opened?<form aria-label={`Form ${noun} server`} className="space-y-3" onSubmit={e=>{e.preventDefault();void send();}}>
       <label htmlFor={id} className="block text-body-sm">{kind==='transfer'?'Pocket asal':kind==='income'?'Pocket penerima':'Pocket pembayaran'}</label>
       <select id={id} value={pocketId} disabled={busy} onChange={e=>{setPocket(e.target.value);setCategory('');setMessage('');}} className="w-full min-w-0 rounded-input border border-border bg-surface p-3">
         {pockets.map(p=><option key={p.id} value={p.id}>{p.emoji} {p.name}</option>)}
@@ -137,5 +142,6 @@ export function TransactionCreateForm({ownerId,pockets,client,onReload,onResolve
       <Button fullWidth type="submit" loading={busy}>Simpan {noun} server</Button>
       <Button fullWidth type="button" variant="ghost" disabled={busy} onClick={()=>{setOpened(false);setAmount('');setNote('');setMessage('');}}>Batal</Button>
     </form>:<div className="space-y-2">{(['expense','income','transfer'] as const).map(type=><Button key={type} fullWidth variant={type==='expense'?'primary':'secondary'} disabled={pockets.length<(type==='transfer'?2:1)} onClick={()=>{setKind(type);setCategory('');setIncomeSource('');setToPocket('');setTransferType('normal');setOpened(true);}}>Tambah {transactionNames[type]} server</Button>)}{pockets.length<2&&<p className="text-body-sm text-text-secondary">Transfer membutuhkan minimal dua pocket aktif.</p>}</div>}
+    {ready&&!record&&!opened&&!batchOpened&&<Button fullWidth variant="secondary" disabled={!pockets.length} className="h-auto min-h-11 py-2" onClick={()=>setBatchOpened(true)}>Tambah beberapa pengeluaran</Button>}
   </section>;
 }

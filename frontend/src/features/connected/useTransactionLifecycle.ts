@@ -4,6 +4,7 @@ import {TransactionAttemptStore,TransactionStorageError,editAttemptRequest,type 
 import type {ServerTransaction} from '@/lib/api/transactionRead';
 import {snapshotEditRequest,type TransactionEditChanges} from '@/lib/api/transactionEdit';
 import type {TransactionEditAttempt} from '@/lib/api/transactionAttempt';
+import {formatRupiah} from '@/lib/currency';
 
 /** A shared durable slot, never a second lifecycle queue or automatic sender. */
 export function useTransactionLifecycle({ownerId,client,onExpired,onResolved,onLock}:{
@@ -49,6 +50,17 @@ export function useTransactionLifecycle({ownerId,client,onExpired,onResolved,onL
         attempt=candidate;
       }
       let status:'cancelled'|'committed';
+      if(attempt.operation==='batch'){
+        const request={ownerId:attempt.ownerId,body:attempt.body};
+        const result=resolving?await client.resolveTransactionBatch(request):
+          {status:'committed' as const,clientMutationId:attempt.body.clientMutationId,acknowledgement:{transactions:await client.createTransactionBatch(request)}};
+        const outcomes=result.status==='stopped'?result.items:result.acknowledgement.transactions.map((transaction,index)=>({
+          status:'committed' as const,clientMutationId:attempt.body.items[index]!.clientMutationId,acknowledgement:{transaction}}));
+        const summary=outcomes.map((item,index)=>`${index+1}. ${formatRupiah(attempt.body.items[index]!.amount)} — ${item.status==='committed'?`tersimpan (ID ${item.acknowledgement.transaction.id})`:'dihentikan, tidak disimpan'}`).join('\n');
+        await store.acknowledge(attempt);
+        if(active.current)onResolved(`${result.status==='stopped'?'Batch dihentikan. Item yang sudah berhasil tetap dipertahankan.':'Batch sudah diproses.'}\n${summary}\nIni hasil permintaan asli, bukan status transaksi saat ini. Data terbaru dimuat terpisah dari server.`);
+        return;
+      }
       if(attempt.operation==='edit'){
         const request=editAttemptRequest(attempt);
         status=resolving?await client.resolveTransactionEdit(request):(await client.editTransaction(request),'committed');

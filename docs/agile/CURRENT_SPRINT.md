@@ -2,7 +2,14 @@
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
 Status: Phase 7C.3 In Progress — Single Operations Pushed; Batch/Export and Manual Gates Remain
-Current checkpoint: Phase 7C.3 single-transaction integration pushed as `89b4e65`
+Current checkpoint: Phase 7C.3 batch backend/transport pushed as `48bc98c`
+
+2026-10-18: [connected batch capture](../walkthroughs/phase-7c3-batch-capture.md)
+implemented with confirmation and shared recovery. Next is batch flow/manual review
+and remaining Phase 7C.3 export scope; earlier capture-pending notes are historical.
+
+Shared batch journal/recovery continuation: [checkpoint](../walkthroughs/phase-7c3-batch-recovery.md).
+Next is multi-entry capture/confirmation, not another phase or offline queue.
 
 Batch recovery approved as DEC-036; [backend checkpoint](../walkthroughs/phase-7c3-batch-resolution.md)
 implements terminal root/item resolution. Next: connected transport and shared
