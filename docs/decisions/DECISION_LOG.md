@@ -380,6 +380,19 @@ Implement backend first, then shared recovery and connected multi-entry UI under
 verification gates. No offline queue, migration, deployment, new phase or Git delivery
 is authorized. Implementation verification and delivery acceptance remain separate.
 
+### DEC-037 - Complete connected selected-period CSV export
+
+Date: 2026-10-18
+Status: Accepted by Product Owner through explicit approval of the export proposal
+
+Authorize the [bounded connected export](../architecture/CONNECTED_PERIOD_EXPORT_PROPOSAL.md)
+contract and implementation within Phase 7C.3. Preserve the fixed 26–25 period,
+existing CSV columns/security and owner isolation; read all eligible transactions
+and labels consistently, without partial-page exports or financial writes. Technical
+resource failures must be explicit, never silent truncation. Implement and verify
+backend before frontend integration. No deployment, backup/restore, new phase or
+Git delivery implied. Delivered-result/manual acceptance remains separate.
+
 ## Pending decisions
 
 

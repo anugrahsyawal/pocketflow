@@ -19,6 +19,8 @@ changes them.
 
 ## Current delivery authority
 
+- [Connected complete-period export — accepted DEC-037](architecture/CONNECTED_PERIOD_EXPORT_PROPOSAL.md)
+
 - [Batch recovery proposal — accepted DEC-036](architecture/BATCH_ATTEMPT_RESOLUTION_PROPOSAL.md)
 
 - [Current state](project/CURRENT_STATE.md)
@@ -43,6 +45,8 @@ Screenshots are supporting visual evidence. Raw Stitch HTML is a raw visual
 reference only and must not be copied into production.
 
 ## Verification evidence
+
+- [Complete connected selected-period CSV export](walkthroughs/phase-7c3-period-export.md)
 
 - [Connected multi-expense capture](walkthroughs/phase-7c3-batch-capture.md)
 

@@ -1,4 +1,5 @@
 import { transactionQuery,parseTransactionPage,type TransactionQuery,type TransactionPage } from './transactionRead';
+import {fetchPeriodExport,type ExportPeriod} from './periodExport';
 import { parseTransactionAttempt,type TransactionAttempt } from './transactionAttempt';
 import { snapshotEditRequest,validateEditAcknowledgement,type TransactionEditRequest } from './transactionEdit';
 import { snapshotBatchRequest, validateBatchAcknowledgement, validateBatchResolution, type TransactionBatchRequest, type TransactionBatchResolution } from './transactionBatch';
@@ -130,6 +131,11 @@ export class SessionClient {
   }
 
   async me(): Promise<ServerUser> { return parseUser(await this.request('/me')); }
+
+  async exportPeriod(period:ExportPeriod) {
+    try{return await fetchPeriodExport(this.fetcher,period);}
+    catch(error){if(error instanceof ApiError&&error.status===401)this.clear();throw error;}
+  }
 
   async listTransactions(query:TransactionQuery={}):Promise<TransactionPage> {
     const request=transactionQuery(query);

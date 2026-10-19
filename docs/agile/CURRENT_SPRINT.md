@@ -1,8 +1,18 @@
 # Current Sprint
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
-Status: Phase 7C.3 In Progress — Single Operations Pushed; Batch/Export and Manual Gates Remain
-Current checkpoint: Phase 7C.3 batch backend/transport pushed as `48bc98c`
+Status: Phase 7C.3 Review — Batch Pushed; Export Delivered Locally; Manual/Git Gates Remain
+Current checkpoint: Phase 7C.3 batch capture/recovery pushed as `648a9da`
+
+2026-10-18 continuation: DEC-037 approved; complete connected period export
+implemented. See [verification/review checklist](../walkthroughs/phase-7c3-period-export.md).
+Await delivered-result/manual review, not further scope approval for this slice.
+No Phase 7C.4 cutover; earlier pending-proposal notes are historical.
+
+2026-10-18 delivery: batch capture/recovery committed and pushed. Next bounded
+scope is [complete connected export](../architecture/CONNECTED_PERIOD_EXPORT_PROPOSAL.md),
+with a proposed read-only contract extension awaiting PO approval. No next-phase
+implementation or overall acceptance; earlier pending/uncommitted notes are historical.
 
 2026-10-18: [connected batch capture](../walkthroughs/phase-7c3-batch-capture.md)
 implemented with confirmation and shared recovery. Next is batch flow/manual review

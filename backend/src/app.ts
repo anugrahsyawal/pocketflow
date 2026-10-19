@@ -10,6 +10,7 @@ import { setupRoutes } from './routes/setup.js';
 import { pocketRoutes } from './routes/pockets.js';
 import { categoryRoutes } from './routes/categories.js';
 import { transactionRoutes } from './routes/transactions.js';
+import { transactionExportRoutes } from './routes/transactionExport.js';
 import { reportRoutes } from './routes/reports.js';
 
 export async function buildApp(config: AppConfig, options: { reportClock?: () => Date } = {}): Promise<FastifyInstance> {
@@ -51,6 +52,7 @@ export async function buildApp(config: AppConfig, options: { reportClock?: () =>
   await app.register(pocketRoutes);
   await app.register(categoryRoutes);
   await app.register(transactionRoutes);
+  await app.register(transactionExportRoutes);
   await app.register(reportRoutes, {clock: options.reportClock});
 
   return app;

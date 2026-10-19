@@ -1,10 +1,29 @@
 # PocketFlow Current State
 
-Last updated: 2026-10-18
+Last updated: 2026-10-19
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `48bc98c` (Phase 7C.3 batch backend/transport, pushed to origin/codex/audit-pocketflow-documentation)
+Latest committed checkpoint: `648a9da` (Phase 7C.3 batch capture/recovery, pushed to origin/codex/audit-pocketflow-documentation)
 
 ## Executive state
+
+**Closure review — 2026-10-19:** [Consolidated review](../walkthroughs/phase-7c3-consolidated-audit.md)
+now reflects delivered batch/export rather than historical missing-scope findings.
+Next planned phase is 7C.4 Home/Reports reconciliation; no implementation started
+across the uncommitted 7C.3 checkpoint. PO manual review and Git delivery remain
+separate gates. Export timeout verification is recorded in its walkthrough.
+
+**Connected export — 2026-10-18:** PO approved DEC-037. Backend complete-period
+CSV, guarded transport and connected development selector/download implemented.
+[Evidence and manual checklist](../walkthroughs/phase-7c3-period-export.md).
+No local Reports cutover, new phase, deployment or PO acceptance claimed. Changes
+remain uncommitted on top of `648a9da`; older approval-pending notes are historical.
+
+**Delivery and export audit — 2026-10-18:** Batch capture/recovery committed and
+pushed as `648a9da`; tree clean before continuation. Earlier uncommitted labels
+below are historical. The [connected export proposal](../architecture/CONNECTED_PERIOD_EXPORT_PROPOSAL.md)
+identifies pagination/snapshot gaps and recommends a bounded read-only contract
+extension. Await PO approval before implementing that new endpoint. No Phase 7C.4
+transition or manual acceptance claimed.
 
 **Batch capture — 2026-10-18:** Connected transaction section now opens multi-entry
 expense drafts with ordered confirmation, combined per-pocket preflight and durable

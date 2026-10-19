@@ -4,6 +4,22 @@ Last updated: 2026-09-28
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- 2026-10-19: [consolidated closure review](../walkthroughs/phase-7c3-consolidated-audit.md)
+  updated to include delivered batch/export. Review 7C.3 with PO and obtain explicit
+  commit/push authorization before a clean-tree transition to 7C.4. No new-phase
+  implementation or manual acceptance claimed by this continuation.
+
+- 2026-10-18 continuation: DEC-037 accepted and connected export implemented.
+  [Evidence/manual review](../walkthroughs/phase-7c3-period-export.md) describes
+  the Export periode card in connected development, complete CSV and explicit
+  failure states. No local Reports cutover or deployment. Implementation changes
+  remain local; no commit/push requested this turn.
+
+- 2026-10-18: batch capture/recovery committed and pushed as `648a9da`. Clean
+  tree verified before the export audit. Review the [export proposal](../architecture/CONNECTED_PERIOD_EXPORT_PROPOSAL.md)
+  and obtain approval for its new read-only contract before implementation.
+  Existing batch verification remains valid; PO manual acceptance remains pending.
+
 - 2026-10-18: [batch capture](../walkthroughs/phase-7c3-batch-capture.md) available
   in connected development. Entry point “Tambah beberapa pengeluaran”; drafts are
   ephemeral until confirmation, then use the shared durable slot. Both builds and

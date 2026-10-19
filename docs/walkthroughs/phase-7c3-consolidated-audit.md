@@ -1,5 +1,43 @@
 # Phase 7C.3 — Consolidated delivery audit
 
+## Current delivery review — 2026-10-19
+
+This section supersedes the missing-batch/export findings of the dated audit below;
+retain that audit as the decision trail, not the current capability inventory.
+
+| Capability | Current delivery evidence | Remaining gate |
+| --- | --- | --- |
+| Single create, history, edit, archive/restore/delete and durable recovery | Existing single-operation checkpoints | PO manual acceptance |
+| Multi-entry expense and shared recovery | `648a9da`; batch capture/recovery walkthroughs | PO manual acceptance |
+| Complete selected-period CSV | DEC-037; [export walkthrough](phase-7c3-period-export.md) | Uncommitted; PO manual acceptance |
+| Home/pocket detail/Reports server reconciliation | Integration plan 7C.4 | Not implemented in this phase |
+
+Verified the recorded 2026-10-18 full regression log: 402 tests / 49 suites passed,
+zero failures/skips. This is retained evidence, not a fresh full-suite run today.
+Current source still separates ConnectedApp from the local financial stores; the
+export card is not a full Reports integration. The export checkpoint's technical
+verification does not imply acceptance of every connected screen.
+
+Additional PO review: create two expense items, confirm once and inspect both
+balances/history; export the current period, compare the file with active history,
+and check an empty historical period. Use disposable data and record actual results.
+Earlier checklist below remains applicable. No manual result is inferred from
+the request to continue work.
+
+### Next phase boundary
+
+Next planned implementation is 7C.4: consume validated report responses, integrate
+Home/pocket detail/Reports, preserve historical unknown states and independent
+Cash/NFC balances, reject stale-period responses, then reconcile these screens
+with CSV after financial mutations. Preserve approved Stitch appearance.
+
+Entry gates: review current delivery with the PO, obtain explicit Git delivery
+authorization and commit the 7C.3 checkpoint so the working tree is clean. This
+review does not auto-commit or start 7C.4 across uncommitted 7C.3 work. No deployment,
+offline queue, migration or historical snapshot feature is added.
+
+## Historical audit — 2026-10-17
+
 Date: 2026-10-17. Committed implementation: `89b4e651f99e8b8994055266e0607c625d33ca9b`.
 Pushed to `origin/codex/audit-pocketflow-documentation`; HEAD and upstream matched.
 Working tree was clean immediately after push. This audit is a subsequent local

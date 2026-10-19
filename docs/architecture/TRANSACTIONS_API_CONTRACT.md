@@ -1,5 +1,38 @@
 # Transaction API Contract Specification
 
+## Phase 7C.3 extension — DEC-037 (2026-10-18)
+
+`GET /v1/transactions/export` is authenticated, read-only and requires exactly
+`startDate` and `endDate` (valid YYYY-MM-DD strings delimiting one inclusive 26–25
+period). Unknown, repeated, missing or invalid parameters return standard JSON
+`400 INVALID_INPUT`; missing/invalid session returns `401 UNAUTHENTICATED`.
+
+Success: `200`, `Content-Type: text/csv; charset=utf-8`,
+`Content-Disposition: attachment; filename="pocketflow-transactions_START_to_END.csv"`,
+`Cache-Control: private, no-store`. Complete UTF-8 BOM CSV, CRLF separators, quoted
+fields with doubled quotes, neutralized formula-leading text (after trimming).
+Columns in order: transaction_id,type,date,time,amount,pocket,source_pocket,
+destination_pocket,category,income_source,transfer_type,note,created_at,updated_at.
+Amounts are exact positive integer rupiah; dates use occurredOn, time uses stored
+local time, timestamps use ISO UTC. Empty period returns header only.
+
+Read one owner-scoped database snapshot, including referenced pocket/category names
+(current at export time, not historical names). Include inactive master references;
+exclude archived/deleted transactions. Missing pocket: `Pocket tidak tersedia`;
+missing expense category: `Tanpa kategori`. Other irrelevant columns are empty.
+Order occurredOn, occurredAtLocalTime, createdAt and id descending. No history
+filter inheritance, mutations, allocation creation, or client paging loop.
+
+Resource guards: maximum 10,000 eligible rows and 16 MiB encoded CSV; query timeout
+30 seconds. Fetch at most 10,001 rows to detect overflow; overflow returns JSON
+`422 EXPORT_TOO_LARGE`, never partial CSV. Timeout returns JSON `503 EXPORT_UNAVAILABLE`;
+unexpected failure returns sanitized `500 INTERNAL_SERVER_ERROR`. All errors retain
+no-store. No attachment headers or CSV bytes are sent until the complete CSV passes
+guards. Guards are operational limits, not a promise that larger exports are supported.
+Frontend must buffer successful response before download and handle errors explicitly.
+
+This extension does not change pagination/write contracts or accept Phase 7C.4.
+
 > [!NOTE]
 > **PRODUCT OWNER ACCEPTED — IMPLEMENTATION NOT AUTHORIZED**
 >
