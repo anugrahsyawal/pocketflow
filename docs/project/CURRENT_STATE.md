@@ -2,9 +2,16 @@
 
 Last updated: 2026-10-20
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `4c5c56c` (Phase 7C.4 report read foundation, pushed to origin/codex/audit-pocketflow-documentation)
+Latest committed checkpoint: `85aba13` (Phase 7C.4 report period/summary, pushed to origin/codex/audit-pocketflow-documentation)
 
 ## Executive state
+
+**Connected pocket budget — 2026-10-20:** `85aba13` committed/pushed; clean tree
+confirmed before continuation. [Pocket budget actuals](../walkthroughs/phase-7c4-pocket-budget.md)
+now present server budget attribution separately from payment-pocket balances.
+Zero allocation, missing allocation and historical unavailability remain distinct.
+This bounded continuation remains local/uncommitted; full Reports integration and
+PO manual acceptance remain pending. Earlier summary slice below is now committed.
 
 **Connected report summary — 2026-10-20:** `4c5c56c` committed/pushed, clean tree
 before continuation. [Period loading and summary](../walkthroughs/phase-7c4-report-period-summary.md)

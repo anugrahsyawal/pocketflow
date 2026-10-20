@@ -47,6 +47,7 @@ reference only and must not be copied into production.
 ## Verification evidence
 
 - [Phase 7C.4 connected period loading and summary](walkthroughs/phase-7c4-report-period-summary.md)
+- [Phase 7C.4 connected pocket budget actuals](walkthroughs/phase-7c4-pocket-budget.md)
 
 - [Phase 7C.4 report read foundation](walkthroughs/phase-7c4-report-read-foundation.md)
 

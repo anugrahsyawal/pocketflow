@@ -4,6 +4,11 @@ Last updated: 2026-09-28
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- 2026-10-20 continuation: `85aba13` committed/pushed. [Connected pocket budget](../walkthroughs/phase-7c4-pocket-budget.md)
+  adds expandable server-backed pocket rows without merging Cash/NFC balances.
+  This slice is local/uncommitted. Next review: pocket attribution, missing/zero
+  allocation and historical unavailable states; then remaining Reports sections.
+
 - 2026-10-20: `4c5c56c` committed/pushed. [Connected period summary](../walkthroughs/phase-7c4-report-period-summary.md)
   integrates initial Reports sections with latest-request/loading/error handling.
   Next: remaining report sections, then Home/detail and reconciliation. Preserve

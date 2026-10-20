@@ -1,8 +1,12 @@
 # Current Sprint
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
-Status: Phase 7C.4 In Progress — Report Period/Summary Integrated; Remaining Sections Pending
-Current checkpoint: Phase 7C.4 report read foundation pushed as `4c5c56c`
+Status: Phase 7C.4 In Progress — Report Summary/Pocket Budget Integrated; Remaining Sections Pending
+Current checkpoint: Phase 7C.4 report period/summary pushed as `85aba13`
+
+2026-10-20 continuation: [pocket budget actuals](../walkthroughs/phase-7c4-pocket-budget.md)
+implemented locally in connected development. Transfer and allocation details
+preserve server semantics; no local Reports cutover or full-phase acceptance.
 
 2026-10-20: [period summary](../walkthroughs/phase-7c4-report-period-summary.md)
 implemented in connected development after the requested commit/push. Technical

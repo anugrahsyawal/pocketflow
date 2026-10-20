@@ -1,6 +1,7 @@
 import type {ServerReport} from '@/lib/api/reportRead';
 import {formatRupiah} from '@/lib/currency';
 import {CashFlowTimelineChart} from '@/features/reports/components/CashFlowTimelineChart';
+import {ConnectedPocketBudgetActuals} from './ConnectedPocketBudgetActuals';
 
 /** Presentation only: all financial values come from the validated server report. */
 export function ConnectedReportSummary({report}:{report:ServerReport}) {
@@ -25,6 +26,7 @@ export function ConnectedReportSummary({report}:{report:ServerReport}) {
           {[['Total anggaran',budget.revisedAllocation],['Pengeluaran aktual',budget.expense],['Sisa anggaran',budget.remaining]].map(([label,value])=><div key={String(label)} className="flex flex-wrap justify-between gap-2"><dt>{label}</dt><dd className="font-semibold">{typeof value==='number'?formatRupiah(value):'Belum tersedia'}</dd></div>)}
         </dl>}
     </section>
+    <ConnectedPocketBudgetActuals report={report}/>
     <p className="text-body-sm text-text-secondary">{totals.transactionCount} transaksi · {totals.expenseCount} pengeluaran · {totals.incomeCount} pemasukan · {totals.transferCount} transfer. Transfer tidak dihitung sebagai pemasukan atau pengeluaran.</p>
   </div>;
 }
