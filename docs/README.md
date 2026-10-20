@@ -46,6 +46,8 @@ reference only and must not be copied into production.
 
 ## Verification evidence
 
+- [Phase 7C.4 report read foundation](walkthroughs/phase-7c4-report-read-foundation.md)
+
 - [Complete connected selected-period CSV export](walkthroughs/phase-7c3-period-export.md)
 
 - [Connected multi-expense capture](walkthroughs/phase-7c3-batch-capture.md)

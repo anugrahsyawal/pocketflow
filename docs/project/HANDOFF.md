@@ -4,6 +4,12 @@ Last updated: 2026-09-28
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- 2026-10-19: `1f048d0` committed/pushed under PO authorization; clean tree before
+  7C.4. [Report read foundation](../walkthroughs/phase-7c4-report-read-foundation.md)
+  implements complete wire validation and generation gate. Next: period-loading
+  state and approved Reports screen integration. Do not claim the primitive is
+  already used by UI, or that Home/Reports cutover/manual verification has passed.
+
 - 2026-10-19: [consolidated closure review](../walkthroughs/phase-7c3-consolidated-audit.md)
   updated to include delivered batch/export. Review 7C.3 with PO and obtain explicit
   commit/push authorization before a clean-tree transition to 7C.4. No new-phase

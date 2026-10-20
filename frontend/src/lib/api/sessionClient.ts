@@ -1,5 +1,6 @@
 import { transactionQuery,parseTransactionPage,type TransactionQuery,type TransactionPage } from './transactionRead';
 import {fetchPeriodExport,type ExportPeriod} from './periodExport';
+import {reportQuery,parseReport,type ReportQuery} from './reportRead';
 import { parseTransactionAttempt,type TransactionAttempt } from './transactionAttempt';
 import { snapshotEditRequest,validateEditAcknowledgement,type TransactionEditRequest } from './transactionEdit';
 import { snapshotBatchRequest, validateBatchAcknowledgement, validateBatchResolution, type TransactionBatchRequest, type TransactionBatchResolution } from './transactionBatch';
@@ -131,6 +132,11 @@ export class SessionClient {
   }
 
   async me(): Promise<ServerUser> { return parseUser(await this.request('/me')); }
+
+  async readReport(input:ReportQuery={}) {
+    const query=reportQuery(input);
+    return parseReport(await this.request(query.path),query);
+  }
 
   async exportPeriod(period:ExportPeriod) {
     try{return await fetchPeriodExport(this.fetcher,period);}
