@@ -4,6 +4,12 @@ Last updated: 2026-09-28
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- 2026-10-20 distributions: `9078609` is pushed. [Connected distributions](../walkthroughs/phase-7c4-distributions.md)
+  reuse existing category donut and pocket relative bars with validated report
+  data. Three adapter tests, both builds and three browser scripts pass.
+  Local/uncommitted for review. Next bounded slice: aggregate Weekly Usage,
+  retaining unavailable historical allocation and missing-current-allocation states.
+
 - 2026-10-20 continuation: `85aba13` committed/pushed. [Connected pocket budget](../walkthroughs/phase-7c4-pocket-budget.md)
   adds expandable server-backed pocket rows without merging Cash/NFC balances.
   This slice is local/uncommitted. Next review: pocket attribution, missing/zero

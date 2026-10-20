@@ -2,9 +2,17 @@
 
 Last updated: 2026-10-20
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `85aba13` (Phase 7C.4 report period/summary, pushed to origin/codex/audit-pocketflow-documentation)
+Latest committed checkpoint: `9078609` (Phase 7C.4 pocket budget actuals, pushed to origin/codex/audit-pocketflow-documentation)
 
 ## Executive state
+
+**Connected spending distributions — 2026-10-20:** following PO continuation and
+clean tree at `9078609`, [category/payment-pocket charts](../walkthroughs/phase-7c4-distributions.md)
+are integrated locally into the connected report preview. Existing chart styling
+is reused; categories show top five + Lainnya, pockets top five with all-expense
+denominator. Both builds, three adapter tests and three browser scripts pass.
+This slice remains uncommitted; weekly/insight/Sinking and Home/detail integration
+remain pending. Earlier pocket-budget slice is now committed; no full cutover.
 
 **Connected pocket budget — 2026-10-20:** `85aba13` committed/pushed; clean tree
 confirmed before continuation. [Pocket budget actuals](../walkthroughs/phase-7c4-pocket-budget.md)

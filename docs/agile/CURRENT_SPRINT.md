@@ -1,8 +1,12 @@
 # Current Sprint
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
-Status: Phase 7C.4 In Progress — Report Summary/Pocket Budget Integrated; Remaining Sections Pending
-Current checkpoint: Phase 7C.4 report period/summary pushed as `85aba13`
+Status: Phase 7C.4 In Progress — Report Summary/Pocket Budget/Distributions Integrated; Remaining Sections Pending
+Current checkpoint: Phase 7C.4 pocket budget actuals pushed as `9078609`
+
+2026-10-20 distribution continuation: [category/payment-pocket charts](../walkthroughs/phase-7c4-distributions.md)
+implemented and technically verified in connected development. Same approved MVP
+scope; remaining report sections and full reconciliation are pending.
 
 2026-10-20 continuation: [pocket budget actuals](../walkthroughs/phase-7c4-pocket-budget.md)
 implemented locally in connected development. Transfer and allocation details

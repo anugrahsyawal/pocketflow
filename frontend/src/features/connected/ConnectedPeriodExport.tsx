@@ -47,7 +47,7 @@ export function ConnectedPeriodExport({client,currentPeriod,onExpired}:{client:S
       <p role="alert" className="text-body-sm text-bahaya">{reportState.error} Angka laporan belum ditampilkan.</p>
       <Button size="sm" variant="secondary" onClick={reportState.reload}>Coba lagi laporan</Button>
     </div>:reportState.report&&<ConnectedReportSummary report={reportState.report}/>}
-    <p className="text-body-sm text-text-secondary">Pratinjau integrasi server: distribusi, mingguan, dan insight menyusul. Laporan lokal tidak berubah.</p>
+    <p className="text-body-sm text-text-secondary">Pratinjau integrasi server: mingguan, insight, dan rekomendasi Sinking Fund menyusul. Laporan lokal tidak berubah.</p>
     <p className="text-body-sm text-text-secondary">Seluruh transaksi aktif periode ini dari server, termasuk transfer. Tidak dibatasi halaman atau filter riwayat. Transaksi arsip dan yang dihapus tidak disertakan.</p>
     {message&&<p role="status" className="text-body-sm break-words">{message}</p>}
     {error&&<p role="alert" className="text-body-sm text-bahaya break-words">{error}</p>}
