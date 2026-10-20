@@ -4,6 +4,11 @@ Last updated: 2026-09-28
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- 2026-10-20: `4c5c56c` committed/pushed. [Connected period summary](../walkthroughs/phase-7c4-report-period-summary.md)
+  integrates initial Reports sections with latest-request/loading/error handling.
+  Next: remaining report sections, then Home/detail and reconciliation. Preserve
+  existing local mode. This continuation is local/uncommitted, not full acceptance.
+
 - 2026-10-19: `1f048d0` committed/pushed under PO authorization; clean tree before
   7C.4. [Report read foundation](../walkthroughs/phase-7c4-report-read-foundation.md)
   implements complete wire validation and generation gate. Next: period-loading

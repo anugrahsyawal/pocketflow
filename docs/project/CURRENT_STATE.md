@@ -1,10 +1,17 @@
 # PocketFlow Current State
 
-Last updated: 2026-10-19
+Last updated: 2026-10-20
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `1f048d0` (Phase 7C.3 complete export, pushed to origin/codex/audit-pocketflow-documentation)
+Latest committed checkpoint: `4c5c56c` (Phase 7C.4 report read foundation, pushed to origin/codex/audit-pocketflow-documentation)
 
 ## Executive state
+
+**Connected report summary — 2026-10-20:** `4c5c56c` committed/pushed, clean tree
+before continuation. [Period loading and summary](../walkthroughs/phase-7c4-report-period-summary.md)
+now show validated backend totals/timeline/budget in connected development, with
+stale-response suppression and retry. Both builds, 9 targeted tests and 2 browser
+scripts pass. Remaining Reports sections/Home/detail integration are pending; no
+full cutover or PO manual acceptance. Continuation remains uncommitted.
 
 **Phase 7C.4 entry — 2026-10-19:** PO requested commit/push and continuation.
 `1f048d0` pushed; tree clean before starting. [Report read foundation](../walkthroughs/phase-7c4-report-read-foundation.md)

@@ -1,8 +1,12 @@
 # Current Sprint
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
-Status: Phase 7C.4 In Progress — Report Read Foundation; Screen Integration Pending
-Current checkpoint: Phase 7C.3 complete export pushed as `1f048d0`
+Status: Phase 7C.4 In Progress — Report Period/Summary Integrated; Remaining Sections Pending
+Current checkpoint: Phase 7C.4 report read foundation pushed as `4c5c56c`
+
+2026-10-20: [period summary](../walkthroughs/phase-7c4-report-period-summary.md)
+implemented in connected development after the requested commit/push. Technical
+checks pass; full Reports/Home reconciliation and manual review remain pending.
 
 2026-10-19: PO authorized commit/push and continuation into 7C.4. Clean tree
 verified before [report read foundation](../walkthroughs/phase-7c4-report-read-foundation.md).
