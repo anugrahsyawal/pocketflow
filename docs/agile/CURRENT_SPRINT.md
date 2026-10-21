@@ -2,7 +2,13 @@
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
 Status: Phase 7C.4 In Progress — Report Sections Integrated in Connected Preview; Reconciliation Pending
-Current checkpoint: Phase 7C.4 weekly/insights/Sinking pushed as `cad4cfe`
+Current checkpoint: Phase 7C.4 report review/remediation pushed as `3e1689c`
+
+2026-10-21 continuation: [Home financial snapshot](../walkthroughs/phase-7c4-home-snapshot.md)
+implemented locally within 7C.4, reusing current server balances. Total/spendable,
+safe-per-day and scoped privacy only; remaining Home sections/detail and mutation
+reconciliation are not complete. Historical pending/uncommitted notes below do
+not override the latest checkpoint.
 
 2026-10-21 remediation: [empty-period actions and introduction](../walkthroughs/phase-7c4-report-empty-actions.md)
 implemented within 7C.4. Earlier review findings 1/2 are addressed; remaining

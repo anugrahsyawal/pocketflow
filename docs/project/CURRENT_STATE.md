@@ -2,9 +2,17 @@
 
 Last updated: 2026-10-21
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `cad4cfe` (Phase 7C.4 weekly/insights/Sinking, pushed to origin/codex/audit-pocketflow-documentation)
+Latest committed checkpoint: `3e1689c` (Phase 7C.4 report review/remediation, pushed to origin/codex/audit-pocketflow-documentation)
 
 ## Executive state
+
+**Connected Home snapshot — 2026-10-21:** report review/remediation committed and
+pushed as `3e1689c`; clean tree before PO-authorized continuation. [Home snapshot](../walkthroughs/phase-7c4-home-snapshot.md)
+adds server-backed total/spendable balances, inclusive Jakarta safe-per-day and
+Home-only amount visibility. This bounded slice is local/uncommitted. Carousel,
+attention, recent transactions, detail and mutation reconciliation remain pending.
+Earlier uncommitted/review-findings statements below are checkpoint history;
+this does not claim full Phase 7C.4 completion or PO manual acceptance.
 
 **Report presentation remediation — 2026-10-21:** [empty actions and copy](../walkthroughs/phase-7c4-report-empty-actions.md)
 address the two consolidated-review findings. Historical empty periods return

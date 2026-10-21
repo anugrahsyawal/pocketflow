@@ -14,6 +14,7 @@ import { OpeningBalanceForm } from './OpeningBalanceForm';
 import { ConnectedHistory } from './ConnectedHistory';
 import { ConnectedPeriodExport } from './ConnectedPeriodExport';
 import { TransactionCreateForm } from './TransactionCreateForm';
+import { ConnectedHomeSnapshot } from './ConnectedHomeSnapshot';
 
 export function ConnectedPockets({ownerId,client,onExpired}:{ownerId:string;client:SessionClient;onExpired:()=>void}) {
   const [data,setData] = useState<MasterData | null>(null);
@@ -46,6 +47,7 @@ export function ConnectedPockets({ownerId,client,onExpired}:{ownerId:string;clie
     {error ? <p role="alert" className="rounded-card bg-bahaya-soft p-4 text-bahaya">{error} Data belum ditampilkan.</p>
       : !data ? <p role="status">Memuat pocket server…</p>
       : !data.isSetupCompleted ? <ConnectedSetup client={client} onExpired={onExpired} onComplete={()=>setRefresh(n=>n+1)} /> : <>
+        <ConnectedHomeSnapshot data={data}/>
         <p className="text-body-sm text-text-secondary">Periode {data.period?.startDate} — {data.period?.endDate}</p>
         {data.period&&<ConnectedPeriodExport ownerId={ownerId} client={client} currentPeriod={data.period} onExpired={onExpired} onExpense={()=>setExpenseRequest(n=>n+1)} expenseBlocked={!data.pockets.length||!!editing||creationLocked||expenseLocked||lifecycleLocked}/>}
         <ConnectedHistory ownerId={ownerId} client={client} data={data} onExpired={onExpired} blocked={!!editing||creationLocked||expenseLocked} onLock={setLifecycleLocked} onResolved={message=>{setResolutionNotice(message);reload();}}/>

@@ -4,6 +4,13 @@ Last updated: 2026-09-28
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- 2026-10-21 Home: `3e1689c` committed/pushed under PO authorization. Bounded
+  [Home snapshot](../walkthroughs/phase-7c4-home-snapshot.md) is now local/uncommitted:
+  total, spendable, safe-per-day and Home-only privacy. Review this slice, then
+  continue remaining Home carousel/attention/recent transactions and detail;
+  mutation-to-screen reconciliation remains required. No full Home cutover,
+  deployment or Product Owner manual acceptance claimed.
+
 - 2026-10-21 remediation: [empty-state CTA and copy](../walkthroughs/phase-7c4-report-empty-actions.md)
   address the two report review findings, preserving existing transaction recovery
   and draft locks. No new write path. Review/remediation are local/uncommitted;
