@@ -15,7 +15,7 @@ function jakartaNow(){
   const value=(type:string)=>parts.find(p=>p.type===type)!.value;
   return {date:`${value('year')}-${value('month')}-${value('day')}`,time:`${value('hour')}:${value('minute')}`};
 }
-export function TransactionCreateForm({ownerId,pockets,client,onReload,onResolved,onExpired,onLock}:{ownerId:string;pockets:ServerPocket[];client:SessionClient;onReload:()=>void;onResolved:(status:'cancelled'|'committed')=>void;onExpired:()=>void;onLock:(locked:boolean)=>void}){
+export function TransactionCreateForm({ownerId,pockets,client,onReload,onResolved,onExpired,onLock,expenseRequest=0}:{ownerId:string;pockets:ServerPocket[];client:SessionClient;onReload:()=>void;onResolved:(status:'cancelled'|'committed')=>void;onExpired:()=>void;onLock:(locked:boolean)=>void;expenseRequest?:number}){
   const [store]=useState(()=>new TransactionAttemptStore()),[now]=useState(jakartaNow),id=useId();
   const [record,setPending]=useState<TransactionRecoveryRecord|null>(null),[ready,setReady]=useState(false),[opened,setOpened]=useState(false);
   const pending=record?.operation==='create'?record:null;
@@ -31,6 +31,15 @@ export function TransactionCreateForm({ownerId,pockets,client,onReload,onResolve
   const noun=transactionNames[kind];
   const running=useRef(false),active=useRef(true),selected=pockets.find(p=>p.id===pocketId);
   const pendingPocketId=pending&&pending.body.type!=='transfer'?pending.body.pocketId:null;
+  const entry=useRef<HTMLElement>(null),handledExpenseRequest=useRef(expenseRequest);
+  useEffect(()=>{
+    if(expenseRequest===handledExpenseRequest.current)return;
+    handledExpenseRequest.current=expenseRequest;
+    // Navigate only; never bypass recovery, replace a draft, or submit a transaction.
+    if(ready&&!record&&!busy&&!opened&&!batchOpened){setKind('expense');setOpened(true);}
+    entry.current?.scrollIntoView({block:'start'});
+    entry.current?.focus({preventScroll:true});
+  },[expenseRequest,ready,record,busy,opened,batchOpened]);
   const pocketName=(value:string)=>pockets.find(p=>p.id===value)?.name??value;
   const inspect=async()=>{try{const record=await store.read(ownerId);if(active.current){setPending(record);setReady(true);setMessage('');}}
     catch{if(active.current){setReady(false);setMessage('Penyimpanan pemulihan tidak tersedia atau rusak. Pengiriman diblokir; jangan hapus data situs.');}}};
@@ -80,7 +89,7 @@ export function TransactionCreateForm({ownerId,pockets,client,onReload,onResolve
       else setMessage('Penghentian belum terkonfirmasi atau permintaan berbeda dengan catatan server. Catatan tetap disimpan; coba konfirmasi lagi setelah koneksi pulih.');
     }finally{running.current=false;if(active.current)setBusy(false);}
   };
-  return <section aria-label="Tambah transaksi server" className="space-y-3 rounded-card border border-border bg-surface p-5">
+  return <section ref={entry} tabIndex={-1} aria-label="Tambah transaksi server" className="space-y-3 rounded-card border border-border bg-surface p-5">
     <h2 className="font-display text-headline-md">{record?'Transaksi tertunda':opened?`Tambah ${noun}`:'Tambah transaksi'}</h2>
     {message&&<p role="alert" className="text-body-sm text-bahaya break-words">{message}</p>}
     {!ready?<Button disabled={busy} variant="secondary" onClick={()=>void inspect()}>Periksa pemulihan transaksi</Button>:batch?<>

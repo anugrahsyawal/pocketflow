@@ -52,6 +52,8 @@ reference only and must not be copied into production.
 - [Phase 7C.4 connected weekly usage](walkthroughs/phase-7c4-weekly.md)
 - [Phase 7C.4 connected rule-based insights](walkthroughs/phase-7c4-insights.md)
 - [Phase 7C.4 connected Sinking Fund](walkthroughs/phase-7c4-sinking.md)
+- [Phase 7C.4 consolidated Reports review](walkthroughs/phase-7c4-reports-review.md)
+- [Phase 7C.4 empty report actions and introduction remediation](walkthroughs/phase-7c4-report-empty-actions.md)
 
 - [Phase 7C.4 report read foundation](walkthroughs/phase-7c4-report-read-foundation.md)
 

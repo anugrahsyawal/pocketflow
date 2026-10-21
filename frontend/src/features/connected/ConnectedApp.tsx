@@ -73,7 +73,7 @@ export default function ConnectedApp() {
         </> : user ? <>
           <h2 className="font-display text-headline-md break-words">Halo, {user.displayName}</h2>
           <p className="text-body-sm text-text-secondary break-all">{user.email}</p>
-          <p className="rounded-input bg-primary-soft p-3 text-body-sm text-primary">Setup, pengaturan pocket/kategori, riwayat, pengeluaran, pemasukan dan transfer server tersedia. Batch, edit transaksi dan migrasi data belum tersedia di mode ini.</p>
+          <p className="rounded-input bg-primary-soft p-3 text-body-sm text-primary">Setup, pengaturan pocket/kategori, transaksi tunggal dan batch, edit, riwayat, laporan serta export CSV server tersedia. Integrasi Beranda dan detail pocket masih dikerjakan; migrasi data dan sinkronisasi otomatis belum tersedia.</p>
           <Button fullWidth variant="secondary" disabled={busy} onClick={() => void check()}>Periksa sesi</Button>
           <Button fullWidth loading={busy} onClick={() => void run(async () => {
             await client.logout();
@@ -89,7 +89,7 @@ export default function ConnectedApp() {
       {user && <fieldset hidden={busy || !!error} disabled={busy || !!error} className="min-w-0 border-0 p-0 m-0">
         <ConnectedPockets key={user.id} ownerId={user.id} client={client} onExpired={expire} />
       </fieldset>}
-      <p className="text-center text-body-sm text-text-secondary">Tahap 7C.3 · Arsip, pulihkan dan hapus permanen tersedia dengan konfirmasi. Belum ada migrasi data atau sinkronisasi otomatis.</p>
+      <p className="text-center text-body-sm text-text-secondary">Tahap 7C.4 · Pratinjau integrasi server. Arsip, pulihkan dan hapus permanen tersedia dengan konfirmasi; belum merupakan deployment produksi.</p>
     </div>
   </main>;
 }

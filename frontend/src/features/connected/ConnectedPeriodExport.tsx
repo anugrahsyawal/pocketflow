@@ -8,7 +8,7 @@ import {ConnectedReportSummary} from './ConnectedReportSummary';
 import {useSinkingPreferences} from './useSinkingPreferences';
 
 /** Development integration surface; does not cut over the local Reports page. */
-export function ConnectedPeriodExport({ownerId,client,currentPeriod,onExpired}:{ownerId:string;client:SessionClient;currentPeriod:ExportPeriod;onExpired:()=>void}) {
+export function ConnectedPeriodExport({ownerId,client,currentPeriod,onExpired,onExpense,expenseBlocked}:{ownerId:string;client:SessionClient;currentPeriod:ExportPeriod;onExpired:()=>void;onExpense:()=>void;expenseBlocked:boolean}) {
   const [offset,setOffset]=useState(0),[busy,setBusy]=useState(false),[message,setMessage]=useState(''),[error,setError]=useState('');
   const running=useRef(false),active=useRef(true);
   useEffect(()=>{active.current=true;return()=>{active.current=false;};},[]);
@@ -48,7 +48,10 @@ export function ConnectedPeriodExport({ownerId,client,currentPeriod,onExpired}:{
     {reportState.loading?<p role="status" className="text-body-sm">Memuat laporan periode ini…</p>:reportState.error?<div className="space-y-2">
       <p role="alert" className="text-body-sm text-bahaya">{reportState.error} Angka laporan belum ditampilkan.</p>
       <Button size="sm" variant="secondary" onClick={reportState.reload}>Coba lagi laporan</Button>
-    </div>:reportState.report&&<ConnectedReportSummary report={reportState.report} onSinkingIncluded={preferences.setIncluded} disabled={busy}/>}
+    </div>:reportState.report&&<>
+      {reportState.report.totals.transactionCount===0&&<Button size="sm" className="h-auto min-h-9 whitespace-normal py-2" disabled={busy||(offset===0&&expenseBlocked)} onClick={()=>{if(offset===0)onExpense();else move(-offset);}}>{offset===0?'Catat Pengeluaran':'Kembali ke Periode Berjalan'}</Button>}
+      <ConnectedReportSummary report={reportState.report} onSinkingIncluded={preferences.setIncluded} disabled={busy}/>
+    </>}
     {preferences.error&&<p role="alert" className="text-body-sm text-bahaya">{preferences.error}</p>}
     <p className="text-body-sm text-text-secondary">Pratinjau integrasi laporan server. Laporan lokal tidak berubah; integrasi Beranda dan detail pocket menyusul.</p>
     <p className="text-body-sm text-text-secondary">Seluruh transaksi aktif periode ini dari server, termasuk transfer. Tidak dibatasi halaman atau filter riwayat. Transaksi arsip dan yang dihapus tidak disertakan.</p>

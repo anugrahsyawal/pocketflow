@@ -4,6 +4,16 @@ Last updated: 2026-09-28
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- 2026-10-21 remediation: [empty-state CTA and copy](../walkthroughs/phase-7c4-report-empty-actions.md)
+  address the two report review findings, preserving existing transaction recovery
+  and draft locks. No new write path. Review/remediation are local/uncommitted;
+  next work remains connected Home/detail and end-to-end mutation reconciliation.
+
+- 2026-10-21 review: `cad4cfe` pushed; [Reports reconciliation review](../walkthroughs/phase-7c4-reports-review.md)
+  passes 59 targeted tests plus real downloaded CSV vs report aggregates/UI. Next:
+  remediate empty-period CTA and stale connected introduction; then remaining
+  Home/detail and mutation-to-screen checks. Review changes are local/uncommitted.
+
 - 2026-10-21 Sinking: [connected recommendation and exclusions](../walkthroughs/phase-7c4-sinking.md)
   completed after interruption. Owner-isolated local preference keys, validated
   IDs, GET-only recomputation, stale-response guard and explicit storage failures.

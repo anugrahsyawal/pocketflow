@@ -2,7 +2,15 @@
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
 Status: Phase 7C.4 In Progress — Report Sections Integrated in Connected Preview; Reconciliation Pending
-Current checkpoint: Phase 7C.4 distributions pushed as `7dc729e`
+Current checkpoint: Phase 7C.4 weekly/insights/Sinking pushed as `cad4cfe`
+
+2026-10-21 remediation: [empty-period actions and introduction](../walkthroughs/phase-7c4-report-empty-actions.md)
+implemented within 7C.4. Earlier review findings 1/2 are addressed; remaining
+Home/detail and mutation-to-screen/CSV evidence still required.
+
+2026-10-21 review: [consolidated Reports review](../walkthroughs/phase-7c4-reports-review.md)
+verified cross-section/CSV figures. Empty-period CTA and stale introduction copy
+remain remediation items; Home/detail and end-to-end mutation checks still pending.
 
 2026-10-21: resumed [Sinking Fund/exclusions](../walkthroughs/phase-7c4-sinking.md)
 verification after interruption. Local preferences only; no automatic transfer.

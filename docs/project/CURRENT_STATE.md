@@ -2,9 +2,24 @@
 
 Last updated: 2026-10-21
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `7dc729e` (Phase 7C.4 spending distributions, pushed to origin/codex/audit-pocketflow-documentation)
+Latest committed checkpoint: `cad4cfe` (Phase 7C.4 weekly/insights/Sinking, pushed to origin/codex/audit-pocketflow-documentation)
 
 ## Executive state
+
+**Report presentation remediation — 2026-10-21:** [empty actions and copy](../walkthroughs/phase-7c4-report-empty-actions.md)
+address the two consolidated-review findings. Historical empty periods return
+directly to current; current empty periods navigate to guarded existing expense
+entry. Stale batch/edit introduction replaced with accurate preview limitations.
+Review and remediation remain uncommitted. Home/detail and mutation reconciliation
+are still pending; this is not full Phase 7C.4 completion.
+
+**Reports consolidated review — 2026-10-21:** `cad4cfe` committed/pushed under PO
+authorization; clean tree before review. [Review and reconciliation](../walkthroughs/phase-7c4-reports-review.md)
+adds downloaded-CSV cross-section checks; 59 targeted API/transport/adapter tests
+and the new browser test pass. Two presentation gaps remain: unified empty-period
+CTA and stale connected introduction copy. Home/detail and mutation-to-screen
+reconciliation remain open. Prior weekly/insight/Sinking uncommitted labels below
+are checkpoint history; only this review continuation is uncommitted.
 
 **Connected Sinking Fund — 2026-10-21:** resumed interrupted work; [Sinking Fund](../walkthroughs/phase-7c4-sinking.md)
 now displays server recommendations and account-scoped browser-local exclusions.
