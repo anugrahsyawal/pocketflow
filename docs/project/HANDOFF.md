@@ -4,6 +4,23 @@ Last updated: 2026-09-28
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- 2026-10-21 Sinking: [connected recommendation and exclusions](../walkthroughs/phase-7c4-sinking.md)
+  completed after interruption. Owner-isolated local preference keys, validated
+  IDs, GET-only recomputation, stale-response guard and explicit storage failures.
+  Weekly/insights/Sinking are uncommitted. Next: consolidated report review and
+  remaining presentation/reconciliation before Home/detail integration.
+
+- 2026-10-20 insights: [connected rule-based insights](../walkthroughs/phase-7c4-insights.md)
+  consume server facts and preserve order/severity, including income-only surplus.
+  Weekly + insights are uncommitted; latest pushed checkpoint remains `7dc729e`.
+  Next: informational Sinking Fund with approved local exclusions, then remaining
+  presentation/reconciliation. No automatic transfer or deployment.
+
+- 2026-10-20 weekly: `7dc729e` committed/pushed. [Connected weekly usage](../walkthroughs/phase-7c4-weekly.md)
+  displays four server buckets, precise quarter-rupiah targets and separate time/
+  budget statuses. Missing/historical allocations are not zero. Local/uncommitted;
+  next bounded task is deterministic report insights, not a new phase or deployment.
+
 - 2026-10-20 distributions: `9078609` is pushed. [Connected distributions](../walkthroughs/phase-7c4-distributions.md)
   reuse existing category donut and pocket relative bars with validated report
   data. Three adapter tests, both builds and three browser scripts pass.

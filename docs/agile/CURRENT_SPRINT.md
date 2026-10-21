@@ -1,8 +1,20 @@
 # Current Sprint
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
-Status: Phase 7C.4 In Progress — Report Summary/Pocket Budget/Distributions Integrated; Remaining Sections Pending
-Current checkpoint: Phase 7C.4 pocket budget actuals pushed as `9078609`
+Status: Phase 7C.4 In Progress — Report Sections Integrated in Connected Preview; Reconciliation Pending
+Current checkpoint: Phase 7C.4 distributions pushed as `7dc729e`
+
+2026-10-21: resumed [Sinking Fund/exclusions](../walkthroughs/phase-7c4-sinking.md)
+verification after interruption. Local preferences only; no automatic transfer.
+Weekly, insights and Sinking remain uncommitted; not full Phase 7C.4 acceptance.
+
+2026-10-20 insights continuation: [server rule-based insights](../walkthroughs/phase-7c4-insights.md)
+added without committing the prior weekly slice. Both remain local in the same
+phase; no full cutover or Product Owner manual acceptance claimed.
+
+2026-10-20 weekly continuation: [aggregate weekly usage](../walkthroughs/phase-7c4-weekly.md)
+integrated into the connected preview, preserving DEC-019/031 and existing local
+mode. This slice remains uncommitted for review.
 
 2026-10-20 distribution continuation: [category/payment-pocket charts](../walkthroughs/phase-7c4-distributions.md)
 implemented and technically verified in connected development. Same approved MVP

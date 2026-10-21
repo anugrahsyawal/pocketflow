@@ -1,10 +1,31 @@
 # PocketFlow Current State
 
-Last updated: 2026-10-20
+Last updated: 2026-10-21
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `9078609` (Phase 7C.4 pocket budget actuals, pushed to origin/codex/audit-pocketflow-documentation)
+Latest committed checkpoint: `7dc729e` (Phase 7C.4 spending distributions, pushed to origin/codex/audit-pocketflow-documentation)
 
 ## Executive state
+
+**Connected Sinking Fund — 2026-10-21:** resumed interrupted work; [Sinking Fund](../walkthroughs/phase-7c4-sinking.md)
+now displays server recommendations and account-scoped browser-local exclusions.
+Changed selections reload the report with stale-response protection. No server
+preference write, automatic transfer or historical balance invention. Weekly,
+insights and Sinking remain uncommitted; full report review, Home/detail and
+mutation-to-screen/CSV reconciliation are still pending.
+
+**Connected insights — 2026-10-20:** PO authorized continuation within Phase
+7C.4; prior uncommitted weekly changes preserved, no automatic commit. [Insights](../walkthroughs/phase-7c4-insights.md)
+translate structured server facts into Indonesian copy and reuse the existing
+three-card severity UI. Income-only surplus is not suppressed. No frontend
+eligibility rules, cross-period comparisons or invented causality. Weekly and
+insights remain local/uncommitted; Sinking/Home/detail and reconciliation pending.
+
+**Connected weekly usage — 2026-10-20:** distribution slice committed/pushed as
+`7dc729e`; clean tree before PO-authorized continuation. [Weekly usage](../walkthroughs/phase-7c4-weekly.md)
+now presents server date buckets, expenses, temporal states and available budget
+targets. Quarter-rupiah amounts retain exact decimals; missing/historical targets
+remain unavailable, distinct from known zero. Local continuation, not full-phase
+completion or PO manual acceptance. Insights/Sinking/Home/detail remain pending.
 
 **Connected spending distributions — 2026-10-20:** following PO continuation and
 clean tree at `9078609`, [category/payment-pocket charts](../walkthroughs/phase-7c4-distributions.md)

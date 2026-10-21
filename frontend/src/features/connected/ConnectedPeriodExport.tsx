@@ -5,15 +5,17 @@ import {getBudgetPeriodByOffset} from '@/lib/budgetPeriod';
 import type {ExportPeriod} from '@/lib/api/periodExport';
 import {useConnectedReport} from './useConnectedReport';
 import {ConnectedReportSummary} from './ConnectedReportSummary';
+import {useSinkingPreferences} from './useSinkingPreferences';
 
 /** Development integration surface; does not cut over the local Reports page. */
-export function ConnectedPeriodExport({client,currentPeriod,onExpired}:{client:SessionClient;currentPeriod:ExportPeriod;onExpired:()=>void}) {
+export function ConnectedPeriodExport({ownerId,client,currentPeriod,onExpired}:{ownerId:string;client:SessionClient;currentPeriod:ExportPeriod;onExpired:()=>void}) {
   const [offset,setOffset]=useState(0),[busy,setBusy]=useState(false),[message,setMessage]=useState(''),[error,setError]=useState('');
   const running=useRef(false),active=useRef(true);
   useEffect(()=>{active.current=true;return()=>{active.current=false;};},[]);
   const year=Number(currentPeriod.startDate.slice(0,4)),month=Number(currentPeriod.startDate.slice(5,7));
   const period=getBudgetPeriodByOffset(offset,new Date(year,month-1,26));
-  const reportState=useConnectedReport(client,period.startDate,onExpired);
+  const preferences=useSinkingPreferences(ownerId);
+  const reportState=useConnectedReport(client,period.startDate,onExpired,preferences.ids);
   const move=(amount:number)=>{setOffset(n=>n+amount);setMessage('');setError('');};
   const download=async()=>{
     if(running.current)return;running.current=true;setBusy(true);setMessage('');setError('');
@@ -46,8 +48,9 @@ export function ConnectedPeriodExport({client,currentPeriod,onExpired}:{client:S
     {reportState.loading?<p role="status" className="text-body-sm">Memuat laporan periode ini…</p>:reportState.error?<div className="space-y-2">
       <p role="alert" className="text-body-sm text-bahaya">{reportState.error} Angka laporan belum ditampilkan.</p>
       <Button size="sm" variant="secondary" onClick={reportState.reload}>Coba lagi laporan</Button>
-    </div>:reportState.report&&<ConnectedReportSummary report={reportState.report}/>}
-    <p className="text-body-sm text-text-secondary">Pratinjau integrasi server: mingguan, insight, dan rekomendasi Sinking Fund menyusul. Laporan lokal tidak berubah.</p>
+    </div>:reportState.report&&<ConnectedReportSummary report={reportState.report} onSinkingIncluded={preferences.setIncluded} disabled={busy}/>}
+    {preferences.error&&<p role="alert" className="text-body-sm text-bahaya">{preferences.error}</p>}
+    <p className="text-body-sm text-text-secondary">Pratinjau integrasi laporan server. Laporan lokal tidak berubah; integrasi Beranda dan detail pocket menyusul.</p>
     <p className="text-body-sm text-text-secondary">Seluruh transaksi aktif periode ini dari server, termasuk transfer. Tidak dibatasi halaman atau filter riwayat. Transaksi arsip dan yang dihapus tidak disertakan.</p>
     {message&&<p role="status" className="text-body-sm break-words">{message}</p>}
     {error&&<p role="alert" className="text-body-sm text-bahaya break-words">{error}</p>}

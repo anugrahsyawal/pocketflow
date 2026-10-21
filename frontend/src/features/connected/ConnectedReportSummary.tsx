@@ -3,9 +3,12 @@ import {formatRupiah} from '@/lib/currency';
 import {CashFlowTimelineChart} from '@/features/reports/components/CashFlowTimelineChart';
 import {ConnectedPocketBudgetActuals} from './ConnectedPocketBudgetActuals';
 import {ConnectedReportDistribution} from './ConnectedReportDistribution';
+import {ConnectedWeeklyUsage} from './ConnectedWeeklyUsage';
+import {ConnectedReportInsights} from './ConnectedReportInsights';
+import {ConnectedSinkingFund} from './ConnectedSinkingFund';
 
 /** Presentation only: all financial values come from the validated server report. */
-export function ConnectedReportSummary({report}:{report:ServerReport}) {
+export function ConnectedReportSummary({report,onSinkingIncluded,disabled=false}:{report:ServerReport;onSinkingIncluded:(id:string,included:boolean)=>void;disabled?:boolean}) {
   const {totals,budget}=report;
   return <div className="space-y-4" aria-label="Ringkasan laporan server">
     <section aria-label="Arus kas bersih" className="rounded-card bg-primary p-5 text-white shadow-card space-y-2">
@@ -29,6 +32,9 @@ export function ConnectedReportSummary({report}:{report:ServerReport}) {
     </section>
     <ConnectedPocketBudgetActuals report={report}/>
     <ConnectedReportDistribution report={report}/>
+    <ConnectedWeeklyUsage report={report}/>
+    <ConnectedReportInsights report={report}/>
+    <ConnectedSinkingFund report={report} onIncluded={onSinkingIncluded} disabled={disabled}/>
     <p className="text-body-sm text-text-secondary">{totals.transactionCount} transaksi · {totals.expenseCount} pengeluaran · {totals.incomeCount} pemasukan · {totals.transferCount} transfer. Transfer tidak dihitung sebagai pemasukan atau pengeluaran.</p>
   </div>;
 }

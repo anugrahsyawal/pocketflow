@@ -46,7 +46,7 @@ export function ConnectedPockets({ownerId,client,onExpired}:{ownerId:string;clie
       : !data ? <p role="status">Memuat pocket server…</p>
       : !data.isSetupCompleted ? <ConnectedSetup client={client} onExpired={onExpired} onComplete={()=>setRefresh(n=>n+1)} /> : <>
         <p className="text-body-sm text-text-secondary">Periode {data.period?.startDate} — {data.period?.endDate}</p>
-        {data.period&&<ConnectedPeriodExport client={client} currentPeriod={data.period} onExpired={onExpired}/>}
+        {data.period&&<ConnectedPeriodExport ownerId={ownerId} client={client} currentPeriod={data.period} onExpired={onExpired}/>}
         <ConnectedHistory ownerId={ownerId} client={client} data={data} onExpired={onExpired} blocked={!!editing||creationLocked||expenseLocked} onLock={setLifecycleLocked} onResolved={message=>{setResolutionNotice(message);reload();}}/>
         <fieldset disabled={!!editing||creationLocked||lifecycleLocked} className="min-w-0 border-0 p-0 m-0">
           <TransactionCreateForm ownerId={ownerId} pockets={data.pockets} client={client} onReload={()=>{setResolutionNotice('');reload();}} onResolved={status=>{setResolutionNotice(status==='cancelled'?'Permintaan dibatalkan oleh server. Tidak ada transaksi baru dari permintaan ini.':'Transaksi ternyata sudah tersimpan. Transaksi tetap dipertahankan; periksa riwayat sebelum membuat pengganti.');reload();}} onExpired={onExpired} onLock={setExpenseLocked}/>
