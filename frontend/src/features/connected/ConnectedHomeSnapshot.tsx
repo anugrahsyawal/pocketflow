@@ -5,10 +5,13 @@ import {formatRupiah} from '@/lib/currency';
 import type {SessionClient} from '@/lib/api/sessionClient';
 import {ConnectedHomeRecent} from './ConnectedHomeRecent';
 import {ProgressBar} from '@/components/ui/ProgressBar';
+import {ConnectedPocketDetail} from './ConnectedPocketDetail';
 const labels={aman:'Aman',waspada:'Waspada',bahaya:'Bahaya',overbudget:'Overbudget','tanpa-alokasi':'Tanpa alokasi'};
 
 export function ConnectedHomeSnapshot({data,client,onExpired}:{data:MasterData;client:SessionClient;onExpired:()=>void}) {
   const [hidden,setHidden]=useState(false);
+  const [selectedId,setSelectedId]=useState<string|null>(null);
+  const selected=data.pockets.find(p=>p.id===selectedId);
   const snapshot=homeSnapshot(data,jakartaDate());
   const attention=homeAttention(data.pockets);
   const amount=(value:number|null)=>hidden?'••••••••':value===null?'Belum tersedia':formatRupiah(value);
@@ -19,7 +22,11 @@ export function ConnectedHomeSnapshot({data,client,onExpired}:{data:MasterData;c
       <div className="flex items-center justify-between gap-2">
         <h3 className="text-label-caps font-semibold text-text-secondary">Total semua pocket</h3>
         <button type="button" aria-label={hidden?'Tampilkan nominal Beranda':'Sembunyikan nominal Beranda'} aria-pressed={hidden} onClick={()=>setHidden(v=>!v)} className="min-h-[44px] min-w-[44px] rounded-full focus-visible:outline focus-visible:outline-primary">
-          <span aria-hidden="true" className="material-symbols-rounded">{hidden?'visibility_off':'visibility'}</span>
+          <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="24" height="24" className="mx-auto" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
+            <circle cx="12" cy="12" r="3"/>
+            {hidden&&<path d="m3 3 18 18"/>}
+          </svg>
         </button>
       </div>
       <p className="font-display text-amount-lg font-bold break-words">{amount(snapshot.total)}</p>
@@ -47,6 +54,7 @@ export function ConnectedHomeSnapshot({data,client,onExpired}:{data:MasterData;c
             <p className="text-xs text-text-secondary">Budget {card.members[0]!.name}: {card.members[0]!.budgetStatus?labels[card.members[0]!.budgetStatus!]:'Belum tersedia'}</p>
             <dl className="space-y-2 text-body-sm">{card.members.map(p=><div key={p.id} className="flex flex-wrap justify-between gap-2"><dt className="min-w-0 break-words text-text-secondary">{p.name}</dt><dd className="font-semibold break-all">{amount(p.currentBalance)}</dd></div>)}</dl>
             <div className="flex flex-wrap justify-between gap-2 border-t border-border pt-3 text-body-sm"><span>Total tersedia</span><span className="font-bold text-primary break-all">{amount(card.total)}</span></div>
+            <div className="flex flex-wrap gap-2">{card.members.map(p=><button key={p.id} type="button" className="min-h-[44px] text-left text-primary underline text-body-sm" onClick={()=>setSelectedId(p.id)}>Detail {p.name}</button>)}</div>
           </article>)}
         </div>
       </>}
@@ -63,6 +71,7 @@ export function ConnectedHomeSnapshot({data,client,onExpired}:{data:MasterData;c
       </div>:<p className="rounded-card border border-border bg-surface-container-low p-4 text-body-sm">{attention.allSafe?'Semua pocket yang dipantau masih aman.':data.pockets.length===0?'Belum ada pocket aktif untuk dipantau.':'Belum ada peringatan terdeteksi. Sebagian budget belum tersedia atau tanpa alokasi; kondisi aman belum dapat dipastikan.'}</p>}
     </section>
     <ConnectedHomeRecent client={client} data={data} hidden={hidden} onExpired={onExpired}/>
-    <p className="text-xs text-text-secondary">Pratinjau ringkasan Beranda. Sembunyikan nominal mencakup carousel dan transaksi terbaru; laporan dan detail di bawah tetap terlihat. Tautan menuju pocket dan riwayat server di halaman ini. Navigasi detail lengkap belum terintegrasi di Beranda.</p>
+    {selected&&<ConnectedPocketDetail pocket={selected} data={data} client={client} hidden={hidden} onExpired={onExpired} onClose={()=>setSelectedId(null)}/>}
+    <p className="text-xs text-text-secondary">Pratinjau ringkasan Beranda. Sembunyikan nominal mencakup carousel, dialog detail, dan transaksi terbaru; laporan serta pengaturan pocket di bawah tetap terlihat. Detail baca-saja tersedia dari carousel. Navigasi halaman detail lengkap belum terintegrasi.</p>
   </section>;
 }

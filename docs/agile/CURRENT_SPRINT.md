@@ -2,7 +2,15 @@
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
 Status: Phase 7C.4 In Progress — Report Sections Integrated in Connected Preview; Reconciliation Pending
-Current checkpoint: Phase 7C.4 Home budget/review/expense reconciliation pushed as `6dd43cf`
+Current checkpoint: Phase 7C.4 income/transfer reconciliation pushed as `5016bd1`
+
+2026-10-22 continuation: [Pocket detail dialog](../walkthroughs/phase-7c4-pocket-detail-preview.md)
+implemented read-only in connected preview, with independent balance/budget,
+categories, filtered recent rows and Home privacy. Not full route cutover.
+
+2026-10-22: [Home privacy icon](../walkthroughs/phase-7c4-home-privacy-icon.md)
+remediates observed external-font fallback without new dependencies or behavior.
+Local/uncommitted; not full navigation/detail delivery.
 
 2026-10-22 continuation: income and NFC top-up lifecycle coverage added to the
 [Home mutation script](../walkthroughs/phase-7c4-home-mutation-reconciliation.md).

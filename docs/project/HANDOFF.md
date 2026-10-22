@@ -4,6 +4,14 @@ Last updated: 2026-09-28
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- 2026-10-22: [Pocket detail preview](../walkthroughs/phase-7c4-pocket-detail-preview.md)
+  continues same phase with existing uncommitted icon fix. Review per-wallet
+  dialogs and privacy; settings/recovery unchanged. No commit/push this turn.
+
+- 2026-10-22 icon: `5016bd1` pushed. [Home privacy SVG](../walkthroughs/phase-7c4-home-privacy-icon.md)
+  removes external icon-font dependency for this button only. Review this bounded
+  fix before full connected navigation/detail work; other icons are unchanged.
+
 - 2026-10-22 income/transfer: `6dd43cf` pushed; clean tree before extending
   [Home mutation reconciliation](../walkthroughs/phase-7c4-home-mutation-reconciliation.md).
   New coverage is uncommitted test/documentation. Remaining work includes full

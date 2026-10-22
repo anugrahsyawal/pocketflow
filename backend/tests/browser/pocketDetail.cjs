@@ -1,0 +1,52 @@
+const {chromium}=require(process.env.PLAYWRIGHT_MODULE_PATH||'playwright');
+const assert=require('node:assert/strict');
+(async()=>{
+ const browser=await chromium.launch({channel:'msedge',headless:true});
+ const page=await browser.newPage({viewport:{width:375,height:844}}),errors=[],writes=[],logs=[];
+ page.on('pageerror',e=>errors.push(e.message));
+ page.on('console',m=>{if(m.type()==='error')logs.push({text:m.text(),url:m.location().url});});
+ try{
+  await page.goto(process.env.PREVIEW_URL||'http://127.0.0.1:5175');
+  await page.getByLabel('Email',{exact:true}).fill('preview@example.com');
+  await page.getByLabel('Password',{exact:true}).fill('Disposable-preview-123!');
+  await page.getByRole('button',{name:'Masuk ke server',exact:true}).click();
+  const home=page.getByRole('region',{name:'Ringkasan Beranda server'});
+  await home.waitFor();
+  page.on('request',r=>{if(['POST','PATCH','DELETE','PUT'].includes(r.method()))writes.push(r.url());});
+  const open=home.getByRole('button',{name:'Detail Transportation',exact:true});
+  await open.click();
+  let dialog=page.getByRole('dialog');
+  await dialog.getByText('Rp100.000',{exact:true}).first().waitFor();
+  assert.equal(await dialog.locator('dd').allTextContents().then(x=>x.join('|')),'Rp100.000|Rp18.000|Rp200.000|Rp182.000');
+  await dialog.getByRole('region',{name:'Transaksi terbaru pocket'}).locator('li').waitFor();
+  assert.equal(await dialog.locator('li').count(),1);
+  await page.keyboard.press('Escape');
+  assert.equal(await page.getByRole('dialog').count(),0);
+  assert.equal(await open.evaluate(el=>el===document.activeElement),true);
+  await home.getByRole('button',{name:'Detail NFC Card',exact:true}).click();
+  await dialog.getByText('-Rp18.000',{exact:true}).waitFor();
+  assert.equal(await dialog.locator('dd').allTextContents().then(x=>x.join('|')),'Rp82.000|Rp0|Rp0|Rp0');
+  assert.equal(await dialog.getByRole('region',{name:'Kategori pocket'}).getByText('🚇 MRT',{exact:true}).count(),1);
+  assert.equal(await dialog.getByRole('region',{name:'Transaksi terbaru pocket'}).locator('li').count(),2);
+  for(const width of [375,390,430]){await page.setViewportSize({width,height:844});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);}
+  await page.setViewportSize({width:375,height:844});
+  await dialog.screenshot({path:'.env.pocket-detail.png'});
+  await page.keyboard.press('Escape');
+  await home.getByRole('button',{name:'Sembunyikan nominal Beranda'}).click();
+  await home.getByRole('button',{name:'Detail NFC Card',exact:true}).click();
+  await dialog.getByRole('region',{name:'Transaksi terbaru pocket'}).locator('li').first().waitFor();
+  assert.equal((await dialog.innerText()).includes('Rp'),false);
+  await page.keyboard.press('Escape');
+  const filtered=url=>{const u=new URL(url);return u.pathname.endsWith('/transactions')&&u.searchParams.has('pocketId');};
+  await page.route(filtered,route=>route.fulfill({status:200,contentType:'application/json',body:'{}'}));
+  await home.getByRole('button',{name:'Detail NFC Card',exact:true}).click();
+  await dialog.getByRole('button',{name:'Coba lagi transaksi terbaru'}).waitFor();
+  assert.equal(await dialog.getByRole('region',{name:'Transaksi terbaru pocket'}).locator('li').count(),0);
+  await page.unroute(filtered);
+  await dialog.getByRole('button',{name:'Coba lagi transaksi terbaru'}).click();
+  await dialog.getByRole('region',{name:'Transaksi terbaru pocket'}).locator('li').first().waitFor();
+  assert.deepEqual(errors,[]);assert.deepEqual(writes,[]);
+  assert.deepEqual(logs.filter(x=>!x.text.includes('401')&&!((x.url.includes('fonts.googleapis.com')||x.url.includes('fonts.gstatic.com'))&&/ERR_|Failed to load resource/.test(x.text))),[]);
+  console.log('PASS: individual balances/budget, filtered transactions, categories, privacy, Escape/focus, mobile, no writes');
+ }finally{await browser.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});

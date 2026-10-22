@@ -29,6 +29,9 @@ describe('Connected master data read boundary',()=>{
     const nfc=result.pockets.find(p=>p.id===ids.nfc.id)!;
     const cash=result.pockets.find(p=>p.id===ids.cash.id)!;
     assert.equal(transport.currentBalance,100000);assert.equal(nfc.currentBalance,82000);
+    assert.equal(transport.budget?.expense,18000);assert.equal(transport.budget?.remaining,182000);
+    assert.equal(nfc.budget?.expense,0);assert.equal(nfc.budget?.remaining,0);
+    assert.equal(cash.budget?.availability,'missing-allocation');
     assert.equal(transport.allocation,200000);assert.equal(nfc.allocation,0);assert.equal(cash.allocation,null);
     assert.equal(transport.budgetStatus,'aman');assert.equal(nfc.budgetStatus,'tanpa-alokasi');assert.equal(cash.budgetStatus,null);
     assert.equal(nfc.budgetOwnerPocketId,transport.id);assert.equal(nfc.categories[0].name,'MRT');

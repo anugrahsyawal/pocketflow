@@ -2,9 +2,19 @@
 
 Last updated: 2026-10-22
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `6dd43cf` (Phase 7C.4 Home budget/review/expense reconciliation, pushed to origin/codex/audit-pocketflow-documentation)
+Latest committed checkpoint: `5016bd1` (Phase 7C.4 income/transfer reconciliation, pushed to origin/codex/audit-pocketflow-documentation)
 
 ## Executive state
+
+2026-10-22: [Read-only pocket detail](../walkthroughs/phase-7c4-pocket-detail-preview.md)
+now opens independently for each Home carousel member. Server balances/budget,
+categories and filtered recent transactions; inherits Home privacy. Local only;
+full routed detail and Phase 7C.4 completion remain pending.
+
+**Home privacy icon — 2026-10-22:** `5016bd1` committed/pushed under PO authority;
+clean tree before bounded [icon resilience remediation](../walkthroughs/phase-7c4-home-privacy-icon.md).
+Connected Home uses inline SVG instead of the external Material Symbols font.
+Local/uncommitted; full connected navigation/detail remains separate work.
 
 **Income/transfer reconciliation — 2026-10-22:** `6dd43cf` committed/pushed under
 PO authorization; clean tree before extending the [mutation script](../walkthroughs/phase-7c4-home-mutation-reconciliation.md)

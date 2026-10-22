@@ -9,6 +9,7 @@ export interface ServerPocket {
   groupId:PocketGroup;isSpendable:boolean;
   openingBalance: number; currentBalance: number | null; allocation: number | null;
   budgetStatus?:ServerBudgetStatus|null;
+  budget?:ReturnType<typeof parseCurrentBudget>;
   categories: ServerCategory[];
   archivedCategories: ServerCategory[];
 }
@@ -70,7 +71,7 @@ export function mapMasterData(pocketPayload: unknown, categoryPayload: unknown, 
     return {id, isActive:boolean(p.isActive),isArchived:boolean(p.isArchived),templateKey:p.templateKey === null ? null : string(p.templateKey),name:string(p.name),emoji:string(p.emoji),
       budgetOwnerPocketId:nullableId(p.budgetOwnerPocketId),revision:revision(p.revision),groupId:p.groupId as PocketGroup,isSpendable:boolean(p.isSpendable),
       openingBalance,currentBalance:!row || row.currentBalance === null ? null : amount(row.currentBalance),
-      allocation,budgetStatus,categories:parsedCategories.filter(c => c.pocketId === id && c.isActive && !c.isArchived),
+      allocation,budgetStatus,budget:budget?parseCurrentBudget(budget):undefined,categories:parsedCategories.filter(c => c.pocketId === id && c.isActive && !c.isArchived),
       archivedCategories:parsedCategories.filter(c => c.pocketId === id && c.isArchived)};
   });
   return {isSetupCompleted:true,period:{startDate,endDate},budget:parseCurrentBudget(report.budget),

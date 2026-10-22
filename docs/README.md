@@ -8,6 +8,8 @@ checkpoint.
 
 ## Product authority
 
+Latest local verification: [Connected pocket detail preview](walkthroughs/phase-7c4-pocket-detail-preview.md).
+
 - [Product vision](product/PRODUCT_VISION.md)
 - [Product requirements](product/PRODUCT_REQUIREMENTS.md)
 - [Product backlog](product/PRODUCT_BACKLOG.md)
@@ -45,6 +47,8 @@ Screenshots are supporting visual evidence. Raw Stitch HTML is a raw visual
 reference only and must not be copied into production.
 
 ## Verification evidence
+
+- [Phase 7C.4 Home privacy icon resilience](walkthroughs/phase-7c4-home-privacy-icon.md)
 
 - [Phase 7C.4 connected period loading and summary](walkthroughs/phase-7c4-report-period-summary.md)
 - [Phase 7C.4 connected pocket budget actuals](walkthroughs/phase-7c4-pocket-budget.md)
