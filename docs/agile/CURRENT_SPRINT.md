@@ -2,7 +2,11 @@
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
 Status: Phase 7C.4 In Progress — Report Sections Integrated in Connected Preview; Reconciliation Pending
-Current checkpoint: Phase 7C.4 Home carousel/attention/recent pushed as `9d8ed55`
+Current checkpoint: Phase 7C.4 Home budget/review/expense reconciliation pushed as `6dd43cf`
+
+2026-10-22 continuation: income and NFC top-up lifecycle coverage added to the
+[Home mutation script](../walkthroughs/phase-7c4-home-mutation-reconciliation.md).
+Test/documentation only, local/uncommitted; full phase completion not claimed.
 
 2026-10-22 edit continuation: [expense amount edit/revert](../walkthroughs/phase-7c4-home-mutation-reconciliation.md)
 now reconciles through Home/report/CSV via UI. Test/documentation only; no commit.

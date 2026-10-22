@@ -1,5 +1,37 @@
 # Phase 7C.4 — Expense lifecycle to Home/report reconciliation
 
+## Continuation — income and NFC top-up (2026-10-22)
+
+Previous budget/review/expense work committed and pushed as `6dd43cf` under PO
+authorization. Clean tree before this continuation. The browser script now also
+creates income 2,000 into Cash and a 3,000 Transportation-to-NFC top-up via UI,
+then archives/restores/archives each. Both are independent cycles with baseline
+active balances restored between them. Assertions cover Home totals, Cash/NFC
+carousel money, signed/neutral recent amounts, report totals, unchanged pocket
+budgets and downloaded CSV row/amount inclusion. PR-005/006, DL-006/007 apply.
+
+Expected income: total 1,534,000, Cash 52,000, cash flow -16,000, expense 18,000.
+Expected transfer: total stays 1,532,000, Transportation 97,000, NFC 85,000, cash
+flow stays -18,000, transfer volume 103,000. No budget reallocation is involved.
+Successful full run leaves three test rows archived/recoverable and original
+active balances restored. This does not cover every transfer category, income/
+transfer edit, payment-pocket edits, lost-response reconciliation or full routes.
+
+Only the browser script and current-state/sprint/handoff/this walkthrough changed.
+No app source changes; build/type-check not rerun for this test-only continuation.
+Use the same explicit opt-in command and disposable database described below.
+Earlier lifecycle/expense-only status notes are retained as checkpoint history.
+
+Expanded mutation run passed, including unchanged budgets for ordinary NFC
+top-up and income. `node --check` and `git diff --check` passed. No unexpected
+page/console errors (the existing expected pre-auth 401/external-font filter
+remains). Agent inspected income/transfer screenshots in ignored `.env.home-*-mutation.png`.
+The transfer screenshot shows the external icon-font fallback text `visibility`:
+financial behavior passed, but external font availability is a visual resilience
+limitation, not a perfect visual-QA pass. No production-code fix is claimed here.
+The subsequent `node tests/browser/homeSnapshot.cjs` regression also passed
+after all three test records were archived and baseline balances restored.
+
 Date: 2026-10-22. Same approved phase; local/uncommitted technical evidence.
 Previous budget/review changes preserved. No commit/push or production code edits.
 

@@ -2,9 +2,15 @@
 
 Last updated: 2026-10-22
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `9d8ed55` (Phase 7C.4 Home carousel/attention/recent, pushed to origin/codex/audit-pocketflow-documentation)
+Latest committed checkpoint: `6dd43cf` (Phase 7C.4 Home budget/review/expense reconciliation, pushed to origin/codex/audit-pocketflow-documentation)
 
 ## Executive state
+
+**Income/transfer reconciliation — 2026-10-22:** `6dd43cf` committed/pushed under
+PO authorization; clean tree before extending the [mutation script](../walkthroughs/phase-7c4-home-mutation-reconciliation.md)
+to income and NFC top-up lifecycles. This continuation is test/documentation only
+and uncommitted. Earlier pending/uncommitted checkpoint notes below are history.
+Full navigation/detail and other edit/recovery variants remain outstanding.
 
 **Home expense edit reconciliation — 2026-10-22:** expanded [lifecycle test](../walkthroughs/phase-7c4-home-mutation-reconciliation.md)
 verifies real amount edit/revert, changed-only revisioned PATCH, preserved budget

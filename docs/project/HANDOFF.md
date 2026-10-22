@@ -4,6 +4,11 @@ Last updated: 2026-09-28
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- 2026-10-22 income/transfer: `6dd43cf` pushed; clean tree before extending
+  [Home mutation reconciliation](../walkthroughs/phase-7c4-home-mutation-reconciliation.md).
+  New coverage is uncommitted test/documentation. Remaining work includes full
+  connected navigation/detail and payment-pocket edit/recovery variants.
+
 - 2026-10-22 edit: [expense amount edit/revert reconciliation](../walkthroughs/phase-7c4-home-mutation-reconciliation.md)
   passed, including CSV amount and preserved attribution. No application changes;
   earlier dirty work preserved. Next bounded checks: income/transfer lifecycle;
