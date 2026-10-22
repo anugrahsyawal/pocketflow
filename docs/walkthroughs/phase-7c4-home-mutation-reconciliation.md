@@ -1,0 +1,85 @@
+# Phase 7C.4 — Expense lifecycle to Home/report reconciliation
+
+Date: 2026-10-22. Same approved phase; local/uncommitted technical evidence.
+Previous budget/review changes preserved. No commit/push or production code edits.
+
+## Continuation — expense amount edit verified (2026-10-22)
+
+The same script now creates a test expense of 1,000, edits it to 2,000 via UI
+review/confirmation, then edits it back to 1,000 before archive/restore checks.
+Each edit sends only amount, clientMutationId and expectedRevision; the test
+asserts the same transaction ID, revision increment and preserved payment/budget
+pocket mapping. CSV assertions now verify one row for that ID and the amount,
+not only inclusion. At 2,000: Home total/spendable 1,530,000; NFC 80,000;
+Transportation money 100,000; paired total 180,000; Transportation period expense
+20,000; recent amount -2,000 and report cash flow -20,000.
+
+The expanded script passed with real UI writes and no unexpected page/console
+errors. `node --check` and `git diff --check` passed. Agent inspected ignored
+`.env.home-edit-mutation.png` after edit. Original active balances restored by
+the final archive; this run leaves one more recoverable archived fixture record.
+No production code change, so build/type-check not rerun in this continuation.
+Prior lifecycle-only notes below are checkpoint history: amount-only expense
+edit is now covered, but changing payment pocket/date/category, income/transfer
+mutations and lost-response edit-to-Home recovery are not covered by this script.
+No Product Owner manual acceptance or full Phase 7C.4 completion is claimed.
+
+## Scope
+
+PR-003/005/007/008/009 and DEC-024: a payment from NFC reduces NFC money while
+its configured Transportation owner receives budget expense attribution.
+New `backend/tests/browser/homeMutationReconciliation.cjs` performs real UI
+expense create, archive, restore and final archive using dedicated preview data.
+No mocked mutation responses. Each transition checks Home total/spendable,
+paired NFC/Transportation balances, recent expense, server report budget/payment
+attribution and downloaded CSV inclusion/exclusion of the created transaction ID.
+
+Fixture expected progression:
+
+| State | Total money | NFC | Transport money | Transport expense | Recent/CSV test row |
+|---|---:|---:|---:|---:|---|
+| Baseline / archived | 1,532,000 | 82,000 | 100,000 | 18,000 | absent |
+| Created / restored | 1,531,000 | 81,000 | 100,000 | 19,000 | present |
+
+NFC budget expense remains zero, aggregate allocation remains unavailable (the
+fixture has a missing allocation), and report cash flow changes accordingly.
+This is not a claim that all Home mutations are complete: edit, income, transfer,
+permanent delete and failure/recovery reconciliation remain separate coverage.
+
+## Safety / execution
+
+Script requires `PREVIEW_MUTATIONS=1`, loopback hostname and known fixture active
+totals before writing. Use only disposable `sessionPreview --with-pockets` database
+`pocketflow_test_7c1_preview`, with dedicated preview login. Never run against a
+personal database. These guards are not a substitute for choosing the test DB.
+After success the test transaction remains archived and recoverable; original
+active balances are restored. Fixture reset remains an explicit separate action.
+
+```text
+# backend directory, existing Playwright runtime configured
+$env:PREVIEW_MUTATIONS='1'
+node tests/browser/homeMutationReconciliation.cjs
+node tests/browser/homeSnapshot.cjs
+git diff --check
+```
+
+The existing connected Vite preview on 5175 and fixture API on 3000 were reused.
+No new application source changed; build/type-check were not rerun for this
+test/documentation-only continuation. Previous review recorded both builds and
+27 targeted tests passing. No full backend-suite rerun or PO manual acceptance.
+
+Results: mutation script passed twice (second run added paired-card UI assertions
+and screenshot), then Home regression passed with restored active balances.
+Both runs left their own test record archived. `node --check` and
+`git diff --check` passed. No page or unexpected console errors; pre-login 401
+and external font-load failures are explicitly filtered. Agent inspected ignored
+`.env.home-mutation.png` after create: total 1,531,000, NFC 81,000, paired total
+181,000 and newest -1,000 expense. Automated browser interaction and agent visual
+inspection are not Product Owner manual acceptance.
+
+## Changed files / review
+
+New browser script, this walkthrough and documentation index/current-state/
+sprint/handoff. Existing dirty budget/review files remain untouched.
+Review the lifecycle evidence and remaining scope before extending to edit and
+other transaction types. Full navigation/detail work is still pending.

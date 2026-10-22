@@ -4,6 +4,7 @@ import {homeSnapshot,homePocketCards,homeAttention,jakartaDate} from '@/lib/api/
 import {formatRupiah} from '@/lib/currency';
 import type {SessionClient} from '@/lib/api/sessionClient';
 import {ConnectedHomeRecent} from './ConnectedHomeRecent';
+import {ProgressBar} from '@/components/ui/ProgressBar';
 const labels={aman:'Aman',waspada:'Waspada',bahaya:'Bahaya',overbudget:'Overbudget','tanpa-alokasi':'Tanpa alokasi'};
 
 export function ConnectedHomeSnapshot({data,client,onExpired}:{data:MasterData;client:SessionClient;onExpired:()=>void}) {
@@ -27,6 +28,14 @@ export function ConnectedHomeSnapshot({data,client,onExpired}:{data:MasterData;c
         <div className="min-w-0"><dt className="text-body-sm text-text-secondary">Aman per hari</dt><dd className="font-semibold break-words">{amount(snapshot.safePerDay)}</dd></div>
       </dl>
       <p className="text-body-sm text-text-secondary">{snapshot.remainingDays===null?'Periode perlu dimuat ulang untuk menghitung aman per hari.':`Perkiraan dari saldo spendable dibagi ${snapshot.remainingDays} hari tersisa, termasuk hari ini.`} Saldo Cash/NFC dihitung sekali, tidak digabung ulang dengan budget asal.</p>
+      <section aria-label="Progres anggaran Beranda" className="space-y-2 border-t border-border pt-3 text-body-sm">
+        <h3 className="font-semibold">Anggaran periode</h3>
+        {data.budget?.availability==='available'?<>
+          <p className="text-text-secondary">Status anggaran: {data.budget.status?labels[data.budget.status]:'Belum tersedia'}</p>
+          <dl className="space-y-2">{[['Terpakai',data.budget.expense],['Total anggaran',data.budget.revisedAllocation],['Sisa anggaran',data.budget.remaining]].map(([label,value])=><div key={String(label)} className="flex flex-wrap justify-between gap-2"><dt>{label}</dt><dd className="font-semibold break-all">{amount(value as number|null)}</dd></div>)}</dl>
+          {data.budget.usageRatio!==null?<><ProgressBar value={data.budget.usageRatio} variant={data.budget.status&&data.budget.status!=='tanpa-alokasi'?data.budget.status:'neutral'}/><p>{Math.round(data.budget.usageRatio*100)}% terpakai</p></>:<p>Persentase tidak tersedia karena alokasi nol.</p>}
+        </>:<p className="text-text-secondary">Total anggaran belum tersedia. Lengkapi alokasi seluruh pocket; saldo uang tetap ditampilkan terpisah.</p>}
+      </section>
     </div>
     <section aria-label="Ringkasan Pocket" className="space-y-3 pt-3">
       <h3 className="font-display text-headline-sm">Ringkasan Pocket</h3>

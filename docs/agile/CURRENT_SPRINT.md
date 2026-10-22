@@ -2,7 +2,24 @@
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
 Status: Phase 7C.4 In Progress — Report Sections Integrated in Connected Preview; Reconciliation Pending
-Current checkpoint: Phase 7C.4 Home financial snapshot pushed as `a71e3cc`
+Current checkpoint: Phase 7C.4 Home carousel/attention/recent pushed as `9d8ed55`
+
+2026-10-22 edit continuation: [expense amount edit/revert](../walkthroughs/phase-7c4-home-mutation-reconciliation.md)
+now reconciles through Home/report/CSV via UI. Test/documentation only; no commit.
+Other edit variants, income/transfer and navigation/detail remain pending.
+
+2026-10-22: [Home expense lifecycle reconciliation](../walkthroughs/phase-7c4-home-mutation-reconciliation.md)
+adds real disposable UI mutation evidence without changing application code.
+Create/archive/restore covered; edit/income/transfer reconciliation and full
+navigation/detail remain pending. No automatic commit or phase advancement.
+
+2026-10-22: [consolidated Home review](../walkthroughs/phase-7c4-home-review.md)
+and malformed-budget ratio remediation within 7C.4. Budget/review remain
+uncommitted; navigation/detail and mutation reconciliation still required.
+
+2026-10-22: [Home budget progress](../walkthroughs/phase-7c4-home-budget.md) added
+after authorized commit/push and clean tree. Server aggregate only; partial
+allocation never presented as complete budget. Local/uncommitted for review.
 
 2026-10-21 continuation: [Recent transactions](../walkthroughs/phase-7c4-home-recent.md)
 added to connected Home with max-three active server records and shared privacy.

@@ -22,6 +22,16 @@ const instant:Decoder<string>=v=>typeof v==='string'&&Number.isFinite(Date.parse
 const availability=enumeration('available','missing-allocation','historical-unavailable');
 const status=nullable(enumeration('aman','waspada','bahaya','overbudget','tanpa-alokasi'));
 const budget=object({availability,revisedAllocation:nullable(positive),expense:positive,remaining:nullable(amount),usageRatio:nullable(ratio),status});
+export function parseCurrentBudget(value:unknown) {
+  const result=budget(value);
+  if(result.availability==='historical-unavailable')invalid();
+  if(result.availability==='available') {
+    if(result.revisedAllocation===null||result.remaining===null)invalid();
+    // A missing ratio is valid only for known zero, not an unknown positive budget.
+    if((result.revisedAllocation===0)!==(result.usageRatio===null))invalid();
+  } else if(result.revisedAllocation!==null||result.remaining!==null||result.usageRatio!==null||result.status!==null)invalid();
+  return result;
+}
 const metadata={id:uuid,label:text,emoji:nullable(text),isMetadataMissing:bool,isCurrentlyActive:bool};
 const transfer=object({inAmount:positive,outAmount:positive,netAmount:amount,count:positive});
 const breakdown={...metadata,amount:positive,transactionCount:positive,percentage:ratio};

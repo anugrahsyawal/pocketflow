@@ -1,10 +1,36 @@
 # PocketFlow Current State
 
-Last updated: 2026-10-21
+Last updated: 2026-10-22
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `a71e3cc` (Phase 7C.4 Home financial snapshot, pushed to origin/codex/audit-pocketflow-documentation)
+Latest committed checkpoint: `9d8ed55` (Phase 7C.4 Home carousel/attention/recent, pushed to origin/codex/audit-pocketflow-documentation)
 
 ## Executive state
+
+**Home expense edit reconciliation — 2026-10-22:** expanded [lifecycle test](../walkthroughs/phase-7c4-home-mutation-reconciliation.md)
+verifies real amount edit/revert, changed-only revisioned PATCH, preserved budget
+attribution and CSV amount after each edit. Passed; fixture active balances
+restored. Earlier edit-pending notes refer to the preceding checkpoint; remaining
+edit variants, income/transfer and full navigation/detail are still outstanding.
+
+**Home mutation reconciliation — 2026-10-22:** [expense lifecycle browser evidence](../walkthroughs/phase-7c4-home-mutation-reconciliation.md)
+now covers real UI create/archive/restore with NFC payment and Transportation
+budget attribution through Home, report and downloaded CSV. Test uses disposable
+preview only; no production code change. Budget/review/test remain uncommitted.
+Edit, income/transfer mutations and full navigation/detail still need coverage;
+this is not completion of every mutation-to-screen path.
+
+**Home review — 2026-10-22:** [consolidated review](../walkthroughs/phase-7c4-home-review.md)
+preserves uncommitted budget work and strengthens current-budget ratio validation:
+positive allocation cannot carry a null ratio, nor zero allocation a ratio.
+Full route/detail integration and mutation-to-screen reconciliation remain open;
+preview verification does not constitute production cutover or PO acceptance.
+
+**Connected Home budget — 2026-10-22:** previous Home continuation committed/
+pushed as `9d8ed55`; clean tree before [budget progress](../walkthroughs/phase-7c4-home-budget.md).
+Home now consumes aggregate server budget, preserving missing allocation and
+known-zero states. Technical verification passed; new slice is uncommitted.
+Earlier uncommitted labels below are checkpoint history. Full navigation/detail,
+consolidated Home review and mutation reconciliation remain pending.
 
 **Connected Home recent transactions — 2026-10-21:** same-phase continuation,
 preserving uncommitted carousel/attention. [Recent transactions](../walkthroughs/phase-7c4-home-recent.md)

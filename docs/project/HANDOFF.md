@@ -4,6 +4,27 @@ Last updated: 2026-09-28
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- 2026-10-22 edit: [expense amount edit/revert reconciliation](../walkthroughs/phase-7c4-home-mutation-reconciliation.md)
+  passed, including CSV amount and preserved attribution. No application changes;
+  earlier dirty work preserved. Next bounded checks: income/transfer lifecycle;
+  payment-pocket edit/recovery variants and full navigation/detail remain open.
+
+- 2026-10-22 mutation: [NFC expense lifecycle reconciliation](../walkthroughs/phase-7c4-home-mutation-reconciliation.md)
+  verifies create/archive/restore and CSV inclusion via real UI writes on disposable
+  preview. Test leaves balances restored with a recoverable archived test record.
+  Next bounded evidence: edit, then income/transfer; full connected navigation/
+  detail remains separate unfinished work. Earlier budget/review changes preserved.
+
+- 2026-10-22 review: [Home review and checklist](../walkthroughs/phase-7c4-home-review.md)
+  records bounded preview coverage and ratio-nullability remediation. Preserve
+  uncommitted budget/review. Next: complete connected navigation/detail plus
+  mutation reconciliation; no phase advancement or deployment claimed.
+
+- 2026-10-22 budget: `9d8ed55` committed/pushed; [Home budget progress](../walkthroughs/phase-7c4-home-budget.md)
+  implemented locally with aggregate server values and shared privacy. Both builds,
+  12 targeted tests and browser checks pass. Next: consolidated Home review,
+  navigation/detail and mutation reconciliation. No full-phase acceptance claimed.
+
 - 2026-10-21 recent: [Home transaction preview](../walkthroughs/phase-7c4-home-recent.md)
   implemented with isolated read states, shared privacy and on-page history link.
   Prior carousel/attention preserved, all uncommitted. Next: consolidated Home

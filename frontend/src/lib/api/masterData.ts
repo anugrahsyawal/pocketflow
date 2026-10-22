@@ -1,4 +1,5 @@
 import { ApiError, SessionClient, type PocketGroup } from './sessionClient';
+import {parseCurrentBudget} from './reportRead';
 
 export interface ServerCategory { id: string; pocketId: string; name: string; emoji: string; revision: number }
 export type ServerBudgetStatus='aman'|'waspada'|'bahaya'|'overbudget'|'tanpa-alokasi';
@@ -12,6 +13,7 @@ export interface ServerPocket {
   archivedCategories: ServerCategory[];
 }
 export interface MasterData {
+  budget?:ReturnType<typeof parseCurrentBudget>;
   isSetupCompleted: boolean;
   period: {startDate: string; endDate: string} | null;
   pockets: ServerPocket[];
@@ -71,7 +73,7 @@ export function mapMasterData(pocketPayload: unknown, categoryPayload: unknown, 
       allocation,budgetStatus,categories:parsedCategories.filter(c => c.pocketId === id && c.isActive && !c.isArchived),
       archivedCategories:parsedCategories.filter(c => c.pocketId === id && c.isArchived)};
   });
-  return {isSetupCompleted:true,period:{startDate,endDate},
+  return {isSetupCompleted:true,period:{startDate,endDate},budget:parseCurrentBudget(report.budget),
     pockets:parsedPockets.filter(p=>p.isActive && !p.isArchived),
     archivedPockets:parsedPockets.filter(p=>p.isArchived)};
 }
