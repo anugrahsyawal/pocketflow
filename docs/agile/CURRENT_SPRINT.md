@@ -2,7 +2,19 @@
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
 Status: Phase 7C.4 In Progress — Report Sections Integrated in Connected Preview; Reconciliation Pending
-Current checkpoint: Phase 7C.4 report review/remediation pushed as `3e1689c`
+Current checkpoint: Phase 7C.4 Home financial snapshot pushed as `a71e3cc`
+
+2026-10-21 continuation: [Recent transactions](../walkthroughs/phase-7c4-home-recent.md)
+added to connected Home with max-three active server records and shared privacy.
+Carousel/attention/recent remain uncommitted; full Home acceptance not claimed.
+
+2026-10-21 continuation: [Home attention](../walkthroughs/phase-7c4-home-attention.md)
+adds server budget status and at most two owner alerts. Earlier carousel remains
+uncommitted; no automatic commit or new phase. Full Home delivery still pending.
+
+2026-10-21: [Home pocket carousel](../walkthroughs/phase-7c4-home-carousel.md)
+implemented locally after clean-tree commit/push. Paired/individual server balances
+and privacy verified; status/navigation and remaining Home sections still pending.
 
 2026-10-21 continuation: [Home financial snapshot](../walkthroughs/phase-7c4-home-snapshot.md)
 implemented locally within 7C.4, reusing current server balances. Total/spendable,

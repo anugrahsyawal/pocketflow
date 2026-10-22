@@ -53,6 +53,9 @@ reference only and must not be copied into production.
 - [Phase 7C.4 connected rule-based insights](walkthroughs/phase-7c4-insights.md)
 - [Phase 7C.4 connected Sinking Fund](walkthroughs/phase-7c4-sinking.md)
 - [Phase 7C.4 consolidated Reports review](walkthroughs/phase-7c4-reports-review.md)
+- [Phase 7C.4 connected Home recent transactions](walkthroughs/phase-7c4-home-recent.md)
+- [Phase 7C.4 connected Home budget attention](walkthroughs/phase-7c4-home-attention.md)
+- [Phase 7C.4 connected Home pocket carousel](walkthroughs/phase-7c4-home-carousel.md)
 - [Phase 7C.4 connected Home financial snapshot](walkthroughs/phase-7c4-home-snapshot.md)
 - [Phase 7C.4 empty report actions and introduction remediation](walkthroughs/phase-7c4-report-empty-actions.md)
 

@@ -30,6 +30,7 @@ describe('Connected master data read boundary',()=>{
     const cash=result.pockets.find(p=>p.id===ids.cash.id)!;
     assert.equal(transport.currentBalance,100000);assert.equal(nfc.currentBalance,82000);
     assert.equal(transport.allocation,200000);assert.equal(nfc.allocation,0);assert.equal(cash.allocation,null);
+    assert.equal(transport.budgetStatus,'aman');assert.equal(nfc.budgetStatus,'tanpa-alokasi');assert.equal(cash.budgetStatus,null);
     assert.equal(nfc.budgetOwnerPocketId,transport.id);assert.equal(nfc.categories[0].name,'MRT');
     assert.equal(transport.categories.length,0);assert.equal(nfc.revision,1);
     assert.equal((await db.select().from(transactions)).length,2);
@@ -75,8 +76,13 @@ describe('Master data validation failures',()=>{
     const id='10000000-0000-4000-8000-000000000001';
     const p={id,templateKey:'cash',name:'Cash',emoji:'💵',budgetOwnerPocketId:null,revision:1,isActive:true,isArchived:false,groupId:'daily',isSpendable:true,openingBalance:0};
     const report={schemaVersion:1,period:{isCurrent:true,startDate:'2026-08-26',endDate:'2026-09-25'},
-      pocketBudgetActuals:[{id,currentBalance:9007199254740992,budget:{availability:'missing-allocation'}}]};
+      pocketBudgetActuals:[{id,currentBalance:9007199254740992,budget:{availability:'missing-allocation',status:null}}]};
     assert.throws(()=>mapMasterData({pockets:[p]},{categories:[]},report),{code:'INVALID_RESPONSE'});
+    report.pocketBudgetActuals[0]!.currentBalance=0;
+    for(const status of ['safe',undefined,'aman']){
+      const malformed={...report,pocketBudgetActuals:[{id,currentBalance:0,budget:{availability:'missing-allocation',status}}]};
+      assert.throws(()=>mapMasterData({pockets:[p]},{categories:[]},malformed),{code:'INVALID_RESPONSE'});
+    }
   });
   it('does not present partial results when one request fails',async()=>{
     const client=new SessionClient(async path=>{

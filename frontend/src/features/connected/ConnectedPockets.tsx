@@ -47,7 +47,7 @@ export function ConnectedPockets({ownerId,client,onExpired}:{ownerId:string;clie
     {error ? <p role="alert" className="rounded-card bg-bahaya-soft p-4 text-bahaya">{error} Data belum ditampilkan.</p>
       : !data ? <p role="status">Memuat pocket server…</p>
       : !data.isSetupCompleted ? <ConnectedSetup client={client} onExpired={onExpired} onComplete={()=>setRefresh(n=>n+1)} /> : <>
-        <ConnectedHomeSnapshot data={data}/>
+        <ConnectedHomeSnapshot data={data} client={client} onExpired={onExpired}/>
         <p className="text-body-sm text-text-secondary">Periode {data.period?.startDate} — {data.period?.endDate}</p>
         {data.period&&<ConnectedPeriodExport ownerId={ownerId} client={client} currentPeriod={data.period} onExpired={onExpired} onExpense={()=>setExpenseRequest(n=>n+1)} expenseBlocked={!data.pockets.length||!!editing||creationLocked||expenseLocked||lifecycleLocked}/>}
         <ConnectedHistory ownerId={ownerId} client={client} data={data} onExpired={onExpired} blocked={!!editing||creationLocked||expenseLocked} onLock={setLifecycleLocked} onResolved={message=>{setResolutionNotice(message);reload();}}/>
@@ -62,7 +62,7 @@ export function ConnectedPockets({ownerId,client,onExpired}:{ownerId:string;clie
         {data.pockets.map(p => {
           const owner = p.budgetOwnerPocketId ? data.pockets.find(other=>other.id===p.budgetOwnerPocketId) : null;
           const isWallet = p.templateKey === 'cash' || p.templateKey === 'nfc-card';
-          return <article key={p.id} className="rounded-card border border-border/60 bg-surface p-5 shadow-card space-y-4">
+          return <article key={p.id} id={`server-pocket-${p.id}`} tabIndex={-1} className="rounded-card border border-border/60 bg-surface p-5 shadow-card space-y-4">
             <div className="flex gap-3 items-start"><span aria-hidden="true" className="text-2xl">{p.emoji}</span>
               <h3 className="font-display text-headline-sm break-words min-w-0">{p.name}</h3></div>
             <dl className="space-y-2 text-body-sm">

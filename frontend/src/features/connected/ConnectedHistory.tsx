@@ -36,7 +36,7 @@ export function ConnectedHistory({ownerId,client,data,onExpired,onResolved,onLoc
   const load=(next:TransactionQuery)=>{setResult(null);setError('');setQuery(next);};
   const field=(key:Exclude<keyof typeof empty,'includeArchived'>,value:string)=>setDraft(d=>({...d,[key]:value,...(key==='pocketId'?{categoryId:''}:{})}));
   const selectClass='w-full min-w-0 rounded-input border border-border bg-surface p-3 text-body-sm';
-  return <section aria-label="Riwayat transaksi server" className="space-y-4 rounded-card border border-border bg-surface p-5">
+  return <section id="server-history" tabIndex={-1} aria-label="Riwayat transaksi server" className="space-y-4 rounded-card border border-border bg-surface p-5">
     <h2 className="font-display text-headline-md">Riwayat transaksi</h2>
     <p className="text-body-sm text-text-secondary">Data server · arsip dapat dipulihkan. Filter tanggal memakai tanggal transaksi Jakarta. Daftar ini bukan perhitungan saldo atau export seluruh riwayat.</p>
     <div ref={recoveryPanel} tabIndex={-1} aria-label="Pemulihan arsip dan pulihkan" role="region" className="space-y-3 text-body-sm break-words">

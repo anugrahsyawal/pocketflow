@@ -1,11 +1,13 @@
 import { ApiError, SessionClient, type PocketGroup } from './sessionClient';
 
 export interface ServerCategory { id: string; pocketId: string; name: string; emoji: string; revision: number }
+export type ServerBudgetStatus='aman'|'waspada'|'bahaya'|'overbudget'|'tanpa-alokasi';
 export interface ServerPocket {
   id: string; templateKey: string | null; name: string; emoji: string;
   budgetOwnerPocketId: string | null; revision: number;
   groupId:PocketGroup;isSpendable:boolean;
   openingBalance: number; currentBalance: number | null; allocation: number | null;
+  budgetStatus?:ServerBudgetStatus|null;
   categories: ServerCategory[];
   archivedCategories: ServerCategory[];
 }
@@ -53,16 +55,20 @@ export function mapMasterData(pocketPayload: unknown, categoryPayload: unknown, 
     const id = uuid(p.id), row = reportRows.get(id);
     const budget = row ? object(row.budget) : null;
     let allocation: number | null = null;
+    let budgetStatus:ServerBudgetStatus|null=null;
     if (budget) {
+      if(budget.status!==null&&!['aman','waspada','bahaya','overbudget','tanpa-alokasi'].includes(budget.status as string))invalid();
+      budgetStatus=budget.status as ServerBudgetStatus|null;
       if (budget.availability === 'available') {
         allocation = amount(budget.revisedAllocation);
         if (allocation < 0) invalid();
       } else if (budget.availability !== 'missing-allocation') invalid();
+      if(budget.availability==='missing-allocation'&&budgetStatus!==null)invalid();
     }
     return {id, isActive:boolean(p.isActive),isArchived:boolean(p.isArchived),templateKey:p.templateKey === null ? null : string(p.templateKey),name:string(p.name),emoji:string(p.emoji),
       budgetOwnerPocketId:nullableId(p.budgetOwnerPocketId),revision:revision(p.revision),groupId:p.groupId as PocketGroup,isSpendable:boolean(p.isSpendable),
       openingBalance,currentBalance:!row || row.currentBalance === null ? null : amount(row.currentBalance),
-      allocation,categories:parsedCategories.filter(c => c.pocketId === id && c.isActive && !c.isArchived),
+      allocation,budgetStatus,categories:parsedCategories.filter(c => c.pocketId === id && c.isActive && !c.isArchived),
       archivedCategories:parsedCategories.filter(c => c.pocketId === id && c.isArchived)};
   });
   return {isSetupCompleted:true,period:{startDate,endDate},

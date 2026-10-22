@@ -2,9 +2,29 @@
 
 Last updated: 2026-10-21
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `3e1689c` (Phase 7C.4 report review/remediation, pushed to origin/codex/audit-pocketflow-documentation)
+Latest committed checkpoint: `a71e3cc` (Phase 7C.4 Home financial snapshot, pushed to origin/codex/audit-pocketflow-documentation)
 
 ## Executive state
+
+**Connected Home recent transactions — 2026-10-21:** same-phase continuation,
+preserving uncommitted carousel/attention. [Recent transactions](../walkthroughs/phase-7c4-home-recent.md)
+requests three active server-ordered records, with Home privacy, separate loading/
+empty/error/retry and a link to on-page history. No ledger sums or new writes.
+All Home continuation remains uncommitted; full detail routing, overall budget
+progress and mutation reconciliation remain pending.
+
+**Connected Home attention — 2026-10-21:** continued same 7C.4 with earlier
+uncommitted carousel preserved. [Budget status and attention](../walkthroughs/phase-7c4-home-attention.md)
+consume validated server statuses, show up to two severity-ranked owner alerts,
+and link to existing on-page server pocket details. Unknown/zero allocations do
+not imply all-safe. Carousel/attention remain uncommitted; recent transactions,
+full detail routing and mutation reconciliation are pending.
+
+**Connected Home carousel — 2026-10-21:** `a71e3cc` committed/pushed under PO
+authorization; clean tree before continuation. [Pocket carousel](../walkthroughs/phase-7c4-home-carousel.md)
+now shows template pairs and remaining active pockets with independent balances,
+combined totals and shared Home privacy. Local/uncommitted; status badges,
+detail navigation, attention, recent transactions and reconciliation remain open.
 
 **Connected Home snapshot — 2026-10-21:** report review/remediation committed and
 pushed as `3e1689c`; clean tree before PO-authorized continuation. [Home snapshot](../walkthroughs/phase-7c4-home-snapshot.md)

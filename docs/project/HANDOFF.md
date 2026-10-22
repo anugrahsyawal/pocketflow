@@ -4,6 +4,23 @@ Last updated: 2026-09-28
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- 2026-10-21 recent: [Home transaction preview](../walkthroughs/phase-7c4-home-recent.md)
+  implemented with isolated read states, shared privacy and on-page history link.
+  Prior carousel/attention preserved, all uncommitted. Next: consolidated Home
+  review including overall budget progress, complete navigation/detail and
+  mutation reconciliation; no next phase or deployment authorized by this slice.
+
+- 2026-10-21 attention: [Home server budget status/alerts](../walkthroughs/phase-7c4-home-attention.md)
+  implemented on top of uncommitted carousel, preserving earlier changes. Review
+  severity ordering, unknown-allocation copy and focusable on-page pocket links.
+  Next bounded work: recent transactions; full detail routing and mutation
+  reconciliation remain pending. Latest pushed checkpoint is still `a71e3cc`.
+
+- 2026-10-21 carousel: `a71e3cc` pushed. [Home carousel](../walkthroughs/phase-7c4-home-carousel.md)
+  is local/uncommitted, with paired wallets, all remaining active pockets and
+  shared amount privacy. Review, then integrate server budget status/attention
+  and detail navigation; recent transactions and mutation reconciliation remain.
+
 - 2026-10-21 Home: `3e1689c` committed/pushed under PO authorization. Bounded
   [Home snapshot](../walkthroughs/phase-7c4-home-snapshot.md) is now local/uncommitted:
   total, spendable, safe-per-day and Home-only privacy. Review this slice, then
