@@ -3,6 +3,9 @@ import type {MasterData,ServerPocket} from '@/lib/api/masterData';
 import type {SessionClient} from '@/lib/api/sessionClient';
 import {formatRupiah} from '@/lib/currency';
 import {ConnectedHomeRecent} from './ConnectedHomeRecent';
+import {ProgressBar} from '@/components/ui/ProgressBar';
+
+const budgetLabels={aman:'Aman',waspada:'Waspada',bahaya:'Bahaya',overbudget:'Overbudget','tanpa-alokasi':'Tanpa alokasi'};
 
 export function ConnectedPocketDetail({pocket,data,client,hidden,onExpired,onClose}:{pocket:ServerPocket;data:MasterData;client:SessionClient;hidden:boolean;onExpired:()=>void;onClose:()=>void}) {
   const money=(value:number|null|undefined)=>hidden?'••••••••':value==null?'Belum tersedia':formatRupiah(value);
@@ -17,6 +20,14 @@ export function ConnectedPocketDetail({pocket,data,client,hidden,onExpired,onClo
         <div><dt>Alokasi periode</dt><dd>{money(known?budget.revisedAllocation:null)}</dd></div>
         <div><dt>Sisa budget</dt><dd>{money(known?budget.remaining:null)}</dd></div>
       </dl>
+      <section aria-label="Pemakaian budget pocket" className="space-y-2">
+        <h3 className="font-semibold">Pemakaian budget periode</h3>
+        <p>Status: {known&&budget.status?budgetLabels[budget.status]:'Belum tersedia'}</p>
+        {known&&budget.usageRatio!==null?<>
+          <ProgressBar value={budget.usageRatio} variant={budget.status&&budget.status!=='tanpa-alokasi'?budget.status:'neutral'}/>
+          <p>{Math.round(budget.usageRatio*100)}% terpakai</p>
+        </>:known?<p>Persentase tidak tersedia karena alokasi nol.</p>:<p>Progres belum tersedia karena alokasi belum diatur.</p>}
+      </section>
       {!known&&<p>Alokasi belum tersedia; jangan disamakan dengan nol.</p>}
       <p>Saldo adalah uang di pocket ini. Pengeluaran budget mengikuti sumber budget transaksi, bukan selalu pocket pembayaran.</p>
       {(pocket.templateKey==='cash'||pocket.templateKey==='nfc-card')&&<p>Budget pengeluaran baru: <strong>{pocket.budgetOwnerPocketId?owner?.name??'Pocket tidak tersedia':pocket.name}</strong>. Pengaturan ini tidak mengubah atribusi transaksi lama.</p>}

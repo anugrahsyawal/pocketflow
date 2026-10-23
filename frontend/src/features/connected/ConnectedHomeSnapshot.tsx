@@ -66,7 +66,7 @@ export function ConnectedHomeSnapshot({data,client,onExpired}:{data:MasterData;c
           <h4 className="font-bold break-words"><span aria-hidden="true">{p.emoji} </span>{p.name}</h4>
           <p className="font-semibold">{labels[p.budgetStatus!]}</p>
           <p className="text-body-sm">{p.budgetStatus==='overbudget'?'Pemakaian budget sudah mencapai atau melewati alokasi.':'Pemakaian budget perlu diperhatikan.'}</p>
-          <a className="inline-flex items-center min-h-[44px] font-semibold text-primary underline" href={`#server-pocket-${p.id}`}>Lihat pocket {p.name}</a>
+          <button type="button" className="inline-flex items-center min-h-[44px] text-left font-semibold text-primary underline" onClick={()=>setSelectedId(p.id)}>Lihat pocket {p.name}</button>
         </article>)}
       </div>:<p className="rounded-card border border-border bg-surface-container-low p-4 text-body-sm">{attention.allSafe?'Semua pocket yang dipantau masih aman.':data.pockets.length===0?'Belum ada pocket aktif untuk dipantau.':'Belum ada peringatan terdeteksi. Sebagian budget belum tersedia atau tanpa alokasi; kondisi aman belum dapat dipastikan.'}</p>}
     </section>

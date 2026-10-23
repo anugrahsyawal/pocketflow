@@ -56,6 +56,37 @@ edit is now covered, but changing payment pocket/date/category, income/transfer
 mutations and lost-response edit-to-Home recovery are not covered by this script.
 No Product Owner manual acceptance or full Phase 7C.4 completion is claimed.
 
+## 2026-10-23 — Pocket detail mutation reconciliation
+
+Extended the existing same-phase browser script to open individual pocket
+dialogs after every existing lifecycle checkpoint. This covers NFC expense
+create/amount edit/revert/archive/restore, Cash income, and Transportation-to-NFC
+top-up create/archive/restore. Dialog balance, attributed expense, allocation
+and remaining budget must match the server report; filtered recent activity
+includes active payments/transfers and excludes archived rows. Transportation
+budget absorbs NFC expense without incorrectly listing it as its own payment.
+Existing Home/report/downloaded CSV assertions remain in the same run.
+
+First run exposed a test ordering race on transfer restore: total money and cash
+flow are unchanged by transfer, so waiting for those values did not ensure the
+mutation had completed. Moved the affected-wallet balance wait before report
+reads. This fixes the test, not financial application logic. Restarted only the
+identified disposable preview API and reseeded pocketflow_test_7c1_preview;
+incomplete-run disposable records were removed and are not retained. No personal
+database or production data touched.
+
+Corrected `PREVIEW_MUTATIONS=1 node tests/browser/homeMutationReconciliation.cjs`
+passed with real UI/API mutations and no unexpected console/page errors. Final
+active balances restored; three test records retained as recoverable archives.
+`node --check tests/browser/homeMutationReconciliation.cjs` and
+`git diff --check` passed. Existing localhost Vite/PG used, API helper restarted.
+No application source changed, so build/type-check not rerun. No new visual
+design or PO manual acceptance claimed. Full routed detail, changed payment
+pocket/date/category and lost-response reconciliation remain outside this slice.
+
+Files: browser mutation script, this walkthrough, CURRENT_STATE, CURRENT_SPRINT
+and HANDOFF; earlier uncommitted detail-test changes preserved. No commit/push.
+
 ## Scope
 
 PR-003/005/007/008/009 and DEC-024: a payment from NFC reduces NFC money while

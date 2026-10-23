@@ -2,7 +2,26 @@
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
 Status: Phase 7C.4 In Progress — Report Sections Integrated in Connected Preview; Reconciliation Pending
-Current checkpoint: Phase 7C.4 income/transfer reconciliation pushed as `5016bd1`
+Current checkpoint: Phase 7C.4 pocket detail and Home privacy icon pushed as `722f894`
+
+2026-10-23: attention-to-detail navigation aligned with carousel; preserved
+privacy and focus restoration. Home browser regression passed; same 7C.4 scope.
+
+2026-10-23: added detail status/usage using validated server budget and existing
+ProgressBar. Browser covers available/zero/missing/overbudget/privacy; type-check
+and both builds passed. Same phase, local implementation awaiting review.
+
+2026-10-23: expanded real mutation reconciliation to pocket detail at all existing
+expense/edit/income/top-up lifecycle checkpoints. Passed after correcting a test
+race on transfer restore. Same-phase test/docs only; routed detail still pending.
+
+2026-10-23: pocket-detail network retry versus session-expiry browser assertions
+passed. Same-phase test/docs continuation; no application changes or phase
+completion claimed. Previous uncommitted verification changes preserved.
+
+2026-10-22: detail verification expanded after clean-tree commit/push. Cash/Food,
+missing allocation, Tab/Shift+Tab, close/focus/body-scroll restoration and stale
+NFC response isolation passed. Test/docs only; full routed detail remains pending.
 
 2026-10-22 continuation: [Pocket detail dialog](../walkthroughs/phase-7c4-pocket-detail-preview.md)
 implemented read-only in connected preview, with independent balance/budget,

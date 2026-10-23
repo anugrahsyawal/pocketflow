@@ -4,6 +4,28 @@ Last updated: 2026-09-28
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- 2026-10-23 attention navigation: review “Lihat pocket” from warning cards.
+  It opens read-only detail with Home privacy, not the settings anchor. Existing
+  editing/recovery forms unchanged. Same-phase local work, not full routing.
+
+- 2026-10-23 detail progress: status and usage now visible in read-only dialog.
+  Review Transportation, NFC zero allocation, Cash missing allocation. Existing
+  ProgressBar/tokens reused; no backend changes. Verified locally, not committed.
+
+- 2026-10-23 mutation continuation: detail dialogs reconcile with Home/report/CSV
+  after existing expense edits and expense/income/top-up lifecycles. Final fixture
+  balances restored; three test rows archived. Review mutation walkthrough and
+  local test/docs diff; no new implementation or phase completion claimed.
+
+- 2026-10-23: pocketDetail.cjs also verifies network failure remains retryable
+  and simulated 401 unmounts protected detail/Home and restores login/scroll.
+  Passed against restarted disposable preview services. Test/docs remain local;
+  no commit/push authorization in this continuation. Full routed detail pending.
+
+- 2026-10-22 continuation: `722f894` committed/pushed; tree clean before extending
+  pocketDetail.cjs. Cash/Food and delayed-response/keyboard assertions pass with
+  no financial writes. Review expanded evidence; new test/docs changes are local.
+
 - 2026-10-22: [Pocket detail preview](../walkthroughs/phase-7c4-pocket-detail-preview.md)
   continues same phase with existing uncommitted icon fix. Review per-wallet
   dialogs and privacy; settings/recovery unchanged. No commit/push this turn.

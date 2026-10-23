@@ -1,10 +1,39 @@
 # PocketFlow Current State
 
-Last updated: 2026-10-22
+Last updated: 2026-10-23
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `5016bd1` (Phase 7C.4 income/transfer reconciliation, pushed to origin/codex/audit-pocketflow-documentation)
+Latest committed checkpoint: `722f894` (Phase 7C.4 pocket detail and Home privacy icon, pushed to origin/codex/audit-pocketflow-documentation)
 
 ## Executive state
+
+2026-10-23 navigation continuation: Home attention actions now open the same
+privacy-aware read-only pocket dialog as carousel actions, rather than jumping
+to settings. Correct pocket, Escape/focus and hidden nominal verified in browser.
+No full route cutover or mutation behavior change; local changes remain pending.
+
+2026-10-23 detail completion slice: read-only dialog now shows server budget
+status and usage progress (backlog 2.1), preserving missing versus zero allocation.
+Type-check, both builds and browser cases passed; full routed detail still pending.
+Existing uncommitted verification retained. See pocket-detail walkthrough.
+
+2026-10-23 mutation continuation: pocket detail now verified after expense edits
+and expense/income/top-up lifecycle changes, alongside Home/report/CSV. Corrected
+test wait for neutral-total transfers; final active fixture restored with three
+recoverable archived test records. Test/docs only, no application changes.
+See [mutation evidence](../walkthroughs/phase-7c4-home-mutation-reconciliation.md).
+
+2026-10-23: continued the uncommitted pocket-detail verification within 7C.4.
+Browser network failure/retry preserves authentication; simulated 401 removes
+dialog/Home/visible financial data and restores login and body scrolling.
+No production-code change. Existing preview services restarted; only disposable
+preview database reseeded. See [evidence](../walkthroughs/phase-7c4-pocket-detail-preview.md).
+
+2026-10-22 verification continuation: `722f894` committed/pushed with PO authority;
+clean working tree confirmed before extending the pocket-detail browser test.
+Cash/Food balances, missing allocation, keyboard/close, and delayed NFC response
+isolation passed. Test/documentation-only continuation remains local. Earlier
+uncommitted notes below describe historical checkpoints, not current Git state.
+See [detail verification](../walkthroughs/phase-7c4-pocket-detail-preview.md).
 
 2026-10-22: [Read-only pocket detail](../walkthroughs/phase-7c4-pocket-detail-preview.md)
 now opens independently for each Home carousel member. Server balances/budget,
