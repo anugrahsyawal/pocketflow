@@ -15,6 +15,7 @@ import { ConnectedHistory } from './ConnectedHistory';
 import { ConnectedPeriodExport } from './ConnectedPeriodExport';
 import { TransactionCreateForm } from './TransactionCreateForm';
 import { ConnectedHomeSnapshot } from './ConnectedHomeSnapshot';
+import { ConnectedNavigation } from './ConnectedNavigation';
 
 export function ConnectedPockets({ownerId,client,onExpired}:{ownerId:string;client:SessionClient;onExpired:()=>void}) {
   const [data,setData] = useState<MasterData | null>(null);
@@ -37,7 +38,7 @@ export function ConnectedPockets({ownerId,client,onExpired}:{ownerId:string;clie
     });
     return () => { active = false; };
   },[client,onExpired,refresh]);
-  return <section aria-label="Pocket server" className="space-y-4">
+  return <section aria-label="Pocket server" className="space-y-4 pb-24">
     <div className="flex items-center justify-between gap-3">
       <h2 className="font-display text-headline-md">Pocket saya</h2>
       <Button size="sm" variant="secondary" disabled={!!editing || creationLocked || expenseLocked || lifecycleLocked || (!data?.isSetupCompleted && !error)} onClick={reload}>Muat ulang</Button>
@@ -47,6 +48,7 @@ export function ConnectedPockets({ownerId,client,onExpired}:{ownerId:string;clie
     {error ? <p role="alert" className="rounded-card bg-bahaya-soft p-4 text-bahaya">{error} Data belum ditampilkan.</p>
       : !data ? <p role="status">Memuat pocket server…</p>
       : !data.isSetupCompleted ? <ConnectedSetup client={client} onExpired={onExpired} onComplete={()=>setRefresh(n=>n+1)} /> : <>
+        <ConnectedNavigation blocked={!!editing||creationLocked||expenseLocked||lifecycleLocked}/>
         <ConnectedHomeSnapshot data={data} client={client} onExpired={onExpired}/>
         <p className="text-body-sm text-text-secondary">Periode {data.period?.startDate} — {data.period?.endDate}</p>
         {data.period&&<ConnectedPeriodExport ownerId={ownerId} client={client} currentPeriod={data.period} onExpired={onExpired} onExpense={()=>setExpenseRequest(n=>n+1)} expenseBlocked={!data.pockets.length||!!editing||creationLocked||expenseLocked||lifecycleLocked}/>}
@@ -57,7 +59,8 @@ export function ConnectedPockets({ownerId,client,onExpired}:{ownerId:string;clie
         <fieldset disabled={!!editing||expenseLocked||lifecycleLocked} className="min-w-0 border-0 p-0 m-0">
           <CategoryCreateForm ownerId={ownerId} pockets={data.pockets} client={client} onReload={reload} onExpired={onExpired} onLock={setCreationLocked} />
         </fieldset>
-        <fieldset disabled={creationLocked||expenseLocked||lifecycleLocked} className="min-w-0 border-0 p-0 m-0 space-y-4">
+        <fieldset id="server-pocket-list" tabIndex={-1} disabled={creationLocked||expenseLocked||lifecycleLocked} className="min-w-0 border-0 p-0 m-0 space-y-4">
+        <h2 className="font-display text-headline-md">Pocket dan pengaturan</h2>
         {data.pockets.length === 0 && <p className="rounded-card bg-surface p-5">Belum ada pocket aktif di server.</p>}
         {data.pockets.map(p => {
           const owner = p.budgetOwnerPocketId ? data.pockets.find(other=>other.id===p.budgetOwnerPocketId) : null;

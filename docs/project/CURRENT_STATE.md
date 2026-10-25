@@ -1,10 +1,52 @@
 # PocketFlow Current State
 
-Last updated: 2026-10-23
+Last updated: 2026-10-25
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `722f894` (Phase 7C.4 pocket detail and Home privacy icon, pushed to origin/codex/audit-pocketflow-documentation)
+Latest committed checkpoint: `63c4b40` (Phase 7C.4 detail budget/navigation and reconciliation, pushed to origin/codex/audit-pocketflow-documentation)
 
 ## Executive state
+
+2026-10-25: bottom-nav recovery integration passed real create/edit/archive
+lost-response scenario. Pending edit/archive locks nav; explicit acknowledgement
+unlocks it. Active fixture total restored, one QA row archived. Test/docs only;
+navigation checkpoint ready for review/commit, not separate-page completion.
+
+2026-10-24: connected bottom section navigation added for Home/Pocket/Add/History/
+Reports with focus targets and existing form locks. All owners remain mounted;
+this is not separate-page routing. See [navigation evidence](../walkthroughs/phase-7c4-connected-navigation.md).
+
+2026-10-24 final URL-slice review: four browser regressions including real mutation
+reconciliation, type-check and both builds passed. Ready for PO review/commit as
+a bounded URL-backed overlay; next implementation is connected app navigation,
+not more indefinite recovery variants. Full Phase 7C.4 still open. See navigation
+walkthrough for checklist, results and limits. No new application source this turn.
+
+2026-10-24 archive recovery: navigation/reload preserves a real committed archive
+with lost response; explicit identical retry increments revision once and clears
+journal. One recoverable archived row, active fixture total restored. URL slice
+has create/edit/archive uncertainty evidence; ready for review, not phase closure.
+
+2026-10-24 edit recovery: real committed/lost PATCH survives pocket navigation
+and reload with identical journal; explicit retry changes revision only once.
+Detail reflects edited balance; final archive restores fixture total. Test/docs
+only, no application change. See pocket-navigation walkthrough; local work remains.
+
+2026-10-24: create-expense lost-response navigation verified with real disposable
+API commit and identical explicit retry. Journal survives back/forward/reload;
+no automatic duplicate send; one row created, then archived to restore total.
+See [navigation evidence](../walkthroughs/phase-7c4-pocket-navigation.md). Other
+edit/lifecycle/batch recovery variants not covered by this new test. Local only.
+
+2026-10-23: [Connected pocket URL navigation](../walkthroughs/phase-7c4-pocket-navigation.md)
+adds hash URLs/back/forward/refresh to existing read-only dialogs without unmounting
+session/draft owners. Builds and three browser scripts passed. Full app-shell
+navigation and navigation during actual lost-response recovery remain pending.
+
+2026-10-23 consolidated checkpoint: `63c4b40` pushed; clean tree before review.
+27 targeted tests and Home/detail/report-CSV browser regressions passed. Current
+delivery/remaining scope and next connected-navigation boundary recorded in
+[checkpoint review](../walkthroughs/phase-7c4-checkpoint-review.md). Older local/
+pending notes below are checkpoint history. No production cutover/phase closure.
 
 2026-10-23 navigation continuation: Home attention actions now open the same
 privacy-aware read-only pocket dialog as carousel actions, rather than jumping

@@ -2,7 +2,40 @@
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
 Status: Phase 7C.4 In Progress — Report Sections Integrated in Connected Preview; Reconciliation Pending
-Current checkpoint: Phase 7C.4 pocket detail and Home privacy icon pushed as `722f894`
+Current checkpoint: Phase 7C.4 detail budget/navigation and reconciliation pushed as `63c4b40`
+
+2026-10-25: bottom-nav and durable recovery combined browser run passed;
+lock/unlock assertions added. Same 7C.4 checkpoint ready for review/commit.
+No phase advance, production cutover or separate-screen refactor performed.
+
+2026-10-24: connected section navigation implemented as an intermediate step,
+preserving shared forms/recovery and blocking navigation buttons during active
+form locks. Full screen separation remains pending; no phase completion claimed.
+
+2026-10-24: URL-overlay slice consolidated review passed four browser scripts,
+type-check and both builds. Ready for review/commit; next bounded implementation
+is connected app navigation preserving existing session/recovery ownership.
+
+2026-10-24: archive lost-response navigation/reload/retry passed with one revision
+increment and restored fixture total. URL slice ready for review with create/edit/
+archive coverage; restore/delete/batch variants not claimed by this script.
+
+2026-10-24: amount-edit lost-response navigation/reload/retry passed; identical
+payload/revision, one persisted change and restored fixture total. Same-phase
+test/docs extension, not full navigation or all recovery-variant acceptance.
+
+2026-10-24: real lost-response expense journal survives detail URL navigation and
+reload; explicit same-payload retry produces one row. Browser test passed and
+fixture total restored by archive. Test/docs continuation, no phase closure.
+
+2026-10-23: URL-backed pocket overlay implemented, preserving draft/privacy during
+history navigation. Direct refresh and unavailable IDs verified. See
+[navigation walkthrough](../walkthroughs/phase-7c4-pocket-navigation.md). Local only.
+
+2026-10-23: [consolidated checkpoint review](../walkthroughs/phase-7c4-checkpoint-review.md)
+completed after commit/push. 27 targeted tests plus three browser regressions
+passed; connected-only navigation is the next implementation boundary. No phase
+advance or production acceptance. New review documentation remains local.
 
 2026-10-23: attention-to-detail navigation aligned with carousel; preserved
 privacy and focus restoration. Home browser regression passed; same 7C.4 scope.

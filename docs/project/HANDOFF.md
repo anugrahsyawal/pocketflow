@@ -4,6 +4,41 @@ Last updated: 2026-09-28
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- 2026-10-25: new bottom navigation validated with real create/edit/archive
+  uncertain-response recovery. Lock/unlock, journal, retry and restored balances
+  pass. Recommend review/authorized commit of accumulated navigation checkpoint
+  before broader layout refactor; do not auto-commit on plain “lanjut”.
+
+- 2026-10-24: connected bottom section navigation now available, with existing
+  form locks and local SVG icons. Review section focus/mobile spacing before full
+  page separation. Existing local implementation changes preserved, no commit.
+
+- 2026-10-24: final URL-slice regressions/builds passed. Review/commit this bounded
+  slice before wider connected app navigation. Three new QA rows archived, active
+  totals restored. No commit/push authorization in this continuation.
+
+- 2026-10-24 archive recovery: expanded test passed for committed archive with
+  lost response, history navigation/reload and explicit identical retry. Review
+  URL slice now supported by create/edit/archive evidence; no auto commit/push.
+
+- 2026-10-24 edit recovery: expanded navigation recovery script passes committed
+  PATCH/lost response, navigation/reload, identical retry and single revision.
+  Fixture total restored via archive. Review local navigation changes; no commit.
+
+- 2026-10-24: pocketNavigationRecovery.cjs passed real committed/lost-response
+  expense navigation/reload/retry without duplication. One archived QA row left;
+  active total restored. Review navigation slice; other recovery variants remain
+  outside this test. No source change or commit/push this turn.
+
+- 2026-10-23: connected-only hash pocket navigation implemented and verified.
+  Review back/forward/direct refresh; next verify real pending recovery survives
+  navigation. No standalone full-app route cutover or commit/push claimed.
+
+- 2026-10-23: `63c4b40` committed/pushed. [Checkpoint review](../walkthroughs/phase-7c4-checkpoint-review.md)
+  consolidates delivered/pending scope after 27 tests and three browser passes.
+  Next: connected-only pocket navigation preserving session/recovery ownership;
+  never route server IDs into legacy local-store pages. Review docs local only.
+
 - 2026-10-23 attention navigation: review “Lihat pocket” from warning cards.
   It opens read-only detail with Home privacy, not the settings anchor. Existing
   editing/recovery forms unchanged. Same-phase local work, not full routing.

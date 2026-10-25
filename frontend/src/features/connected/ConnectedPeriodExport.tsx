@@ -35,7 +35,7 @@ export function ConnectedPeriodExport({ownerId,client,currentPeriod,onExpired,on
         `${sessionErrorMessage(cause)} Tidak ada file yang diunduh.`);
     }finally{running.current=false;if(active.current)setBusy(false);}
   };
-  return <section aria-label="Export periode server" className="space-y-4 rounded-card border border-border bg-surface p-5">
+  return <section id="server-reports" tabIndex={-1} aria-label="Export periode server" className="space-y-4 rounded-card border border-border bg-surface p-5">
     <div className="flex flex-wrap items-center justify-between gap-3">
       <h2 className="font-display text-headline-md">Laporan</h2>
       <Button size="sm" variant="secondary" aria-label="Export CSV" disabled={reportState.loading||!!reportState.error} loading={busy} onClick={()=>void download()} icon={<span aria-hidden="true" className="material-symbols-rounded text-lg">download</span>}>Export CSV</Button>

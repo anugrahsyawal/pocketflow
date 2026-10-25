@@ -89,7 +89,7 @@ export function TransactionCreateForm({ownerId,pockets,client,onReload,onResolve
       else setMessage('Penghentian belum terkonfirmasi atau permintaan berbeda dengan catatan server. Catatan tetap disimpan; coba konfirmasi lagi setelah koneksi pulih.');
     }finally{running.current=false;if(active.current)setBusy(false);}
   };
-  return <section ref={entry} tabIndex={-1} aria-label="Tambah transaksi server" className="space-y-3 rounded-card border border-border bg-surface p-5">
+  return <section id="server-entry" ref={entry} tabIndex={-1} aria-label="Tambah transaksi server" className="space-y-3 rounded-card border border-border bg-surface p-5">
     <h2 className="font-display text-headline-md">{record?'Transaksi tertunda':opened?`Tambah ${noun}`:'Tambah transaksi'}</h2>
     {message&&<p role="alert" className="text-body-sm text-bahaya break-words">{message}</p>}
     {!ready?<Button disabled={busy} variant="secondary" onClick={()=>void inspect()}>Periksa pemulihan transaksi</Button>:batch?<>

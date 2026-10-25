@@ -8,7 +8,11 @@ checkpoint.
 
 ## Product authority
 
-Latest local verification: [Connected pocket detail preview](walkthroughs/phase-7c4-pocket-detail-preview.md).
+Latest local review: [Phase 7C.4 consolidated checkpoint](walkthroughs/phase-7c4-checkpoint-review.md).
+
+Latest implementation: [Connected pocket URL navigation](walkthroughs/phase-7c4-pocket-navigation.md).
+
+Current continuation: [Connected section navigation](walkthroughs/phase-7c4-connected-navigation.md).
 
 - [Product vision](product/PRODUCT_VISION.md)
 - [Product requirements](product/PRODUCT_REQUIREMENTS.md)

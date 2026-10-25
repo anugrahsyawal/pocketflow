@@ -6,16 +6,18 @@ import type {SessionClient} from '@/lib/api/sessionClient';
 import {ConnectedHomeRecent} from './ConnectedHomeRecent';
 import {ProgressBar} from '@/components/ui/ProgressBar';
 import {ConnectedPocketDetail} from './ConnectedPocketDetail';
+import {Modal} from '@/components/ui/Modal';
+import {usePocketNavigation} from './usePocketNavigation';
 const labels={aman:'Aman',waspada:'Waspada',bahaya:'Bahaya',overbudget:'Overbudget','tanpa-alokasi':'Tanpa alokasi'};
 
 export function ConnectedHomeSnapshot({data,client,onExpired}:{data:MasterData;client:SessionClient;onExpired:()=>void}) {
   const [hidden,setHidden]=useState(false);
-  const [selectedId,setSelectedId]=useState<string|null>(null);
+  const {pocketId:selectedId,open:setSelectedId,close:closeDetail}=usePocketNavigation();
   const selected=data.pockets.find(p=>p.id===selectedId);
   const snapshot=homeSnapshot(data,jakartaDate());
   const attention=homeAttention(data.pockets);
   const amount=(value:number|null)=>hidden?'••••••••':value===null?'Belum tersedia':formatRupiah(value);
-  return <section aria-label="Ringkasan Beranda server" className="space-y-3">
+  return <section id="server-home" tabIndex={-1} aria-label="Ringkasan Beranda server" className="space-y-3">
     <h2 className="font-display text-headline-md">Beranda</h2>
     <p className="text-body-sm text-text-secondary">Periode {data.period?.startDate} — {data.period?.endDate}</p>
     <div className="rounded-card border border-border bg-surface p-5 shadow-card space-y-4">
@@ -71,7 +73,8 @@ export function ConnectedHomeSnapshot({data,client,onExpired}:{data:MasterData;c
       </div>:<p className="rounded-card border border-border bg-surface-container-low p-4 text-body-sm">{attention.allSafe?'Semua pocket yang dipantau masih aman.':data.pockets.length===0?'Belum ada pocket aktif untuk dipantau.':'Belum ada peringatan terdeteksi. Sebagian budget belum tersedia atau tanpa alokasi; kondisi aman belum dapat dipastikan.'}</p>}
     </section>
     <ConnectedHomeRecent client={client} data={data} hidden={hidden} onExpired={onExpired}/>
-    {selected&&<ConnectedPocketDetail pocket={selected} data={data} client={client} hidden={hidden} onExpired={onExpired} onClose={()=>setSelectedId(null)}/>}
+    {selected&&<ConnectedPocketDetail key={selected.id} pocket={selected} data={data} client={client} hidden={hidden} onExpired={onExpired} onClose={closeDetail}/>}
+    {selectedId!==null&&!selected&&<Modal isOpen onClose={closeDetail} title="Pocket tidak tersedia"><p>Pocket tidak ditemukan atau telah diarsipkan. Tutup detail untuk kembali ke Beranda.</p></Modal>}
     <p className="text-xs text-text-secondary">Pratinjau ringkasan Beranda. Sembunyikan nominal mencakup carousel, dialog detail, dan transaksi terbaru; laporan serta pengaturan pocket di bawah tetap terlihat. Detail baca-saja tersedia dari carousel. Navigasi halaman detail lengkap belum terintegrasi.</p>
   </section>;
 }
