@@ -22,6 +22,7 @@ assert.deepEqual(parseCsv('"a","b"\r\n"x,y","line\r\n""quote"""'),[['a','b'],['x
   await page.getByLabel('Email',{exact:true}).fill('preview@example.com');
   await page.getByLabel('Password',{exact:true}).fill('Disposable-preview-123!');
   await page.getByRole('button',{name:'Masuk ke server',exact:true}).click();
+  await page.getByRole('navigation',{name:'Navigasi server'}).getByRole('button',{name:'Laporan',exact:true}).click();
   const panel=page.getByRole('region',{name:'Export periode server'}),summary=panel.getByLabel('Ringkasan laporan server');
   await summary.waitFor();
   page.on('request',r=>{if(r.url().includes('/v1/')&&r.method()!=='GET')writes.push(r.url());});

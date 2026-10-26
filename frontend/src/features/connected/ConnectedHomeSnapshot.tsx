@@ -10,7 +10,7 @@ import {Modal} from '@/components/ui/Modal';
 import {usePocketNavigation} from './usePocketNavigation';
 const labels={aman:'Aman',waspada:'Waspada',bahaya:'Bahaya',overbudget:'Overbudget','tanpa-alokasi':'Tanpa alokasi'};
 
-export function ConnectedHomeSnapshot({data,client,onExpired}:{data:MasterData;client:SessionClient;onExpired:()=>void}) {
+export function ConnectedHomeSnapshot({data,client,onExpired,onHistory}:{data:MasterData;client:SessionClient;onExpired:()=>void;onHistory?:()=>void}) {
   const [hidden,setHidden]=useState(false);
   const {pocketId:selectedId,open:setSelectedId,close:closeDetail}=usePocketNavigation();
   const selected=data.pockets.find(p=>p.id===selectedId);
@@ -72,9 +72,9 @@ export function ConnectedHomeSnapshot({data,client,onExpired}:{data:MasterData;c
         </article>)}
       </div>:<p className="rounded-card border border-border bg-surface-container-low p-4 text-body-sm">{attention.allSafe?'Semua pocket yang dipantau masih aman.':data.pockets.length===0?'Belum ada pocket aktif untuk dipantau.':'Belum ada peringatan terdeteksi. Sebagian budget belum tersedia atau tanpa alokasi; kondisi aman belum dapat dipastikan.'}</p>}
     </section>
-    <ConnectedHomeRecent client={client} data={data} hidden={hidden} onExpired={onExpired}/>
+    <ConnectedHomeRecent client={client} data={data} hidden={hidden} onExpired={onExpired} onHistory={onHistory}/>
     {selected&&<ConnectedPocketDetail key={selected.id} pocket={selected} data={data} client={client} hidden={hidden} onExpired={onExpired} onClose={closeDetail}/>}
     {selectedId!==null&&!selected&&<Modal isOpen onClose={closeDetail} title="Pocket tidak tersedia"><p>Pocket tidak ditemukan atau telah diarsipkan. Tutup detail untuk kembali ke Beranda.</p></Modal>}
-    <p className="text-xs text-text-secondary">Pratinjau ringkasan Beranda. Sembunyikan nominal mencakup carousel, dialog detail, dan transaksi terbaru; laporan serta pengaturan pocket di bawah tetap terlihat. Detail baca-saja tersedia dari carousel. Navigasi halaman detail lengkap belum terintegrasi.</p>
+    <p className="text-xs text-text-secondary">Pratinjau ringkasan Beranda. Sembunyikan nominal mencakup carousel, dialog detail, dan transaksi terbaru; tidak mencakup layar Laporan atau Pocket. Detail baca-saja tersedia dari carousel.</p>
   </section>;
 }

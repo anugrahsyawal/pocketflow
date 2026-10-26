@@ -5,11 +5,12 @@ import { ApiError, categoryEditFields, SessionClient } from '@/lib/api/sessionCl
 import { CategoryAttempt, CategoryAttemptStore, CategoryStorageError } from '@/lib/api/categoryAttempt';
 import type { ServerPocket } from '@/lib/api/masterData';
 
-export function CategoryCreateForm({ownerId,pockets,client,onReload,onExpired,onLock}:{
-  ownerId:string;pockets:ServerPocket[];client:SessionClient;onReload:()=>void;onExpired:()=>void;onLock:(locked:boolean)=>void;
+export function CategoryCreateForm({ownerId,pockets,client,onReload,onExpired,onLock,onRecovery}:{
+  ownerId:string;pockets:ServerPocket[];client:SessionClient;onReload:()=>void;onExpired:()=>void;onLock:(locked:boolean)=>void;onRecovery?:(needed:boolean)=>void;
 }) {
   const [store]=useState(()=>new CategoryAttemptStore());
   const [pending,setPending]=useState<CategoryAttempt|null>(null),[ready,setReady]=useState(false),[opened,setOpened]=useState(false);
+  useEffect(()=>{onRecovery?.(!ready||!!pending);},[ready,pending,onRecovery]);
   const [name,setName]=useState(''),[emoji,setEmoji]=useState('🏷️'),[pocketId,setPocketId]=useState(pockets[0]?.id??'');
   const [busy,setBusy]=useState(false),[message,setMessage]=useState('');
   const selectId=useId(),active=useRef(true),running=useRef(false);

@@ -68,6 +68,53 @@ navigation/URL navigation/Home browser regressions passed, diff check passed.
 
 ## Limits / review
 
+### Management navigation review follow-up (2026-10-25)
+
+Moved the `server-pocket-list` focus target from the inner pocket fieldset to
+the complete management section. Category creation now belongs to the same
+navigation destination rather than being above it. Independent fieldsets and
+parent lock ownership are unchanged. This supersedes the exact-JSX statement
+for the earlier extraction only in the wrapper/target placement.
+
+Expanded connectedNavigation.cjs verifies category draft locks navigation,
+reload and pocket edits; Cash/NFC budget, pocket archive, opening balance and
+classification forms lock navigation/category creation and unlock on cancel.
+No save/confirmation is submitted and no post-login write requests occur.
+First run timed out because the test used the product's default NFC name rather
+than the fixture's `NFC Card`; corrected the test selector, then rerun passed.
+Pocket URL regression also passed. Type-check, local and connected builds pass
+(154 modules); git diff --check passes. Existing dev server used, no restart.
+Console/page-error assertions passed; navigation screenshot visually inspected.
+No new manual PO acceptance or full backend/mutation suite is claimed.
+
+Changed this turn: ConnectedPocketManagement.tsx, connectedNavigation.cjs,
+this walkthrough and current state/sprint/handoff. Prior local extraction stays
+uncommitted. Review the combined management boundary before committing; full
+screen separation remains pending in the same phase.
+
+### Follow-up: management presentation boundary (2026-10-25)
+
+Checkpoint above committed/pushed as `780bc69` with PO authorization. The next
+local slice moves pocket/category management JSX from ConnectedPockets.tsx into
+ConnectedPocketManagement.tsx. No business rules, APIs, wallet budget ownership,
+archive behavior or design changes. Parent retains every shared lock, session
+and reload callback. Source comparison against HEAD confirms extracted JSX is
+identical (line endings normalized).
+
+Verification after extraction: `npx tsc --noEmit`, `npm run build` and
+`npx vite build --mode connected` passed (154 modules). Existing local dev/API
+servers used; `node tests/browser/connectedNavigation.cjs` and
+`node tests/browser/pocketNavigation.cjs` passed focus, privacy, draft/edit locks,
+URL/back/forward/reload, invalid/archived pocket, mobile width, console and
+no-post-login-write assertions. Agent inspected new navigation screenshot;
+five controls remain readable. Browser checks are automated, not PO manual
+acceptance. Full backend suite and mutation recovery were not rerun for this
+presentation-only extraction. Diff whitespace check also passed.
+
+Files: two connected components plus current state, sprint, handoff and this
+walkthrough. Refactor remains uncommitted for review. Separate screens and
+production cutover remain pending; this is preparation within Phase 7C.4.
+
 Not separate pages: all sections still exist on the long preview surface and
 scrolling can expose them. No active-page indicator is claimed. Draft protection
 blocks navigation buttons but does not prohibit manually scrolling. Shared modal

@@ -4,6 +4,36 @@ Last updated: 2026-09-28
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- 2026-10-26 latest: homeMutationReconciliation.cjs and reportReconciliation.cjs
+  adapted and passed; new connectedEmptyReport.cjs passes both current Add and
+  historical return actions without server writes. Active balances restored,
+  three new QA rows archived. Next is PO review/authorized commit of accumulated
+  mounted-screen checkpoint, not another repeated recovery gate. Full-suite and
+  cutover limitations remain explicit in connected-screens walkthrough.
+
+- 2026-10-26: pocketNavigationRecovery.cjs now screen-aware and passed against
+  freshly seeded disposable preview. Real lost create/edit/archive responses
+  retry identically with one financial effect; final active baseline restored,
+  one QA row archived. Next remaining gate: broader Home/report/CSV reconciliation
+  and empty-report Add shortcut; not another repeat of the same recovery test.
+
+- 2026-10-25 screen continuation: five mounted screens now replace the combined
+  surface. Read connected-screens walkthrough first. Next: adapt real mutation
+  recovery/reconciliation scripts to navigation and rerun, including empty-report
+  Add shortcut. Current synthetic journal tests verify visibility, not server
+  idempotency again. All changes local; no authorized commit/push this turn.
+
+- 2026-10-25 latest review: Pocket target now wraps category creation as well as
+  pocket settings. Expanded management lock/cancel browser tests pass, no writes;
+  type-check, both builds and URL regression pass. Review/commit the combined
+  local refactor before broader screen separation. No auto-commit performed.
+
+- 2026-10-25 latest: authorized checkpoint committed/pushed as `780bc69`.
+  Subsequent local extraction adds ConnectedPocketManagement; parent keeps all
+  shared locks and refresh ownership. JSX unchanged, type-check/both builds and
+  connectedNavigation/pocketNavigation browser regressions pass. Review this
+  structural boundary before full page separation. No new phase or cutover.
+
 - 2026-10-25: new bottom navigation validated with real create/edit/archive
   uncertain-response recovery. Lock/unlock, journal, retry and restored balances
   pass. Recommend review/authorized commit of accumulated navigation checkpoint

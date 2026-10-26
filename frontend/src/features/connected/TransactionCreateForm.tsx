@@ -15,10 +15,11 @@ function jakartaNow(){
   const value=(type:string)=>parts.find(p=>p.type===type)!.value;
   return {date:`${value('year')}-${value('month')}-${value('day')}`,time:`${value('hour')}:${value('minute')}`};
 }
-export function TransactionCreateForm({ownerId,pockets,client,onReload,onResolved,onExpired,onLock,expenseRequest=0}:{ownerId:string;pockets:ServerPocket[];client:SessionClient;onReload:()=>void;onResolved:(status:'cancelled'|'committed')=>void;onExpired:()=>void;onLock:(locked:boolean)=>void;expenseRequest?:number}){
+export function TransactionCreateForm({ownerId,pockets,client,onReload,onResolved,onExpired,onLock,onRecovery,expenseRequest=0}:{ownerId:string;pockets:ServerPocket[];client:SessionClient;onReload:()=>void;onResolved:(status:'cancelled'|'committed')=>void;onExpired:()=>void;onLock:(locked:boolean)=>void;onRecovery?:(needed:boolean)=>void;expenseRequest?:number}){
   const [store]=useState(()=>new TransactionAttemptStore()),[now]=useState(jakartaNow),id=useId();
   const [record,setPending]=useState<TransactionRecoveryRecord|null>(null),[ready,setReady]=useState(false),[opened,setOpened]=useState(false);
   const pending=record?.operation==='create'?record:null;
+  useEffect(()=>{onRecovery?.(!ready||!!pending);},[ready,pending,onRecovery]);
   const batch=record?.operation==='batch'?record:null;
   const lifecycle=record&&record.operation!=='create'&&record.operation!=='batch'?record:null;
   const [pocketId,setPocket]=useState(pockets[0]?.id??''),[categoryId,setCategory]=useState(''),[amount,setAmount]=useState('');

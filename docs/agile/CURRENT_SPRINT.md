@@ -2,7 +2,29 @@
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
 Status: Phase 7C.4 In Progress — Report Sections Integrated in Connected Preview; Reconciliation Pending
-Current checkpoint: Phase 7C.4 detail budget/navigation and reconciliation pushed as `63c4b40`
+Current checkpoint: Phase 7C.4 connected navigation and durable recovery pushed as `780bc69`
+
+2026-10-26 latest: Home/detail/report/CSV mutation reconciliation and empty-report
+navigation passed on mounted screens. Bounded checkpoint ready for PO review;
+full phase acceptance remains separate. No additional feature/phase started.
+
+2026-10-26: screen-aware real create/edit/archive uncertainty/retry regression
+passed, including reload, nav locks and restored active balances. Test/docs-only
+follow-up; broader screen reconciliation remains open, no phase closure.
+
+2026-10-25 latest continuation: five separate mounted screens implemented locally;
+navigation/privacy/form locks and synthetic recovery visibility browser coverage
+added. Full page URL routing and real-mutation screen reconciliation remain open.
+No phase advance or production cutover; see connected-screens walkthrough.
+
+2026-10-25 latest review: management navigation now includes category creation;
+expanded read-only browser lock/cancel checks and URL regression pass, as do
+type-check and both builds. Combined refactor remains local, ready for review.
+
+2026-10-25 latest: pocket/category management presentation extracted while parent
+retains lock/reload ownership. No behavior/product change; exact JSX comparison,
+type-check, local/connected builds and two browser navigation regressions passed.
+Refactor is local and ready for review, not full page separation or phase closure.
 
 2026-10-25: bottom-nav and durable recovery combined browser run passed;
 lock/unlock assertions added. Same 7C.4 checkpoint ready for review/commit.

@@ -6,7 +6,7 @@ import {formatRupiah} from '@/lib/currency';
 import {TRANSFER_TYPE_LABELS,INCOME_SOURCE_LABELS} from '@/data/constants';
 
 /** A bounded server-ordered preview, never a balance or complete ledger. */
-export function ConnectedHomeRecent({client,data,hidden,onExpired,pocketId}:{client:SessionClient;data:MasterData;hidden:boolean;onExpired:()=>void;pocketId?:string}) {
+export function ConnectedHomeRecent({client,data,hidden,onExpired,pocketId,onHistory}:{client:SessionClient;data:MasterData;hidden:boolean;onExpired:()=>void;pocketId?:string;onHistory?:()=>void}) {
   const [rows,setRows]=useState<ServerTransaction[]|null>(null);
   const [error,setError]=useState(''),[retry,setRetry]=useState(0);
   useEffect(()=>{
@@ -22,7 +22,7 @@ export function ConnectedHomeRecent({client,data,hidden,onExpired,pocketId}:{cli
   const categories=pockets.flatMap(p=>[...p.categories,...p.archivedCategories]);
   const pocketName=(id:string|null)=>pockets.find(p=>p.id===id)?.name??'Pocket tidak tersedia';
   return <section aria-label={pocketId?'Transaksi terbaru pocket':'Transaksi terbaru Beranda'} className="rounded-card border border-border bg-surface p-4 space-y-3">
-    <div className="flex flex-wrap justify-between items-center gap-2"><h3 className="font-display text-headline-sm">Transaksi terbaru</h3>{!pocketId&&<a href="#server-history" className="inline-flex min-h-[44px] items-center text-primary font-semibold">Lihat riwayat</a>}</div>
+    <div className="flex flex-wrap justify-between items-center gap-2"><h3 className="font-display text-headline-sm">Transaksi terbaru</h3>{!pocketId&&<a href="#server-history" onClick={event=>{if(onHistory){event.preventDefault();onHistory();}}} className="inline-flex min-h-[44px] items-center text-primary font-semibold">Lihat riwayat</a>}</div>
     <p className="text-xs text-text-secondary">Maksimal 3 transaksi aktif terbaru, lintas periode. {pocketId?'Berdasarkan pocket pembayaran/asal/tujuan, bukan atribusi budget.':'Filter riwayat tidak mengubah ringkasan ini.'}</p>
     {error?<div role="alert" className="text-body-sm space-y-2"><p>{error} Transaksi terbaru belum ditampilkan.</p><button type="button" className="min-h-[44px] text-primary underline" onClick={()=>setRetry(n=>n+1)}>Coba lagi transaksi terbaru</button></div>:rows===null?<p role="status">Memuat transaksi terbaru…</p>:!rows.length?<p className="text-body-sm">Belum ada transaksi aktif. Gunakan form Tambah transaksi di halaman ini untuk mencatat transaksi pertama.</p>:<ul className="divide-y divide-border">
       {rows.map(t=>{

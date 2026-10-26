@@ -12,7 +12,7 @@ Latest local review: [Phase 7C.4 consolidated checkpoint](walkthroughs/phase-7c4
 
 Latest implementation: [Connected pocket URL navigation](walkthroughs/phase-7c4-pocket-navigation.md).
 
-Current continuation: [Connected section navigation](walkthroughs/phase-7c4-connected-navigation.md).
+Current continuation: [Mounted connected screens](walkthroughs/phase-7c4-connected-screens.md).
 
 - [Product vision](product/PRODUCT_VISION.md)
 - [Product requirements](product/PRODUCT_REQUIREMENTS.md)

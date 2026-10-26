@@ -6,15 +6,15 @@ const items=[
   {id:'server-reports',label:'Laporan',path:'M3 3h18v18H3ZM7 17v-5M12 17V7M17 17v-8'},
 ];
 
-/** Section navigation only: never mounts a local router or replaces recovery owners. */
-export function ConnectedNavigation({blocked}:{blocked:boolean}){
+/** Mounted screen navigation: never replaces session or recovery owners. */
+export function ConnectedNavigation({blocked,active,onNavigate}:{blocked:boolean;active:string;onNavigate:(id:string)=>void}){
   return <nav aria-label="Navigasi server" className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-app bg-surface/95 backdrop-blur-xl shadow-nav border-t border-border/60 z-50 pb-safe rounded-t-[24px]">
     <div className="flex items-center justify-around h-[72px] px-2">
-      {items.map(item=><button key={item.id} type="button" aria-label={item.label} disabled={blocked}
+      {items.map(item=><button key={item.id} type="button" aria-label={item.label} aria-current={active===item.id?'page':undefined} disabled={blocked}
         className={item.id==='server-entry'?'flex items-center justify-center w-14 h-14 -mt-6 rounded-full bg-primary text-on-primary ring-[5px] ring-background disabled:opacity-50':'flex flex-col items-center justify-center gap-1 min-w-[56px] min-h-[44px] text-primary disabled:opacity-50'}
-        onClick={()=>{const target=document.getElementById(item.id);if(!target)return;target.scrollIntoView({block:'start'});target.focus({preventScroll:true});}}>
+        onClick={()=>onNavigate(item.id)}>
         <svg aria-hidden="true" viewBox="0 0 24 24" width={item.id==='server-entry'?28:24} height={item.id==='server-entry'?28:24} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={item.path}/></svg>
-        {item.id!=='server-entry'&&<span className="text-[11px] leading-4 font-semibold">{item.label}</span>}
+        {item.id!=='server-entry'&&<span className={`text-[11px] leading-4 font-semibold border-b-2 ${active===item.id?'border-primary':'border-transparent'}`}>{item.label}</span>}
       </button>)}
     </div>
   </nav>;

@@ -1,10 +1,43 @@
 # PocketFlow Current State
 
-Last updated: 2026-10-25
+Last updated: 2026-10-26
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `63c4b40` (Phase 7C.4 detail budget/navigation and reconciliation, pushed to origin/codex/audit-pocketflow-documentation)
+Latest committed checkpoint: `780bc69` (Phase 7C.4 connected navigation and durable recovery, pushed to origin/codex/audit-pocketflow-documentation)
 
 ## Executive state
+
+2026-10-26 latest: cross-screen expense/income/top-up mutation reconciliation
+passed for Home, pocket detail, Reports and CSV, including edit/archive/restore.
+CSV aggregate reconciliation and empty-report Add/return navigation also pass.
+Three additional QA rows archived, active fixture balances restored. Test/docs
+changes only this follow-up; bounded checkpoint ready for PO review, not phase
+closure or production cutover. See connected-screens walkthrough for limits.
+
+2026-10-26: real create/edit/archive lost-response regression adapted to mounted
+screens and passed. Same-payload retries preserve single-row/single-revision
+effects; recovery stays visible after reload and active fixture balance returns
+to baseline. One archived QA row remains in disposable preview. Broader
+Home/report/CSV screen reconciliation and empty-report shortcut remain pending.
+No new application source or commit/push in this follow-up.
+
+2026-10-25 screen continuation: connected preview now separates five mounted
+screens with active navigation and global create/category recovery notices.
+Lifecycle recovery reveals History. No financial rule/API changes. See
+[screen evidence and remaining gates](../walkthroughs/phase-7c4-connected-screens.md).
+Local/uncommitted; real-mutation reconciliation must be adapted to screen navigation
+and rerun before phase closure. Earlier long-page limitations below are historical.
+
+2026-10-25 latest: reviewed management extraction and moved Pocket navigation
+target to encompass category creation too. Expanded browser checks pass category,
+Cash/NFC budget, archive, opening balance and classification cancellation/locks,
+with no writes. Type-check, both builds and URL regression pass. Local checkpoint
+awaits review/authorized commit; no separate-screen completion claimed.
+
+2026-10-25: navigation checkpoint committed/pushed with PO authorization. Next
+same-phase slice extracts pocket/category management into ConnectedPocketManagement;
+shared session, locks and reload remain in ConnectedPockets. Extracted JSX matches
+the checkpoint exactly. Type-check, both builds and two navigation browser scripts
+pass. Local refactor awaits review; full separate-screen routing remains pending.
 
 2026-10-25: bottom-nav recovery integration passed real create/edit/archive
 lost-response scenario. Pending edit/archive locks nav; explicit acknowledgement

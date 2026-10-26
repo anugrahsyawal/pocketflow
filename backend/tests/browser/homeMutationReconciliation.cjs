@@ -12,12 +12,15 @@ const assert=require('node:assert/strict');
   await page.goto(url);await page.getByLabel('Email',{exact:true}).fill('preview@example.com');await page.getByLabel('Password',{exact:true}).fill('Disposable-preview-123!');await page.getByRole('button',{name:'Masuk ke server',exact:true}).click();
   const home=page.getByRole('region',{name:'Ringkasan Beranda server'}),recent=home.getByRole('region',{name:'Transaksi terbaru Beranda'}),history=page.getByRole('region',{name:'Riwayat transaksi server',exact:true}),panel=page.getByRole('region',{name:'Export periode server'}),entry=page.getByRole('region',{name:'Tambah transaksi server',exact:true}),recovery=page.getByRole('region',{name:'Pemulihan arsip dan pulihkan',exact:true});
   await recent.getByText('-Rp18.000',{exact:true}).waitFor();
+  const nav=page.getByRole('navigation',{name:'Navigasi server'});
+  const go=async label=>{await nav.getByRole('button',{name:label,exact:true}).click();};
   const read=()=>page.evaluate(async()=>{const {SessionClient}=await import('/src/lib/api/sessionClient.ts');return new SessionClient().readReport();});
   const baseline=await read();assert.equal(baseline.totals.totalExpense,18000);assert.equal(baseline.totals.transactionCount,2);
   assert.equal(baseline.pocketBudgetActuals.find(p=>p.label==='NFC Card').currentBalance,82000);
   const note='Home reconciliation '+Date.now();let createdId;
   const money=n=>'Rp'+String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.');
   const verifyDetail=async (name,reportRow,shown,active)=>{
+    await go('Beranda');
     await home.getByRole('button',{name:`Detail ${name}`,exact:true}).click();
     const dialog=page.getByRole('dialog'),budget=reportRow.budget;
     const values=[money(reportRow.currentBalance),money(budget.expense),
@@ -31,18 +34,20 @@ const assert=require('node:assert/strict');
     await page.keyboard.press('Escape');
   };
   const verify=async (active,amount=1000)=>{
+    await go('Beranda');
     const delta=active?amount:0,total=money(1532000-delta),expense=18000+delta;
     await home.getByText(total,{exact:true}).first().waitFor();
     assert.equal(await home.getByText(total,{exact:true}).count(),2);
     await home.getByRole('region',{name:'Ringkasan Pocket',exact:true}).getByText(money(82000-delta),{exact:true}).waitFor();
     await home.getByRole('region',{name:'Ringkasan Pocket',exact:true}).getByText(money(182000-delta),{exact:true}).waitFor();
-    await panel.getByRole('region',{name:'Arus kas bersih'}).getByText('-'+money(expense),{exact:true}).waitFor();
     const report=await read(),nfc=report.pocketBudgetActuals.find(p=>p.label==='NFC Card'),transport=report.pocketBudgetActuals.find(p=>p.label==='Transportation');
     assert.equal(report.totals.totalExpense,expense);assert.equal(nfc.currentBalance,82000-delta);
     assert.equal(nfc.paymentExpense,expense);assert.equal(nfc.budget.expense,0);assert.equal(transport.budget.expense,expense);assert.equal(transport.currentBalance,100000);
     assert.equal(report.budget.availability,'missing-allocation');
     await home.getByRole('region',{name:'Progres anggaran Beranda'}).getByText(/Total anggaran belum tersedia/).waitFor();
     if(active)await recent.getByText('-'+money(amount),{exact:true}).waitFor();else assert.equal(await recent.getByText('-'+money(amount),{exact:true}).count(),0);
+    await go('Laporan');
+    await panel.getByRole('region',{name:'Arus kas bersih'}).getByText('-'+money(expense),{exact:true}).waitFor();
     const downloading=page.waitForEvent('download');await panel.getByRole('button',{name:'Export CSV',exact:true}).click();
     const stream=await (await downloading).createReadStream(),chunks=[];for await(const chunk of stream)chunks.push(chunk);
     const csv=Buffer.concat(chunks).toString('utf8');
@@ -52,6 +57,7 @@ const assert=require('node:assert/strict');
     // NFC payment affects owner's budget but is not a Transportation payment row.
     await verifyDetail('Transportation',transport,'-'+money(amount),false);
   };
+  await go('Tambah transaksi');
   await entry.getByRole('button',{name:'Tambah pengeluaran server',exact:true}).click();
   await entry.getByLabel('Pocket pembayaran',{exact:true}).selectOption({label:'💳 NFC Card'});
   await entry.getByLabel('Nominal pengeluaran (rupiah)',{exact:true}).fill('1000');
@@ -60,6 +66,7 @@ const assert=require('node:assert/strict');
   const saved=page.waitForResponse(r=>r.request().method()==='POST'&&new URL(r.url()).pathname==='/v1/transactions');
   await entry.getByRole('button',{name:'Simpan pengeluaran server',exact:true}).click();
   const response=await saved;assert.equal(response.status(),201);
+  await go('Riwayat');
   await history.getByText(note,{exact:true}).waitFor();
   createdId=await page.evaluate(async note=>{const {SessionClient}=await import('/src/lib/api/sessionClient.ts');return (await new SessionClient().listTransactions({search:note})).transactions[0].id;},note);
   await verify(true);
@@ -67,6 +74,7 @@ const assert=require('node:assert/strict');
   const row=()=>history.locator('li').filter({has:page.getByText(note,{exact:true})});
   const editForm=page.getByRole('form',{name:'Form edit transaksi'}),editReview=page.getByRole('region',{name:'Konfirmasi edit transaksi'});
   const edit=async amount=>{
+    await go('Riwayat');
     await row().getByRole('button',{name:'Edit transaksi',exact:true}).click();
     await editForm.getByLabel('Nominal edit',{exact:true}).fill(String(amount));
     await editForm.getByRole('button',{name:'Tinjau perubahan'}).click();
@@ -84,10 +92,12 @@ const assert=require('node:assert/strict');
   };
   const edited=await edit(2000);await home.screenshot({path:'.env.home-edit-mutation.png'});
   const reverted=await edit(1000);assert.equal(reverted.budgetPocketId,edited.budgetPocketId);assert.equal(reverted.pocketId,edited.pocketId);
+  await go('Riwayat');
   await row().getByRole('button',{name:'Arsipkan transaksi',exact:true}).click();await recovery.getByRole('button',{name:'Konfirmasi arsip',exact:true}).click();await verify(false);
   // Other mutation types: each cycle starts and ends at the same active fixture.
   const beforeOther=await read();
   for(const kind of ['income','transfer']){
+    await go('Tambah transaksi');
     const isIncome=kind==='income',amount=isIncome?2000:3000,label=isIncome?'pemasukan':'transfer',testNote=`Home ${kind} reconciliation ${Date.now()}`;
     await entry.getByRole('button',{name:`Tambah ${label} server`,exact:true}).click();
     if(isIncome){
@@ -101,13 +111,14 @@ const assert=require('node:assert/strict');
     await entry.getByLabel(`Nominal ${label} (rupiah)`,{exact:true}).fill(String(amount));
     await entry.getByLabel(`Catatan ${label}`,{exact:true}).fill(testNote);
     await entry.getByRole('button',{name:`Simpan ${label} server`,exact:true}).click();
+    await go('Riwayat');
     await history.getByText(testNote,{exact:true}).waitFor();
     const testRow=()=>history.locator('li').filter({has:page.getByText(testNote,{exact:true})});
     const transaction=await page.evaluate(async note=>{const {SessionClient}=await import('/src/lib/api/sessionClient.ts');return (await new SessionClient().listTransactions({search:note})).transactions[0];},testNote);
     const verifyOther=async active=>{
+      await go('Beranda');
       const income=active&&isIncome?amount:0,transfer=active&&!isIncome?amount:0;
       await home.getByText(money(1532000+income),{exact:true}).first().waitFor();
-      await panel.getByRole('region',{name:'Arus kas bersih'}).getByText('-'+money(18000-income),{exact:true}).waitFor();
       // Transfer is total/cash-flow neutral: wait for its affected wallet balance.
       const cards=home.getByRole('region',{name:'Ringkasan Pocket',exact:true});
       await cards.getByText(money(50000+income),{exact:true}).waitFor();await cards.getByText(money(82000+transfer),{exact:true}).waitFor();
@@ -117,6 +128,8 @@ const assert=require('node:assert/strict');
       assert.deepEqual(r.pocketBudgetActuals.map(p=>p.budget),beforeOther.pocketBudgetActuals.map(p=>p.budget));
       const shown=(isIncome?'+':'')+money(amount);
       if(active)await recent.getByText(shown,{exact:true}).waitFor();else assert.equal(await recent.getByText(shown,{exact:true}).count(),0);
+      await go('Laporan');
+      await panel.getByRole('region',{name:'Arus kas bersih'}).getByText('-'+money(18000-income),{exact:true}).waitFor();
       const downloading=page.waitForEvent('download');await panel.getByRole('button',{name:'Export CSV',exact:true}).click();
       const stream=await (await downloading).createReadStream(),chunks=[];for await(const chunk of stream)chunks.push(chunk);
       const matching=Buffer.concat(chunks).toString('utf8').split(/\r?\n/).filter(line=>line.includes(transaction.id));
@@ -128,14 +141,19 @@ const assert=require('node:assert/strict');
       }
     };
     await verifyOther(true);await home.screenshot({path:`.env.home-${kind}-mutation.png`});
+    await go('Riwayat');
     await testRow().getByRole('button',{name:'Arsipkan transaksi',exact:true}).click();await recovery.getByRole('button',{name:'Konfirmasi arsip',exact:true}).click();await verifyOther(false);
+    await go('Riwayat');
     await history.getByLabel('Sertakan transaksi diarsipkan').check();await history.getByRole('button',{name:'Terapkan filter',exact:true}).click();
     await testRow().getByRole('button',{name:'Pulihkan transaksi',exact:true}).click();await recovery.getByRole('button',{name:'Konfirmasi pulihkan',exact:true}).click();await verifyOther(true);
+    await go('Riwayat');
     await testRow().getByRole('button',{name:'Arsipkan transaksi',exact:true}).click();await recovery.getByRole('button',{name:'Konfirmasi arsip',exact:true}).click();await verifyOther(false);
   }
+  await go('Riwayat');
   await history.getByLabel('Sertakan transaksi diarsipkan').check();await history.getByRole('button',{name:'Terapkan filter',exact:true}).click();
   await row().getByRole('button',{name:'Pulihkan transaksi',exact:true}).click();await recovery.getByRole('button',{name:'Konfirmasi pulihkan',exact:true}).click();await verify(true);
   // Leave fixture balances unchanged; retain the test row as recoverable archive.
+  await go('Riwayat');
   await row().getByRole('button',{name:'Arsipkan transaksi',exact:true}).click();await recovery.getByRole('button',{name:'Konfirmasi arsip',exact:true}).click();await verify(false);
   assert.deepEqual(errors,[]);assert.deepEqual(logs.filter(e=>!e.text.includes('401')&&!((e.url.includes('fonts.googleapis.com')||e.url.includes('fonts.gstatic.com'))&&/ERR_|Failed to load resource/.test(e.text))),[]);
   console.log('PASS: expense edit/lifecycle plus income and NFC top-up reconcile Home, pocket detail, budgets, cash flow and CSV; original active balances restored, three test rows archived');
