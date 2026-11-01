@@ -59,7 +59,7 @@ export function ConnectedPockets({ownerId,client,onExpired}:{ownerId:string;clie
   },[client,onExpired,refresh]);
   return <section aria-label="Pocket server" className="space-y-4 pb-24">
     <div className="flex items-center justify-between gap-3">
-      <h2 className="font-display text-headline-md">PocketFlow</h2>
+      <h2 className="text-body-sm text-text-secondary">Data server</h2>
       <Button size="sm" variant="secondary" disabled={!!editing || creationLocked || expenseLocked || lifecycleLocked || (!data?.isSetupCompleted && !error)} onClick={reload}>Muat ulang</Button>
     </div>
     <p className="text-body-sm text-text-secondary">Data dari server · {data?.isSetupCompleted ? 'Pengaturan budget Cash/NFC tersedia' : 'Setup akun'}</p>

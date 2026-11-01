@@ -1,8 +1,16 @@
 # Current Sprint
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
-Status: Phase 7C.4 In Progress — Report Sections Integrated in Connected Preview; Reconciliation Pending
-Current checkpoint: Phase 7C.4 connected navigation and durable recovery pushed as `780bc69`
+Status: Phase 7C.4 — Mounted-screen checkpoint delivered and bounded reconciliation verified; full acceptance pending
+Current checkpoint: Phase 7C.4 mounted connected screens and reconciliation pushed as `63c342f`
+
+2026-10-26 latest: DEC-038 shell refinement authorized and implemented locally;
+type-check, both builds and session/navigation/empty-report browser checks pass.
+Review/acceptance pending; no next phase, default-mode change or deployment.
+
+2026-10-26 delivery update: authorized checkpoint push complete. Proposed compact
+connected shell refinement awaits PO approval; no next phase automatically started.
+Earlier pending-commit/reconciliation entries below are historical evidence.
 
 2026-10-26 latest: Home/detail/report/CSV mutation reconciliation and empty-report
 navigation passed on mounted screens. Bounded checkpoint ready for PO review;

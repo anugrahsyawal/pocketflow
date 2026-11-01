@@ -393,9 +393,20 @@ resource failures must be explicit, never silent truncation. Implement and verif
 backend before frontend integration. No deployment, backup/restore, new phase or
 Git delivery implied. Delivered-result/manual acceptance remains separate.
 
+### DEC-038 - Compact connected development shell
+
+Date: 2026-10-26
+Status: Implementation authorized by Product Owner through continuation after
+the explicit shell-refinement proposal and approval question
+
+Authorize [connected shell refinement](../architecture/CONNECTED_SHELL_REFINEMENT_PROPOSAL.md):
+compact authenticated layout, accessible session check/logout controls, accurate
+preview copy and existing token-based styling. Preserve login/session contracts,
+mounted form/recovery owners, default local mode and all financial behavior.
+No account/profile feature, dependency, cutover, migration, deployment, new phase
+or automatic Git delivery. Implementation acceptance remains separate.
+
 ## Pending decisions
-
-
 
 The following are deliberately unresolved and must not be guessed:
 

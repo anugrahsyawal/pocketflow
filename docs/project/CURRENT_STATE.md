@@ -2,9 +2,21 @@
 
 Last updated: 2026-10-26
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `780bc69` (Phase 7C.4 connected navigation and durable recovery, pushed to origin/codex/audit-pocketflow-documentation)
+Latest committed checkpoint: `63c342f` (Phase 7C.4 mounted connected screens and reconciliation, pushed to origin/codex/audit-pocketflow-documentation)
 
 ## Executive state
+
+2026-10-26 latest: DEC-038 compact connected shell implemented locally. Session
+controls collapsed but accessible, accurate preview copy, existing login/recovery
+ownership preserved. Type-check, both builds and three browser regressions pass.
+See [shell walkthrough](../walkthroughs/phase-7c4-connected-shell.md). Manual PO
+acceptance and commit pending; proposal-pending text below is historical.
+
+2026-10-26 delivery update: PO-authorized commit/push completed as `63c342f`;
+working tree was clean afterward. Below is historical implementation evidence,
+not a list of still-uncommitted work. Full phase/manual acceptance remains separate.
+Proposed next scope: [connected shell refinement](../architecture/CONNECTED_SHELL_REFINEMENT_PROPOSAL.md),
+awaiting PO approval. No default-mode cutover, migration or deployment authorized.
 
 2026-10-26 latest: cross-screen expense/income/top-up mutation reconciliation
 passed for Home, pocket detail, Reports and CSV, including edit/archive/restore.

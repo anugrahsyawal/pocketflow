@@ -1,8 +1,20 @@
 # Current Handoff
 
-Last updated: 2026-09-28
+Last updated: 2026-10-26
 
 ## Current handoff — supersedes historical checkpoint text below
+
+- 2026-10-26 latest: DEC-038 shell refinement implemented; see connected-shell
+  walkthrough. Three browser scripts, type-check and both builds passed; no
+  financial writes. PO review/authorized commit next, not another feature.
+  The scope proposal is now authorized; older approval-pending entries below
+  are historical. Default local mode and backend contracts untouched.
+
+- Delivery update: `63c342f` committed/pushed with PO authorization, clean tree
+  confirmed afterward. Do not re-commit the previous checkpoint or repeat its
+  completed financial gates by default. Proposed next work is compact connected
+  shell refinement; read CONNECTED_SHELL_REFINEMENT_PROPOSAL.md and obtain PO
+  approval before implementation. No cutover/migration/deployment implied.
 
 - 2026-10-26 latest: homeMutationReconciliation.cjs and reportReconciliation.cjs
   adapted and passed; new connectedEmptyReport.cjs passes both current Add and

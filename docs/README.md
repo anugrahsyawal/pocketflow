@@ -14,6 +14,9 @@ Latest implementation: [Connected pocket URL navigation](walkthroughs/phase-7c4-
 
 Current continuation: [Mounted connected screens](walkthroughs/phase-7c4-connected-screens.md).
 
+Current UI refinement (DEC-038): [Connected shell scope](architecture/CONNECTED_SHELL_REFINEMENT_PROPOSAL.md)
+and [verification](walkthroughs/phase-7c4-connected-shell.md).
+
 - [Product vision](product/PRODUCT_VISION.md)
 - [Product requirements](product/PRODUCT_REQUIREMENTS.md)
 - [Product backlog](product/PRODUCT_BACKLOG.md)

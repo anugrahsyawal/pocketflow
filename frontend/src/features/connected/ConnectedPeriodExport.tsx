@@ -53,7 +53,7 @@ export function ConnectedPeriodExport({ownerId,client,currentPeriod,onExpired,on
       <ConnectedReportSummary report={reportState.report} onSinkingIncluded={preferences.setIncluded} disabled={busy}/>
     </>}
     {preferences.error&&<p role="alert" className="text-body-sm text-bahaya">{preferences.error}</p>}
-    <p className="text-body-sm text-text-secondary">Pratinjau integrasi laporan server. Laporan lokal tidak berubah; integrasi Beranda dan detail pocket menyusul.</p>
+    <p className="text-body-sm text-text-secondary">Laporan memakai data server. Data dan laporan mode lokal tetap terpisah.</p>
     <p className="text-body-sm text-text-secondary">Seluruh transaksi aktif periode ini dari server, termasuk transfer. Tidak dibatasi halaman atau filter riwayat. Transaksi arsip dan yang dihapus tidak disertakan.</p>
     {message&&<p role="status" className="text-body-sm break-words">{message}</p>}
     {error&&<p role="alert" className="text-body-sm text-bahaya break-words">{error}</p>}
