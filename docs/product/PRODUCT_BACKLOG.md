@@ -167,7 +167,7 @@ states below are unchanged; frontend/API integration is a separate phase.
 | ID | Story | Priority | Overall | Delivery / verification / acceptance | Acceptance and evidence |
 |---|---|---|---|---|---|
 | 12.1 | Protect private routes | Must Have | Implemented in backend | Frontend implemented; Backend authenticated preHandler verified / Ready for Review | Mock frontend guards protect local routes. Backend `authenticateRequest` and `validateCsrfToken` hooks enforce 30-day session expiry and CSRF protection on versioned `/v1` endpoints. Phase 7B.2.1 walkthrough. |
-| 12.2 | Secure production configuration | Must Have before production | Refinement Needed | Not Started / Not Verified / Not Reviewed | HTTPS, secret management, password/provider security, sensitive logging, headers, and operations controls require backend/deployment decisions. |
+| 12.2 | Secure production configuration | Must Have before production | In Progress | Local env guards/readiness implemented / See bounded verification / Review pending | [Local readiness slice](../walkthroughs/phase-7d-local-readiness.md). HTTPS termination, DB TLS/pooler, secret operations, abuse controls, logging/headers and deployment verification remain open; not production-ready. |
 
 ## Epic 13 — Goals
 

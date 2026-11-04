@@ -1,8 +1,13 @@
 # Current Sprint
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
-Status: Phase 7C.4 checkpoints delivered; local readiness assessment complete and hosting design awaiting review, full acceptance separate
-Current checkpoint: Phase 7C.4 compact connected shell pushed as `8ad9dbb`
+Status: Phase 7D local production-config/readiness slice verified, ready for review; no deployment
+Current checkpoint: readiness assessment committed locally as `8e1445b` (not pushed)
+
+2026-11-04 latest: PO authorized the first bounded local implementation slice
+after assessment commit. See [evidence](../walkthroughs/phase-7d-local-readiness.md).
+Financial rules, frontend and infrastructure remain unchanged.
+Backend type-check/build and 435/435 integration tests pass.
 
 2026-11-04 continuation: assessment and free-first topology proposal prepared for
 review; test-only calendar-fixture repair included. See readiness walkthrough

@@ -101,6 +101,18 @@ Follow this exact sequence for local backend setup:
 
 ### Public & System Endpoints
 - `GET /health` -> Returns `{"status": "ok", "service": "pocketflow-api"}`
+- `GET /ready` -> Database connectivity only: 200 `{"status":"ready","service":"pocketflow-api"}`
+  or 503 `{"status":"unavailable","service":"pocketflow-api"}`. No authentication
+  required and no database error details returned. Both probes use `Cache-Control: no-store`.
+  Readiness runs a read-only, two-second bounded probe outside the business pool;
+  it does not prove migrations, backup validity or full production readiness.
+
+Production configuration requires `NODE_ENV=production`, an explicit HTTPS
+`CORS_ORIGIN` (without credentials, path, query or fragment), and a random
+`SESSION_SECRET` of at least 32 bytes, not the example placeholder. `PORT` must
+be an integer from 1 to 65535, and `DATABASE_URL` must be a PostgreSQL URL with a
+host and database. Unknown environment names are rejected. These guards do not
+configure database TLS, poolers, deployment, backups or scheduled maintenance.
 
 ### Authentication & Session Endpoints (`/v1`)
 - `POST /v1/auth/login` -> Authenticates owner with email & password. On success, rotates session, sets `HttpOnly` `sid` cookie (30-day absolute expiry), and returns `{ user: { id, email, displayName }, csrfToken }`. Generic error on failure.

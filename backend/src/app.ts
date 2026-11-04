@@ -12,6 +12,7 @@ import { categoryRoutes } from './routes/categories.js';
 import { transactionRoutes } from './routes/transactions.js';
 import { transactionExportRoutes } from './routes/transactionExport.js';
 import { reportRoutes } from './routes/reports.js';
+import { createReadinessProbe } from './db/readiness.js';
 
 export async function buildApp(config: AppConfig, options: { reportClock?: () => Date } = {}): Promise<FastifyInstance> {
   const app = Fastify({
@@ -46,7 +47,7 @@ export async function buildApp(config: AppConfig, options: { reportClock?: () =>
   });
 
   // Register Routes
-  await app.register(healthRoutes);
+  await app.register(healthRoutes, { readiness: createReadinessProbe(config.databaseUrl) });
   await app.register(authRoutes);
   await app.register(setupRoutes);
   await app.register(pocketRoutes);
