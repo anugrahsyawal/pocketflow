@@ -8,7 +8,7 @@ import {loadMasterData} from '../../../frontend/src/lib/api/masterData.js';
 import {createTestApp} from '../helpers/testApp.js';
 import {getTestDb,resetTestDatabase,createTestOwner,closeTestDb} from '../helpers/testDb.js';
 import {seedMasterData} from '../helpers/masterDataFixture.js';
-import {transactions} from '../../src/db/schema.js';
+import {transactions,budgetPeriods} from '../../src/db/schema.js';
 
 describe('Connected single transaction create transport',()=>{
   let db:Awaited<ReturnType<typeof getTestDb>>,app:Awaited<ReturnType<typeof createTestApp>>,address:string;
@@ -33,7 +33,10 @@ describe('Connected single transaction create transport',()=>{
     assert.equal((await client.listTransactions()).transactions.find(t=>t.id===first.id)!.note,'later edit');
   });
   it('validates income, standard transfer and reallocation acknowledgements',async()=>{
-    const base={clientMutationId:randomUUID(),amount:1000,occurredOn:'2026-09-29',occurredAtLocalTime:'12:00:00'};
+    // Use the funded fixture period, not a calendar date that eventually expires.
+    const [period]=await db.select().from(budgetPeriods).where(eq(budgetPeriods.userId,owner.userId));
+    assert.ok(period,'fixture must provide a funded budget period');
+    const base={clientMutationId:randomUUID(),amount:1000,occurredOn:period.startDate,occurredAtLocalTime:'12:00:00'};
     const income=await client.createTransaction(attempt({...base,type:'income',pocketId:ids.cash.id,incomeSource:'gaji'}));
     assert.equal(income.incomeSource,'gaji');assert.equal(income.budgetPocketId,null);
     for(const transferType of ['normal','budget-reallocation'] as const){

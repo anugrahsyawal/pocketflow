@@ -1,6 +1,22 @@
 # Risks and Blockers
 
-Last updated: 2026-08-13
+Last updated: 2026-11-01
+
+## Current readiness assessment
+
+Connected checkpoint `8ad9dbb` is delivered. The older Phase 7B.3 blocker summary
+at the bottom is historical, not a prohibition on already delivered transaction
+APIs. See [release readiness plan](../architecture/RELEASE_READINESS_PLAN.md).
+Current production gates are topology/API routing, security configuration review,
+backup/restore execution and explicit offline/sync scope. Source audit confirms
+Vite's proxy is development-only and /health is not DB readiness. No current
+completed production-security audit is claimed. The 2026-11-04
+[hosting proposal](../architecture/FREE_FIRST_HOSTING_PROPOSAL.md) checks official
+provider constraints; free-tier availability, timer scheduling and DEC-028
+backup compliance remain open gates, not resolved by selecting a database.
+
+The legacy risk entries below retain their original verification context; do not
+claim they have been resolved without reviewing current source and evidence.
 
 | ID | Risk or blocker | State | Impact | Mitigation / next decision |
 |---|---|---|---|---|
@@ -19,6 +35,6 @@ Last updated: 2026-08-13
 | R-013 | Session rotation revoke-then-insert is non-atomic. | Known backend limitation | Session revocation and new session creation happen in separate DB steps | Wrap session rotation in explicit DB transaction during future hardening. |
 | R-014 | Backend `/health` endpoint checks service status only. | Known backend limitation | `/health` returns HTTP 200 even if database connection fails | Add explicit DB health check ping in future monitoring refinement. |
 
-## Current blockers
+## Historical Phase 7B.3 blocker snapshot
 
 There is no application code blocker. Phase 7B.3 Setup & Master Data API implementation is completed, verified, and PO accepted at HEAD `6cff955891bc4e09db4a4a08a3a3cf1ecfb17926` (pushed `origin/main`). Transaction API implementation (`/v1/transactions`) is NOT authorized because a transaction API contract does not yet exist; it requires a separate contract specification and PO authorization before work begins (not a blocker against Phase 7B.3).

@@ -1,8 +1,19 @@
 # Current Handoff
 
-Last updated: 2026-10-26
+Last updated: 2026-11-04
 
 ## Current handoff — supersedes historical checkpoint text below
+
+- 2026-11-04: assessment resumed; see release-readiness-assessment walkthrough
+  for full-suite results and date-fixture repair. FREE_FIRST_HOSTING_PROPOSAL.md
+  recommends Vercel frontend/API + Supabase DB for staging, retaining existing
+  auth. Next gate: PO topology review and authorized commit/clean tree before
+  bounded production-config/readiness implementation. No deployment yet.
+
+- 2026-11-01: `8ad9dbb` pushed, clean tree at entry. Read RELEASE_READINESS_PLAN.md:
+  transition from UI polish to local readiness assessment. Finish/report the full
+  integration run, then refine a free-first topology against existing API/auth
+  and backup requirements. No service creation, cutover or deployment yet.
 
 - 2026-10-26 latest: DEC-038 shell refinement implemented; see connected-shell
   walkthrough. Three browser scripts, type-check and both builds passed; no

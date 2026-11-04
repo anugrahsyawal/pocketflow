@@ -1,10 +1,24 @@
 # PocketFlow Current State
 
-Last updated: 2026-10-26
+Last updated: 2026-11-04
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `63c342f` (Phase 7C.4 mounted connected screens and reconciliation, pushed to origin/codex/audit-pocketflow-documentation)
+Latest committed checkpoint: `8ad9dbb` (Phase 7C.4 compact connected shell, pushed to origin/codex/audit-pocketflow-documentation)
 
 ## Executive state
+
+2026-11-04 continuation: readiness assessment resumed after interrupted session.
+One calendar-dependent reallocation test corrected; production source unchanged.
+Full rerun: 423/423 tests pass, backend type-check/build pass.
+See [assessment evidence](../walkthroughs/release-readiness-assessment.md).
+[Vercel + Supabase staging proposal](../architecture/FREE_FIRST_HOSTING_PROPOSAL.md)
+is ready for design review, not deployment approval. No infrastructure created.
+
+2026-11-01: shell checkpoint committed/pushed with PO authorization; clean tree
+verified before readiness assessment. Next work is [release readiness assessment](../architecture/RELEASE_READINESS_PLAN.md),
+not deployment or another UI-polish loop. Local full backend regression was
+pending at that checkpoint; see the 2026-11-04 result above. Provider/security/backup
+decisions remain open. No PO manual acceptance
+or full-MVP completion inferred. Older uncommitted-shell notes are historical.
 
 2026-10-26 latest: DEC-038 compact connected shell implemented locally. Session
 controls collapsed but accessible, accurate preview copy, existing login/recovery

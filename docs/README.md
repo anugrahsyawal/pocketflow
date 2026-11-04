@@ -17,6 +17,11 @@ Current continuation: [Mounted connected screens](walkthroughs/phase-7c4-connect
 Current UI refinement (DEC-038): [Connected shell scope](architecture/CONNECTED_SHELL_REFINEMENT_PROPOSAL.md)
 and [verification](walkthroughs/phase-7c4-connected-shell.md).
 
+Current assessment: [Release readiness and proposed Phase 7D](architecture/RELEASE_READINESS_PLAN.md).
+
+Next design for review: [Free-first hosting proposal](architecture/FREE_FIRST_HOSTING_PROPOSAL.md)
+and [assessment evidence](walkthroughs/release-readiness-assessment.md).
+
 - [Product vision](product/PRODUCT_VISION.md)
 - [Product requirements](product/PRODUCT_REQUIREMENTS.md)
 - [Product backlog](product/PRODUCT_BACKLOG.md)

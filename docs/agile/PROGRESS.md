@@ -1,6 +1,6 @@
 # Project Progress
 
-Last updated: 2026-08-13
+Last updated: 2026-11-04
 
 The ledger separates delivery, verification, and Product Owner acceptance.
 Older accepted checkpoints are not downgraded solely because their evidence
@@ -8,6 +8,8 @@ predates the current template.
 
 | Area or Phase | Delivery | Verification | PO acceptance | Representative commits / evidence |
 |---|---|---|---|---|
+| Connected screens and compact shell (7C.4) | Delivered and pushed | Bounded browser/reconciliation and build evidence in linked walkthroughs; final readiness assessment separate | Implementation/Git delivery authorized; manual phase acceptance not inferred | `63c342f`, `8ad9dbb`; [screens](../walkthroughs/phase-7c4-connected-screens.md), [shell](../walkthroughs/phase-7c4-connected-shell.md) |
+| Release readiness assessment | Gap inventory and hosting proposal prepared; one test-only date correction | See exact full/targeted rerun results in walkthrough | Staging topology proposed, not approved; no production acceptance | [Evidence](../walkthroughs/release-readiness-assessment.md), [hosting proposal](../architecture/FREE_FIRST_HOSTING_PROPOSAL.md) |
 | Reports API Phase 7B.5 | Implemented locally | See current [walkthrough](../walkthroughs/phase-7b5-reports-api.md) | Implementation review pending; contract accepted | Contract `0e2eb5e`; implementation uncommitted |
 | Repository foundation | Implemented | Legacy Evidence Incomplete | Accepted | `0f44515`; repository history |
 | Authentication foundation | Implemented (mock/dev only) | Legacy Evidence Incomplete | Accepted with production limitation | `5243596` |

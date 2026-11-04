@@ -1,10 +1,18 @@
 # Requirement Traceability Matrix
 
-Last updated: 2026-08-13
+Last updated: 2026-11-01
 
 This matrix highlights delivered MVP behavior and important gaps. The canonical
 [Product Backlog](../product/PRODUCT_BACKLOG.md) contains the complete story
 inventory.
+
+Current connected checkpoint (supersedes older frontend-only delivery statements
+for this scope): `63c342f` and `8ad9dbb` cover server-backed Home/pocket detail,
+screen navigation, report/CSV reconciliation, session shell and durable recovery
+verification for PR-003–015/018. See [screens](../walkthroughs/phase-7c4-connected-screens.md)
+and [shell](../walkthroughs/phase-7c4-connected-shell.md). PR-017/021 offline/sync
+and production operation claims are not satisfied by connected preview. Current
+readiness scope is tracked in [the transition plan](../architecture/RELEASE_READINESS_PLAN.md).
 
 Backend Reports continuation (Epic 8, Phase 7B.5): implemented locally under the
 accepted [Reports contract](../architecture/REPORTS_API_CONTRACT.md), DEC-031.
