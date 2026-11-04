@@ -30,6 +30,8 @@ Runtime continuation: [Persistent lifecycle boundary](walkthroughs/phase-7d-runt
 
 Worker design for review: [Non-HTTP purge worker plan](architecture/NON_HTTP_PURGE_WORKER_PLAN.md).
 
+Worker core implementation: [Atomic bounded purge](walkthroughs/phase-7d-atomic-purge.md).
+
 - [Product vision](product/PRODUCT_VISION.md)
 - [Product requirements](product/PRODUCT_REQUIREMENTS.md)
 - [Product backlog](product/PRODUCT_BACKLOG.md)

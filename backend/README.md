@@ -123,6 +123,13 @@ the app/runtime module does not start maintenance. One persistent runtime per
 process is supported. No serverless worker or purge HTTP API is provided; hosted
 scheduling must respect DEC-030.2 before enabling function deployment.
 
+Purge core performs candidate selection, row locking, audit and deletion within
+one transaction guarded by a cross-process advisory try-lock. Each call removes
+at most 500 eligible tombstones, with 30-day minimum retention. `limit_reached`
+means a follow-up may be needed; `busy` means another caller owns the lock.
+The persistent timer calls this same core. There is no worker CLI/cloud schedule
+yet, and database statement timeouts are not a whole-worker execution deadline.
+
 ### Database connection profiles (local readiness continuation)
 
 `DB_CONNECTION_MODE` accepts `direct` (default), `session`, or `transaction`.

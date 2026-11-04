@@ -4,6 +4,15 @@ Last updated: 2026-11-04
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- 2026-11-05 completion: full regression log confirms 455/455 pass; source/test
+  code unchanged. PO requested completion and commit, not push or next-phase
+  implementation. Read atomic-purge walkthrough before the one-shot CLI slice.
+
+- Latest: plan committed as `61a854f` locally, not pushed. Atomic purge core is
+  implemented with bounded/locked selection and atomic audit/delete. Review
+  phase-7d-atomic-purge evidence before CLI work. Whole-run cancellation, redacted
+  CLI outcomes and scheduler operations are not covered by SQL timeouts alone.
+
 - Latest: `ad8c23d` committed locally, not pushed. NON_HTTP_PURGE_WORKER_PLAN.md
   specifies the proposed atomic/capped core, CLI boundary and tests. Review before
   implementation. Existing selection occurs outside the audit/delete transaction;

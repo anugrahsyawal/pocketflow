@@ -1,4 +1,4 @@
-import { eq, and, isNotNull, lte, inArray } from 'drizzle-orm';
+import { eq, and, isNotNull, lte, inArray, asc, sql } from 'drizzle-orm';
 import { getDb, AppDatabase } from '../db/client.js';
 import { transactions, transactionPurgeLogs } from '../db/schema.js';
 
@@ -18,7 +18,7 @@ export interface PurgeOptions {
 
   /**
    * Reference timestamp representing the current execution time.
-   * Defaults to `new Date()`.
+   * Defaults to the database transaction timestamp.
    */
   now?: Date;
 
@@ -28,21 +28,27 @@ export interface PurgeOptions {
   userId?: string;
 
   /**
-   * Optional maximum number of tombstones to purge in a single execution batch.
+   * Optional batch size, integer 1..500. Defaults to the hard cap of 500.
    */
   batchLimit?: number;
 
   /**
-   * Optional database client or transaction instance.
+   * Optional root database client. This function owns its transaction.
    * Defaults to `getDb()`.
    */
   db?: AppDatabase;
 }
 
 export interface PurgeResult {
+  status: 'completed' | 'busy' | 'limit_reached';
   purgedCount: number;
   purgedTransactionIds: string[];
 }
+
+// Dedicated two-key advisory-lock namespace; shared by every purge invocation.
+export const PURGE_LOCK_NAMESPACE = 1346785100;
+export const PURGE_LOCK_KEY = 1;
+export const PURGE_BATCH_LIMIT = 500;
 
 /**
  * Automatically purges soft-deleted transaction tombstones older than 30 days
@@ -52,62 +58,83 @@ export interface PurgeResult {
  */
 export async function purgeDeletedTransactions(options: PurgeOptions = {}): Promise<PurgeResult> {
   const retentionDays = options.retentionDays ?? 30;
-  const now = options.now ?? new Date();
-  const cutoffDate =
-    options.cutoffDate ?? new Date(now.getTime() - retentionDays * 24 * 60 * 60 * 1000);
+  const batchLimit = options.batchLimit ?? PURGE_BATCH_LIMIT;
+  if (!Number.isInteger(batchLimit) || batchLimit < 1 || batchLimit > PURGE_BATCH_LIMIT) {
+    throw new Error('Purge batch limit must be an integer from 1 to 500');
+  }
+  if (!Number.isFinite(retentionDays) || retentionDays < 30) {
+    throw new Error('Purge retention must be at least 30 days');
+  }
+  if ((options.now && !Number.isFinite(options.now.getTime())) ||
+      (options.cutoffDate && !Number.isFinite(options.cutoffDate.getTime()))) {
+    throw new Error('Invalid purge clock');
+  }
   const db = options.db ?? getDb();
 
-  const conditions = [
-    isNotNull(transactions.deletedAt),
-    lte(transactions.deletedAt, cutoffDate),
-  ];
+  return db.transaction(async (tx): Promise<PurgeResult> => {
+    await tx.execute(sql`SET LOCAL statement_timeout = '10s'`);
+    await tx.execute(sql`SET LOCAL lock_timeout = '2s'`);
+    const [lock] = await tx.execute(sql`SELECT pg_try_advisory_xact_lock(${PURGE_LOCK_NAMESPACE}::int, ${PURGE_LOCK_KEY}::int) AS acquired`);
+    if (lock.acquired !== true) {
+      return { status: 'busy', purgedCount: 0, purgedTransactionIds: [] };
+    }
+    const [clock] = await tx.execute(sql`SELECT transaction_timestamp() AS now`);
+    const now = options.now ?? new Date(clock.now instanceof Date ? clock.now.getTime() : String(clock.now));
+    const cutoffDate = options.cutoffDate ?? new Date(now.getTime() - retentionDays * 24 * 60 * 60 * 1000);
+    if (cutoffDate.getTime() > now.getTime() - retentionDays * 86400000) {
+      throw new Error('Purge cutoff cannot shorten retention');
+    }
 
-  if (options.userId) {
-    conditions.push(eq(transactions.userId, options.userId));
-  }
+    const conditions = [
+      isNotNull(transactions.deletedAt),
+      lte(transactions.deletedAt, cutoffDate),
+    ];
 
-  let query = db
-    .select({
-      id: transactions.id,
-      userId: transactions.userId,
-      type: transactions.type,
-      amount: transactions.amount,
-      pocketId: transactions.pocketId,
-      fromPocketId: transactions.fromPocketId,
-      toPocketId: transactions.toPocketId,
-      categoryId: transactions.categoryId,
-      budgetPocketId: transactions.budgetPocketId,
-      transferType: transactions.transferType,
-      incomeSource: transactions.incomeSource,
-      occurredOn: transactions.occurredOn,
-      occurredAtLocalTime: transactions.occurredAtLocalTime,
-      note: transactions.note,
-      archivedAt: transactions.archivedAt,
-      deletedAt: transactions.deletedAt,
-      createdAt: transactions.createdAt,
-      updatedAt: transactions.updatedAt,
-      revision: transactions.revision,
-    })
-    .from(transactions)
-    .where(and(...conditions));
+    if (options.userId) {
+      conditions.push(eq(transactions.userId, options.userId));
+    }
 
-  if (options.batchLimit && options.batchLimit > 0) {
-    query = query.limit(options.batchLimit) as typeof query;
-  }
+    const query = tx
+      .select({
+        id: transactions.id,
+        userId: transactions.userId,
+        type: transactions.type,
+        amount: transactions.amount,
+        pocketId: transactions.pocketId,
+        fromPocketId: transactions.fromPocketId,
+        toPocketId: transactions.toPocketId,
+        categoryId: transactions.categoryId,
+        budgetPocketId: transactions.budgetPocketId,
+        transferType: transactions.transferType,
+        incomeSource: transactions.incomeSource,
+        occurredOn: transactions.occurredOn,
+        occurredAtLocalTime: transactions.occurredAtLocalTime,
+        note: transactions.note,
+        archivedAt: transactions.archivedAt,
+        deletedAt: transactions.deletedAt,
+        createdAt: transactions.createdAt,
+        updatedAt: transactions.updatedAt,
+        revision: transactions.revision,
+      })
+      .from(transactions)
+      .where(and(...conditions))
+      .orderBy(asc(transactions.deletedAt), asc(transactions.id))
+      .limit(batchLimit)
+      .for('update');
 
-  const candidateRows = await query;
+    const candidateRows = await query;
 
-  if (candidateRows.length === 0) {
-    return {
-      purgedCount: 0,
-      purgedTransactionIds: [],
-    };
-  }
+    if (candidateRows.length === 0) {
+      return {
+        status: 'completed',
+        purgedCount: 0,
+        purgedTransactionIds: [],
+      };
+    }
 
-  const idsToPurge = candidateRows.map((r) => r.id);
+    const idsToPurge = candidateRows.map((r) => r.id);
 
-  // Execute audit log insertion and physical purge atomically within a transaction
-  await db.transaction(async (tx) => {
+    // Selection, row locks, audit and delete all share this transaction/connection.
     const purgeLogRecords = candidateRows.map((r) => ({
       userId: r.userId,
       purgedTransactionId: r.id,
@@ -134,13 +161,19 @@ export async function purgeDeletedTransactions(options: PurgeOptions = {}): Prom
     }));
 
     await tx.insert(transactionPurgeLogs).values(purgeLogRecords);
-    await tx.delete(transactions).where(inArray(transactions.id, idsToPurge));
-  });
+    const deleted = await tx.delete(transactions)
+      .where(and(inArray(transactions.id, idsToPurge), ...conditions))
+      .returning({ id: transactions.id });
+    if (deleted.length !== candidateRows.length) {
+      throw new Error('Purge delete count mismatch');
+    }
 
-  return {
-    purgedCount: idsToPurge.length,
-    purgedTransactionIds: idsToPurge,
-  };
+    return {
+      status: candidateRows.length === batchLimit ? 'limit_reached' : 'completed',
+      purgedCount: idsToPurge.length,
+      purgedTransactionIds: idsToPurge,
+    };
+  });
 }
 
 export const purgeTransactions = purgeDeletedTransactions;

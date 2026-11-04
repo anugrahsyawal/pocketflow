@@ -1,10 +1,21 @@
 # PocketFlow Current State
 
-Last updated: 2026-11-04
+Last updated: 2026-11-05
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `ad8c23d` (persistent runtime boundary, committed locally; not pushed)
+Latest committed checkpoint: `61a854f` (non-HTTP worker plan, committed locally; not pushed)
 
 ## Executive state
+
+2026-11-05 completion: recovered the final full regression summary, 455/455 tests
+passed. Atomic purge source/test code unchanged during completion review; PO
+authorized committing this checkpoint. CLI/cloud execution remains next, not
+implicitly started. See [evidence](../walkthroughs/phase-7d-atomic-purge.md).
+
+Latest implementation: PO authorized worker-plan commit and continuation. Clean
+tree verified; atomic/capped purge core implemented locally with transaction-wide
+advisory locking and rollback checks. See [evidence](../walkthroughs/phase-7d-atomic-purge.md).
+CLI, whole-run deadline, operator alerts and hosted scheduling remain pending.
+Only disposable test fixtures are purged; no cloud activation or push.
 
 Latest continuation: runtime checkpoint committed with PO authorization and clean
 tree verified. [Non-HTTP worker plan](../architecture/NON_HTTP_PURGE_WORKER_PLAN.md)
