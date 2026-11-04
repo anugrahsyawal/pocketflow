@@ -114,6 +114,15 @@ be an integer from 1 to 65535, and `DATABASE_URL` must be a PostgreSQL URL with 
 host and database. Unknown environment names are rejected. These guards do not
 establish hosted TLS/pooler compatibility, deployment, backups or scheduled maintenance.
 
+### Runtime lifecycle (local readiness continuation)
+
+Runtime lifecycle: `src/app.ts` only constructs the HTTP app. `src/runtime.ts`
+starts persistent listening and the existing 24-hour purge timer, then cleans up
+timer/DB connections on close; `src/server.ts` handles shutdown signals. Importing
+the app/runtime module does not start maintenance. One persistent runtime per
+process is supported. No serverless worker or purge HTTP API is provided; hosted
+scheduling must respect DEC-030.2 before enabling function deployment.
+
 ### Database connection profiles (local readiness continuation)
 
 `DB_CONNECTION_MODE` accepts `direct` (default), `session`, or `transaction`.

@@ -4,6 +4,11 @@ Last updated: 2026-11-04
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- Latest: `da6275f` committed locally, not pushed. Runtime-boundary slice separates
+  HTTP construction from persistent maintenance; review its walkthrough. Next
+  scheduler design must respect DEC-030.2 (no public/admin purge API); no cloud
+  scheduling or serverless runtime is enabled by this checkpoint.
+
 - Latest: `1d83de9` pushed to active branch with PO authorization, including
   assessment ancestor `8e1445b`. DB profile/TLS continuation is local; read
   phase-7d-database-profile walkthrough before runtime-entry/scheduler work.

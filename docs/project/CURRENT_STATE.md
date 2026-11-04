@@ -2,9 +2,17 @@
 
 Last updated: 2026-11-04
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `1d83de9` (production configuration/readiness, pushed to active branch)
+Latest committed checkpoint: `da6275f` (database profile/TLS, committed locally; not pushed)
 
 ## Executive state
+
+2026-11-04 latest continuation: DB-profile checkpoint committed with PO permission;
+clean-tree gate passed. Persistent runtime now owns listener/timer/DB shutdown;
+HTTP app factory has no timer side effect. See [evidence](../walkthroughs/phase-7d-runtime-boundary.md).
+Backend type-check/build and 25/25 targeted lifecycle/auth/readiness/delete tests
+pass; full-suite rerun and hosted runtime verification are not claimed.
+DEC-030.2 prohibits purge APIs, so hosted scheduler remains a non-HTTP design gate,
+not an implicitly authorized cron endpoint. No deployment or push this turn.
 
 2026-11-04 latest: PO authorized commit/push and continuation. `1d83de9` pushed
 (including ancestor `8e1445b`); clean-tree gate passed. Shared database connection

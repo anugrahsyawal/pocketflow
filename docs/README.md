@@ -26,6 +26,8 @@ Current local implementation: [Production configuration and readiness](walkthrou
 
 Current continuation: [Database connection profile](walkthroughs/phase-7d-database-profile.md).
 
+Runtime continuation: [Persistent lifecycle boundary](walkthroughs/phase-7d-runtime-boundary.md).
+
 - [Product vision](product/PRODUCT_VISION.md)
 - [Product requirements](product/PRODUCT_REQUIREMENTS.md)
 - [Product backlog](product/PRODUCT_BACKLOG.md)

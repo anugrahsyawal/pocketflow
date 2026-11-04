@@ -54,9 +54,11 @@ this app. [Vercel rewrites](https://vercel.com/docs/routing/rewrites).
   detection, native Argon2 packaging, asynchronous app initialization and cold
   starts with the deployed runtime before claiming compatibility.
 - `backend/src/app.ts` starts a 24-hour in-process purge timer. Serverless cannot
-  rely on it. Design an authenticated scheduled invocation with database-backed
+  rely on it. Under DEC-030.2, design a non-HTTP scheduled worker with database-backed
   overlap protection, bounded batches, retained audit and unchanged 30-day
-  tombstone rule. Do not introduce a publicly callable deletion endpoint.
+  tombstone rule. Do not introduce a public or administrative purge endpoint;
+  even an authenticated HTTP cron route requires a separate PO decision revising
+  that restriction. See [runtime boundary](../walkthroughs/phase-7d-runtime-boundary.md).
 - `backend/src/db/client.ts` currently uses a pool of ten. Serverless pooling
   must be bounded per instance, encrypted, and compatible with the chosen
   connection mode. Transaction pooling requires disabling prepared statements;

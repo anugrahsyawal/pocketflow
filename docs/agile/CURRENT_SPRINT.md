@@ -2,7 +2,11 @@
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
 Status: Phase 7D local production-config/readiness slice verified, ready for review; no deployment
-Current checkpoint: local readiness `1d83de9` pushed; DB-profile continuation in review
+Current checkpoint: DB profile `da6275f` committed locally; runtime boundary in review
+
+Latest continuation: persistent runtime lifecycle separated from app construction;
+see [evidence](../walkthroughs/phase-7d-runtime-boundary.md). Hosted scheduler must
+respect DEC-030.2's no-purge-API boundary. No serverless deployment enabled.
 
 2026-11-04 latest: database connection profile/TLS continuation implemented after
 clean-tree gate. See [evidence](../walkthroughs/phase-7d-database-profile.md).
