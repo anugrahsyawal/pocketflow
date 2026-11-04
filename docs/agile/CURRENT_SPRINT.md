@@ -2,7 +2,11 @@
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
 Status: Phase 7D local production-config/readiness slice verified, ready for review; no deployment
-Current checkpoint: DB profile `da6275f` committed locally; runtime boundary in review
+Current checkpoint: runtime boundary `ad8c23d` committed locally; non-HTTP worker plan in review
+
+Current continuation is [worker design](../architecture/NON_HTTP_PURGE_WORKER_PLAN.md),
+not implementation or activation. Atomic core/concurrency tests are the next
+bounded recommendation; DEC-030.2 remains unchanged.
 
 Latest continuation: persistent runtime lifecycle separated from app construction;
 see [evidence](../walkthroughs/phase-7d-runtime-boundary.md). Hosted scheduler must

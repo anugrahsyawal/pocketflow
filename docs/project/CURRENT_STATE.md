@@ -2,9 +2,15 @@
 
 Last updated: 2026-11-04
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `da6275f` (database profile/TLS, committed locally; not pushed)
+Latest committed checkpoint: `ad8c23d` (persistent runtime boundary, committed locally; not pushed)
 
 ## Executive state
+
+Latest continuation: runtime checkpoint committed with PO authorization and clean
+tree verified. [Non-HTTP worker plan](../architecture/NON_HTTP_PURGE_WORKER_PLAN.md)
+defines bounded atomic selection/audit/delete and cross-process locking before
+any worker activation. Planning only; no purge, new code or scheduler executed.
+Provider, monitoring and production invocation remain unselected.
 
 2026-11-04 latest continuation: DB-profile checkpoint committed with PO permission;
 clean-tree gate passed. Persistent runtime now owns listener/timer/DB shutdown;

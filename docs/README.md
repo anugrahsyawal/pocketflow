@@ -28,6 +28,8 @@ Current continuation: [Database connection profile](walkthroughs/phase-7d-databa
 
 Runtime continuation: [Persistent lifecycle boundary](walkthroughs/phase-7d-runtime-boundary.md).
 
+Worker design for review: [Non-HTTP purge worker plan](architecture/NON_HTTP_PURGE_WORKER_PLAN.md).
+
 - [Product vision](product/PRODUCT_VISION.md)
 - [Product requirements](product/PRODUCT_REQUIREMENTS.md)
 - [Product backlog](product/PRODUCT_BACKLOG.md)

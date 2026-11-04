@@ -4,6 +4,11 @@ Last updated: 2026-11-04
 
 ## Current handoff — supersedes historical checkpoint text below
 
+- Latest: `ad8c23d` committed locally, not pushed. NON_HTTP_PURGE_WORKER_PLAN.md
+  specifies the proposed atomic/capped core, CLI boundary and tests. Review before
+  implementation. Existing selection occurs outside the audit/delete transaction;
+  harden this before enabling multiple workers. No provider schedule selected.
+
 - Latest: `da6275f` committed locally, not pushed. Runtime-boundary slice separates
   HTTP construction from persistent maintenance; review its walkthrough. Next
   scheduler design must respect DEC-030.2 (no public/admin purge API); no cloud
