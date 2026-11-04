@@ -112,7 +112,27 @@ Production configuration requires `NODE_ENV=production`, an explicit HTTPS
 `SESSION_SECRET` of at least 32 bytes, not the example placeholder. `PORT` must
 be an integer from 1 to 65535, and `DATABASE_URL` must be a PostgreSQL URL with a
 host and database. Unknown environment names are rejected. These guards do not
-configure database TLS, poolers, deployment, backups or scheduled maintenance.
+establish hosted TLS/pooler compatibility, deployment, backups or scheduled maintenance.
+
+### Database connection profiles (local readiness continuation)
+
+`DB_CONNECTION_MODE` accepts `direct` (default), `session`, or `transaction`.
+Direct/session retain the ten-connection application pool. Transaction mode caps
+it at one, disables prepared statements and sets runtime `max_pipeline=1`.
+Copy the matching provider URL; changing the mode does not change its host/port.
+Readiness uses the same TLS policy but its own bounded one-connection probe, so
+the total per-instance connection budget can be two in transaction mode.
+
+`DB_SSL_MODE` defaults to `inherit` for local development and `verify-full` for
+production. Production rejects `inherit`; verify-full uses certificate validation
+and rejects conflicting URL TLS options. `DB_SSL_CA` may supply the trusted PEM;
+without it, runtime trust roots apply. URL `sslrootcert` paths are rejected rather
+than silently ignored. Never bypass validation to solve a certificate failure.
+
+Run migrations separately with `DB_CONNECTION_MODE=direct` or `session` and its
+matching URL/credentials. The migration CLI refuses transaction mode before any
+migration execution. No automatic migrations, hosted pooler compatibility or
+provider certificate trust are established merely by these local settings.
 
 ### Authentication & Session Endpoints (`/v1`)
 - `POST /v1/auth/login` -> Authenticates owner with email & password. On success, rotates session, sets `HttpOnly` `sid` cookie (30-day absolute expiry), and returns `{ user: { id, email, displayName }, csrfToken }`. Generic error on failure.

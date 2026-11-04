@@ -2,9 +2,16 @@
 
 Last updated: 2026-11-04
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `8e1445b` (release-readiness assessment, committed locally; not pushed)
+Latest committed checkpoint: `1d83de9` (production configuration/readiness, pushed to active branch)
 
 ## Executive state
+
+2026-11-04 latest: PO authorized commit/push and continuation. `1d83de9` pushed
+(including ancestor `8e1445b`); clean-tree gate passed. Shared database connection
+profiles/TLS guards implemented locally; see [evidence](../walkthroughs/phase-7d-database-profile.md).
+Backend type-check/build, 442/442 full regression and 10/10 explicit transaction-
+profile tests pass. Hosted pooler and certificate handshake remain unverified.
+Provider/runtime/scheduler verification remains pending; no deployment.
 
 2026-11-04 local implementation: PO authorized continuation after the assessment
 commit; clean-tree entry verified. Production env guards and bounded DB `/ready`

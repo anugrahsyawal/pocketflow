@@ -1,12 +1,14 @@
 import postgres from 'postgres';
+import { databaseOptions } from './connectionOptions.js';
 
 /** One bounded, read-only probe at a time per app; never occupies the business pool. */
 export function createReadinessProbe(databaseUrl: string, timeoutMs = 2000): () => Promise<boolean> {
+  const options = databaseOptions(databaseUrl);
   let inFlight: Promise<boolean> | undefined;
   return () => {
     if (inFlight) return inFlight;
     inFlight = (async () => {
-      const client = postgres(databaseUrl, { max: 1, prepare: false, connect_timeout: 2 });
+      const client = postgres(databaseUrl, { ...options, max: 1, prepare: false, connect_timeout: 2 });
       let timer: ReturnType<typeof setTimeout> | undefined;
       try {
         return await Promise.race([

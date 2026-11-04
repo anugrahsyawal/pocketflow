@@ -24,6 +24,8 @@ and [assessment evidence](walkthroughs/release-readiness-assessment.md).
 
 Current local implementation: [Production configuration and readiness](walkthroughs/phase-7d-local-readiness.md).
 
+Current continuation: [Database connection profile](walkthroughs/phase-7d-database-profile.md).
+
 - [Product vision](product/PRODUCT_VISION.md)
 - [Product requirements](product/PRODUCT_REQUIREMENTS.md)
 - [Product backlog](product/PRODUCT_BACKLOG.md)

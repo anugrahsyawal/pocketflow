@@ -1,3 +1,5 @@
+import { databaseOptions } from '../db/connectionOptions.js';
+
 export interface AppConfig {
   nodeEnv: string;
   port: number;
@@ -83,6 +85,8 @@ export function loadAndValidateEnv(): AppConfig {
 
   const normalizedCors =
     trimmedCors.endsWith('/') && trimmedCors.length > 8 ? trimmedCors.slice(0, -1) : trimmedCors;
+
+  databaseOptions(databaseUrl);
 
   return {
     nodeEnv,

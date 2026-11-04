@@ -5,6 +5,9 @@ import { getDb, closeDb } from './client.js';
 async function runMigrate(): Promise<void> {
   try {
     const config = loadAndValidateEnv();
+    if (process.env.DB_CONNECTION_MODE === 'transaction') {
+      throw new Error('Migrations require DB_CONNECTION_MODE=direct or session and the matching connection URL');
+    }
     console.log('Running database migrations...');
     const db = getDb(config.databaseUrl);
     await migrate(db, { migrationsFolder: './drizzle' });

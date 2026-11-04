@@ -2,7 +2,12 @@
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
 Status: Phase 7D local production-config/readiness slice verified, ready for review; no deployment
-Current checkpoint: readiness assessment committed locally as `8e1445b` (not pushed)
+Current checkpoint: local readiness `1d83de9` pushed; DB-profile continuation in review
+
+2026-11-04 latest: database connection profile/TLS continuation implemented after
+clean-tree gate. See [evidence](../walkthroughs/phase-7d-database-profile.md).
+Type-check/build and 442/442 full regression pass; separate transaction-profile
+run passed 10/10. Review pending; no hosted integration claim.
 
 2026-11-04 latest: PO authorized the first bounded local implementation slice
 after assessment commit. See [evidence](../walkthroughs/phase-7d-local-readiness.md).

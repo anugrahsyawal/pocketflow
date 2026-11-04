@@ -2,6 +2,7 @@ import { drizzle, PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { sql } from 'drizzle-orm';
 import * as schema from './schema.js';
+import { databaseOptions } from './connectionOptions.js';
 
 export type AppDatabase = PostgresJsDatabase<typeof schema>;
 
@@ -17,7 +18,7 @@ export function getDb(databaseUrl?: string): AppDatabase {
     throw new Error('Database URL is required to initialize DB client');
   }
 
-  queryClientInstance = postgres(databaseUrl, { max: 10 });
+  queryClientInstance = postgres(databaseUrl, databaseOptions(databaseUrl));
   dbInstance = drizzle(queryClientInstance, { schema });
   return dbInstance;
 }
