@@ -2,9 +2,12 @@
 
 Sprint: Backend MVP Foundation & Transaction API Implementation
 Status: Phase 7D local production-config/readiness slice verified, ready for review; no deployment
-Current checkpoint: atomic purge core verified (455/455 tests); commit authorized 2026-11-05
+Current checkpoint: atomic purge core `9ad932b` committed locally; one-shot CLI verified locally (34/34 targeted tests)
 
-Latest: [atomic core implementation](../walkthroughs/phase-7d-atomic-purge.md)
+Latest continuation: [CLI boundary and deadline](../walkthroughs/phase-7d-purge-cli.md)
+implemented locally; no cloud activation. Prior CLI-pending notes are historical.
+
+Previous checkpoint: [atomic core implementation](../walkthroughs/phase-7d-atomic-purge.md)
 follows PO-authorized continuation. CLI and cloud runner are not implemented.
 
 Current continuation is [worker design](../architecture/NON_HTTP_PURGE_WORKER_PLAN.md),

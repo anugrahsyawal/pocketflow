@@ -1,8 +1,13 @@
 # Current Handoff
 
-Last updated: 2026-11-04
+Last updated: 2026-11-05
 
 ## Current handoff — supersedes historical checkpoint text below
+
+- Latest: atomic core committed as `9ad932b`, not pushed. One-shot CLI now local;
+  read phase-7d-purge-cli walkthrough for deadline, output and verification scope
+  (34/34 targeted tests, type-check and build passed).
+  No automatic schedule or production grants configured. Review before hosted work.
 
 - 2026-11-05 completion: full regression log confirms 455/455 pass; source/test
   code unchanged. PO requested completion and commit, not push or next-phase

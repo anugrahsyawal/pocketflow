@@ -2,9 +2,15 @@
 
 Last updated: 2026-11-05
 Branch: `codex/audit-pocketflow-documentation`
-Latest committed checkpoint: `61a854f` (non-HTTP worker plan, committed locally; not pushed)
+Latest committed checkpoint: `9ad932b` (atomic purge core, committed locally; not pushed)
 
 ## Executive state
+
+Latest continuation: PO requested the one-shot CLI after core commit; clean tree
+verified. Explicit execution guard, dedicated maintenance URL, deadline/cleanup
+and redacted statuses implemented locally; 34/34 targeted tests, type-check and
+build passed. See [evidence](../walkthroughs/phase-7d-purge-cli.md).
+No HTTP purge endpoint, cloud runner, external credential or deployment added.
 
 2026-11-05 completion: recovered the final full regression summary, 455/455 tests
 passed. Atomic purge source/test code unchanged during completion review; PO

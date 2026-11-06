@@ -32,6 +32,8 @@ Worker design for review: [Non-HTTP purge worker plan](architecture/NON_HTTP_PUR
 
 Worker core implementation: [Atomic bounded purge](walkthroughs/phase-7d-atomic-purge.md).
 
+Worker CLI continuation: [One-shot purge invocation](walkthroughs/phase-7d-purge-cli.md).
+
 - [Product vision](product/PRODUCT_VISION.md)
 - [Product requirements](product/PRODUCT_REQUIREMENTS.md)
 - [Product backlog](product/PRODUCT_BACKLOG.md)

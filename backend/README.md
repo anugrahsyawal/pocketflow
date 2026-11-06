@@ -127,8 +127,37 @@ Purge core performs candidate selection, row locking, audit and deletion within
 one transaction guarded by a cross-process advisory try-lock. Each call removes
 at most 500 eligible tombstones, with 30-day minimum retention. `limit_reached`
 means a follow-up may be needed; `busy` means another caller owns the lock.
-The persistent timer calls this same core. There is no worker CLI/cloud schedule
-yet, and database statement timeouts are not a whole-worker execution deadline.
+The persistent timer calls this same core. No cloud schedule is activated.
+
+### One-shot non-HTTP maintenance worker
+
+For an explicitly chosen maintenance database, inject `PURGE_DATABASE_URL` using
+the runner's secret environment, then run `npm run maintenance:purge -- --execute`
+from backend during development, or `node dist/cli/purge.js --execute` after build.
+Do not run these commands against real data until operational approval. This
+physically removes eligible tombstones; it is not a dry run. There is no HTTP API.
+
+The command does not load `.env` automatically and never falls back to
+`DATABASE_URL`. Set `NODE_ENV=production` on a real runner; existing certificate-
+verification settings (`DB_SSL_MODE`, optional `DB_SSL_CA`) apply. Only direct or
+session connection mode is accepted. Provision a separate least-privilege worker
+credential before hosted use; code cannot establish the privilege of a supplied URL.
+
+Exactly `--execute` is required: no retention, cutoff, owner or batch overrides.
+One invocation processes at most 500 rows with unchanged 30-day retention. It
+owns a dedicated connection and a 30-second execution deadline, force-closing
+the connection after timeout/interruption and awaiting connection cleanup.
+The deadline does not promise control over OS suspension or blocked event loops;
+SQL timeouts remain the database-side bound. An interrupted COMMIT can have an
+unknown outcome. Retry explicitly; do not infer zero writes from failure.
+
+Worker stdout is one JSON summary (npm may also print its script banner):
+`status`, `purgedCount`, `durationMs`, and a safe failure `code` when applicable.
+No transaction IDs, notes, URLs or raw DB errors. `purgedCount` is null on failure.
+Exit 0: completed or busy (busy means skipped, not drained); exit 2: batch limit
+reached and owner follow-up may be needed; exit 1: invalid input/config or failure.
+No auto-retry loop or schedule is installed. SIGINT/SIGTERM request cancellation;
+operator alerts, external scheduling and actual hosted verification remain pending.
 
 ### Database connection profiles (local readiness continuation)
 
